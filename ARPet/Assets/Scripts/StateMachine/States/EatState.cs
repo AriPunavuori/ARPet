@@ -6,9 +6,9 @@ public class EatState : IState
     private float eatTime;
     private Material material;
     private Color defaultColor;
-    private Action OnEatStateEnd;
+    private readonly Action OnEatStateEnd;
 
-    public EatState(float eatTime, Material material, Color defaultColor, Action OnEatStateEnd)
+    public EatState(float eatTime, Material material, Color defaultColor, Action OnEatStateEnd, GameObject target)
     {
         this.eatTime = eatTime;
         this.material = material;

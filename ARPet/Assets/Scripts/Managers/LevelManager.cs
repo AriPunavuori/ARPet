@@ -47,6 +47,12 @@ public class LevelManager : MonoBehaviour
         BuildNavMesh();
 
         CreatePrefabInstance(petPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
+        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
+        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
+        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
+        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
         CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
     }
 

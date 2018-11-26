@@ -86,7 +86,9 @@ public class Pet : MonoBehaviour
     private void OnDestinationReached()
     {
         // Eat state???
-        stateMachine.ChangeState(new EatState(4f, meshRenderer.material, defaultColor, OnEatStateEnd));
+        // stateMachine.ChangeState(new EatState(4f, meshRenderer.material, defaultColor, OnEatStateEnd));
+
+        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, searchRadius, searchTag, OnSearchCompleted));
     }
 
     private void OnEatStateEnd()

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class IdleState : IState
 {
@@ -14,7 +13,7 @@ public class IdleState : IState
 
     public void Enter()
     {
-        moveTimer = UnityEngine.Random.Range(randomMovementTimer.x, randomMovementTimer.y);
+        moveTimer = Random.Range(randomMovementTimer.x, randomMovementTimer.y);
     }
 
     public void Execute()
@@ -23,7 +22,7 @@ public class IdleState : IState
 
         if(moveTimer <= 0f)
         {
-            moveTimer = UnityEngine.Random.Range(randomMovementTimer.x, randomMovementTimer.y);
+            moveTimer = Random.Range(randomMovementTimer.x, randomMovementTimer.y);
             Debug.Log("!!!");
         }
     }
