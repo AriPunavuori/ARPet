@@ -4,12 +4,15 @@ using UnityEngine.UI;
 public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
+
     private Text stateText;
     private Text mainTaskText;
     private Text secondaryTaskText;
+
     #endregion VARIABLES
 
     #region PROPERTIES
+
     public Transform DebugBox
     {
         get;
@@ -20,23 +23,24 @@ public class UIManager : Singelton<UIManager>
     {
         set
         {
-            stateText.text = value;
+            stateText.text = "State: " + value;
         }
     }
     public string MainTaskText
     {
         set
         {
-            mainTaskText.text = value;
+            mainTaskText.text = "MainTask: " + value;
         }
     }
     public string SecondaryTaskText
     {
         set
         {
-            secondaryTaskText.text = value;
+            secondaryTaskText.text = "SecondaryTask: " + value;
         }
     }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
