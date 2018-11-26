@@ -1,16 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class IdleState : MonoBehaviour {
+public class IdleState : IState
+{
+    private Vector2 randomMovementTimer;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private float moveTimer;
+
+    public IdleState(Vector2 randomMovementTimer)
+    {
+        this.randomMovementTimer = randomMovementTimer;
+    }
+
+    public void Enter()
+    {
+        moveTimer = UnityEngine.Random.Range(randomMovementTimer.x, randomMovementTimer.y);
+    }
+
+    public void Execute()
+    {   
+        moveTimer -= Time.deltaTime;
+
+        if(moveTimer <= 0f)
+        {
+            moveTimer = UnityEngine.Random.Range(randomMovementTimer.x, randomMovementTimer.y);
+            Debug.Log("!!!");
+        }
+    }
+
+    public void Exit()
+    {
+        
+    }
 }

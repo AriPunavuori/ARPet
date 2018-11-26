@@ -59,25 +59,25 @@
                 }
 
             }
-            catch (ARUnavailableConnectServerTimeOutException e)
+            catch (ARUnavailableConnectServerTimeOutException /*e*/)
             {
                 errorMessage ="Network is not available, retry later!";
                 Invoke("_DoQuit", 0.5f);
                 return;
             }
-            catch (ARUnavailableDeviceNotCompatibleException e)
+            catch (ARUnavailableDeviceNotCompatibleException /*e*/)
             {
                 errorMessage ="This Device does not support AR!";
                 Invoke("_DoQuit", 0.5f);
                 return;
             }
-            catch (ARUnavailableEmuiNotCompatibleException e)
+            catch (ARUnavailableEmuiNotCompatibleException /*e*/)
             {
                 errorMessage ="This EMUI does not support AR!";
                 Invoke("_DoQuit", 0.5f);
                 return;
             }
-            catch (ARUnavailableUserDeclinedInstallationException e)
+            catch (ARUnavailableUserDeclinedInstallationException /*e*/)
             {
                 errorMessage ="User decline installation right now, quit";
                 Invoke("_DoQuit", 0.5f);
@@ -117,7 +117,7 @@
                 {
                     ARSession.Resume();
                 }
-                catch (ARCameraPermissionDeniedException e)
+                catch (ARCameraPermissionDeniedException /*e*/)
                 {
                     ARDebug.LogError("camera permission is denied");
                     errorMessage="This app require camera permission";
@@ -169,32 +169,32 @@
                 ARSession.SetCameraTextureNameAuto();
                 ARSession.SetDisplayGeometry(Screen.width, Screen.height);
             }
-            catch (ARCameraPermissionDeniedException e)
+            catch (ARCameraPermissionDeniedException /*e*/)
             {
                 isErrorHappendWhenInit = true;
                 ARDebug.LogError("camera permission is denied");
                 errorMessage="This app require camera permission";
                 Invoke("_DoQuit", 0.5f);
             }
-            catch (ARUnavailableDeviceNotCompatibleException e)
+            catch (ARUnavailableDeviceNotCompatibleException /*e*/)
             {
                 isErrorHappendWhenInit = true;
                 errorMessage="This device does not support AR";
                 Invoke("_DoQuit", 0.5f);
             }
-            catch (ARUnavailableServiceApkTooOldException e)
+            catch (ARUnavailableServiceApkTooOldException /*e*/)
             {
                 isErrorHappendWhenInit = true;
                 errorMessage="This AR Engine is too old, please update";
                 Invoke("_DoQuit", 0.5f);
             }
-            catch (ARUnavailableServiceNotInstalledException e)
+            catch (ARUnavailableServiceNotInstalledException /*e*/)
             {
                 isErrorHappendWhenInit = true;
                 errorMessage="This app depend on AREngine.apk, please install it";
                 Invoke("_DoQuit", 0.5f);
             }
-            catch(ARUnSupportedConfigurationException e)
+            catch(ARUnSupportedConfigurationException /*e*/)
             {
                 isErrorHappendWhenInit = true;
                 errorMessage="This config is not supported on this device, exit now.";

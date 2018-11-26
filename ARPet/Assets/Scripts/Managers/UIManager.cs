@@ -5,7 +5,8 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
-    private Text stateText;
+    private Text currentStateText;
+    private Text previousStateText;
     private Text mainTaskText;
     private Text secondaryTaskText;
 
@@ -19,11 +20,18 @@ public class UIManager : Singelton<UIManager>
         private set;
     }
 
-    public string StateText
+    public string CurrentStateText
     {
         set
         {
-            stateText.text = "State: " + value;
+            currentStateText.text = "Current state: " + value;
+        }
+    }
+    public string PreviousStateText
+    {
+        set
+        {
+            previousStateText.text = "Previous state: " + value;
         }
     }
     public string MainTaskText
@@ -57,7 +65,8 @@ public class UIManager : Singelton<UIManager>
     private void Initialize()
     {
         DebugBox = GameMaster.Instance.HUDCanvas.Find("DebugBox");
-        stateText = DebugBox.Find("StateText").GetComponent<Text>();
+        currentStateText = DebugBox.Find("CurrentStateText").GetComponent<Text>();
+        previousStateText = DebugBox.Find("PreviousStateText").GetComponent<Text>();
         mainTaskText = DebugBox.Find("MainTaskText").GetComponent<Text>();
         secondaryTaskText = DebugBox.Find("SecondaryTaskText").GetComponent<Text>();
     }

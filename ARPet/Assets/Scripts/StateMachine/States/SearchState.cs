@@ -10,7 +10,7 @@ public class SearchState : IState
     private readonly string searchTag;
 
     private bool isSearchComleted;
-    private Action<SearchResult> searchResultCallback;
+    private readonly Action<SearchResult> searchResultCallback;
 
     public SearchState
         (Vector3 searchPosition, 
@@ -51,7 +51,7 @@ public class SearchState : IState
 
     public void Exit()
     {
-        
+
     }
 
     private void SearchAndStoreObjectsWithTag(Collider[] hitObjects, Stack<Collider> allObjectsWithSearchTag)

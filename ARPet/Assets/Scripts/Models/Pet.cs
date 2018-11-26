@@ -6,11 +6,14 @@ public class Pet : MonoBehaviour
     #region VARIABLES
 
     private NavMeshAgent navMeshAgent;
+    private MeshRenderer meshRenderer;
 
     private StateMachine stateMachine;
     private LayerMask searchLayer;
     private float searchRadius;
     private string searchTag;
+
+    private Color defaultColor, destinationReachedColor;
 
     #endregion VARIABLES
 
@@ -43,7 +46,8 @@ public class Pet : MonoBehaviour
 
     private void UpdateUI()
     {
-        UIManager.Instance.StateText = stateMachine.CurrentState.ToString();
+        UIManager.Instance.CurrentStateText = stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NULL";
+        UIManager.Instance.PreviousStateText = stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NULL";
 
         //if(currentMainTask != null)
         //{
@@ -59,11 +63,15 @@ public class Pet : MonoBehaviour
     private void Initialize()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         stateMachine = new StateMachine();
         searchLayer = LayerMask.GetMask("Searchable");
         searchRadius = 20f;
-        searchTag = "Food"; 
+        searchTag = "Food";
+
+        defaultColor = meshRenderer.material.color;
+        destinationReachedColor = Color.red;
     }
 
     private void OnSearchCompleted(SearchResult searchResult)
@@ -71,6 +79,24 @@ public class Pet : MonoBehaviour
         var closestObject = GetClosestObject(searchResult.AllHitCollidersInRadius);
 
         navMeshAgent.SetDestination(closestObject);
+
+        stateMachine.ChangeState(new MoveState(transform, closestObject, meshRenderer.material, OnDestinationReached));
+    }
+
+    private void OnDestinationReached()
+    {
+        // Eat state???
+        stateMachine.ChangeState(new EatState(4f, meshRenderer.material, defaultColor, OnEatStateEnd));
+    }
+
+    private void OnEatStateEnd()
+    {
+        stateMachine.ChangeState(new IdleState(new Vector2(1, 4)));
+    }
+
+    private void RandomMovement(Vector3 target)
+    {
+        navMeshAgent.SetDestination(target);
     }
 
     private Vector3 GetClosestObject(Collider[] hitColliders)
