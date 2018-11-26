@@ -1,23 +1,21 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public enum PetStates
-{
-    Idle,
-    Move,
-    Sleep
-}
-
 public class Pet : MonoBehaviour
 {
-    private Queue mainTask = new Queue();
-    private Queue secondaryTask = new Queue();
+    #region VARIABLES
 
-    private PetStates currentState;
+    #endregion VARIABLES
+
+    #region PROPERTIES   
+
+    #endregion PROPERTIES
+
+    #region UNITY_FUNCTIONS
 
     private void Awake()
     {
-        
+        Initialize();
     }
 
     private void Start()
@@ -25,39 +23,19 @@ public class Pet : MonoBehaviour
         
     }
 
-    private void Initialize()
+    private void Update()
     {
         
     }
 
-    private void ChangePetState(PetStates newState)
-    {
-        currentState = newState;
+    #endregion UNITY_FUNCTIONS
 
-        switch (currentState)
-        {
-            case PetStates.Idle:
+    #region CUSTOM_FUNCTIONS
 
-                break;
-            case PetStates.Move:
-
-                break;
-            case PetStates.Sleep:
-
-                break;
-            default:
-
-                break;
-        }
-    }
-
-    private void ExecuteMainTask()
+    private void Initialize()
     {
 
     }
 
-    private IEnumerator IExecuteMainTask()
-    {
-        yield return null;
-    }
+    #endregion CUSTOM_FUNCTIONS
 }

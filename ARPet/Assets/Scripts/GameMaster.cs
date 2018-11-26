@@ -1,15 +1,34 @@
 ﻿using UnityEngine;
 
-public class GameMaster : Singelton<GameMaster>
+public class GameMaster : SingeltonPersistant<GameMaster>
 {
-    public GameObject HUDCanvas { get; private set; }
-    public GameObject Managers { get; private set; }
-    public GameObject Others { get; private set; }
+    #region PROPERTIES
 
-    private void Awake()
+    public Transform HUDCanvas { get; private set; }
+    public Transform Managers { get; private set; }
+    public Transform Others { get; private set; }
+
+    #endregion PROPERTIES
+
+    #region UNITY_FUNCTIONS
+
+    protected override void Awake()
     {
-        HUDCanvas = transform.Find("HUDCanvas").gameObject;
-        Managers = transform.Find("Managers").gameObject;
-        Others = transform.Find("Others").gameObject;
+        base.Awake();
+
+        Initialize();
     }
+
+    #endregion UNITY_FUNCTIONS
+
+    #region CUSTOM_FUNCTIONS
+
+    private void Initialize()
+    {
+        HUDCanvas = transform.Find("HUDCanvas");
+        Managers = transform.Find("Managers");
+        Others = transform.Find("Others");
+    }
+
+    #endregion CUSTOM_FUNCTIONS
 }
