@@ -4,18 +4,16 @@ using UnityEngine;
 public class MoveState : IState
 {
     private Transform objectToMove;
-    private Vector3 endPosition;
-    private Material petMaterial;
+    private Vector3 targetPosition;
 
     private readonly Action OnDestinationReached;
 
     private bool isDestinationReached;
 
-    public MoveState(Transform objectToMove, Vector3 endPosition, Material petMaterial, Action OnDestinationReached)
+    public MoveState(Transform objectToMove, Vector3 targetPosition, Action OnDestinationReached)
     {
         this.objectToMove = objectToMove;
-        this.endPosition = endPosition;
-        this.petMaterial = petMaterial;
+        this.targetPosition = targetPosition;
 
         this.OnDestinationReached = OnDestinationReached;
     }
@@ -32,7 +30,7 @@ public class MoveState : IState
             return;
         }
 
-        if(objectToMove.position.x == endPosition.x)
+        if(objectToMove.position.x == targetPosition.x)
         {
             isDestinationReached = true;
             OnDestinationReached();
@@ -41,6 +39,6 @@ public class MoveState : IState
 
     public void Exit()
     {
-        Debug.Log("MovesState:: Exit()");
+        //Debug.Log("MovesState:: Exit()");
     }
 }

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Pet : MonoBehaviour
+public class PetAI : MonoBehaviour
 {
     #region VARIABLES
 
+    private Transform interactionTarget;
     private NavMeshAgent navMeshAgent;
     private MeshRenderer meshRenderer;
 
@@ -48,16 +49,6 @@ public class Pet : MonoBehaviour
     {
         UIManager.Instance.CurrentStateText = stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NULL";
         UIManager.Instance.PreviousStateText = stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NULL";
-
-        //if(currentMainTask != null)
-        //{
-        //    UIManager.Instance.MainTaskText = currentMainTask.TaskName;
-        //}
-
-        //if (currentSecondaryTask != null)
-        //{
-        //    UIManager.Instance.SecondaryTaskText = currentSecondaryTask.TaskName;
-        //}
     }
 
     private void Initialize()
@@ -76,23 +67,30 @@ public class Pet : MonoBehaviour
 
     private void OnSearchCompleted(SearchResult searchResult)
     {
-        var closestObject = GetClosestObject(searchResult.AllHitCollidersInRadius);
-
-        navMeshAgent.SetDestination(closestObject);
-
-        stateMachine.ChangeState(new MoveState(transform, closestObject, meshRenderer.material, OnDestinationReached));
+        interactionTarget = GetClosestObject(searchResult.AllHitCollidersInRadius);
+        navMeshAgent.SetDestination(interactionTarget.position);
+        stateMachine.ChangeState(new MoveState(transform, interactionTarget.position, OnDestinationReached));
     }
 
     private void OnDestinationReached()
     {
-        // Eat state???
-        // stateMachine.ChangeState(new EatState(4f, meshRenderer.material, defaultColor, OnEatStateEnd));
+        stateMachine.ChangeState(new InteractState(4f, defaultColor, OnInteractionStart, OnInteractionEnd));
+    }
 
-        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, searchRadius, searchTag, OnSearchCompleted));
+    private void OnInteractionStart()
+    {
+
+    }
+
+    private void OnInteractionEnd()
+    {
+
     }
 
     private void OnEatStateEnd()
     {
+        Destroy(interactionTarget.gameObject);
+
         stateMachine.ChangeState(new IdleState(new Vector2(1, 4)));
     }
 
@@ -101,7 +99,7 @@ public class Pet : MonoBehaviour
         navMeshAgent.SetDestination(target);
     }
 
-    private Vector3 GetClosestObject(Collider[] hitColliders)
+    private Transform GetClosestObject(Collider[] hitColliders)
     {
         if (hitColliders.Length > 0)
         {
@@ -119,11 +117,10 @@ public class Pet : MonoBehaviour
                 }
             }
 
-            return hitColliders[closestIndex].transform.position;
+            return hitColliders[closestIndex].transform;
         }
 
-        Debug.LogError("!!!");
-        return Vector3.zero;
+        return null;
     }
 
     #endregion CUSTOM_FUNCTIONS
