@@ -38,28 +38,28 @@ public class UIManager : Singelton<UIManager>
     {
         set
         {
-            currentStateText.text = "Current state: " + value;
+            currentStateText.text = "Current state: " + "<color=yellow>" + value+"</color>";
         }
     }
     public string PreviousStateText
     {
         set
         {
-            previousStateText.text = "Previous state: " + value;
+            previousStateText.text = "Previous state: " + "<color=yellow>" + value + "</color>";
         }
     }
     public string MainTaskText
     {
         set
         {
-            mainTaskText.text = "MainTask: " + value;
+            mainTaskText.text = "MainTask: " + "<color=yellow>" + value + "</color>";
         }
     }
     public string SecondaryTaskText
     {
         set
         {
-            secondaryTaskText.text = "SecondaryTask: " + value;
+            secondaryTaskText.text = "SecondaryTask: " + "<color=yellow>" + value + "</color>";
         }
     }
 

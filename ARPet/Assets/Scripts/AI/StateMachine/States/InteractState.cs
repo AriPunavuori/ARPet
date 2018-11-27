@@ -8,7 +8,6 @@ public class InteractState : IState
 
     public InteractState(
         float interactionTime,
-        Color defaultColor,
         Action OnInteractionStart,
         Action OnInteractFinished)
     {

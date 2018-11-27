@@ -4,6 +4,11 @@ public class InputManager : MonoBehaviour
 {
     #region VARIABLES
 
+    private const float MAX_RAY_DISTANCE = 100f;
+
+    [SerializeField]
+    private LayerMask mouseInteractLayer;
+
     #endregion VARIABLES
 
     #region PROPERTIES
@@ -39,11 +44,18 @@ public class InputManager : MonoBehaviour
             case 0:
                 if (Input.GetMouseButtonDown(0))
                 {
-
+                   
                 }
                 else if (Input.GetMouseButton(0))
                 {
+                    var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
+                    var hit = new RaycastHit();
 
+                    if (Physics.Raycast(ray, out hit, MAX_RAY_DISTANCE, mouseInteractLayer))
+                    {
+                        Debug.Log(hit.collider.name);
+                        Debug.DrawRay(ray.origin, ray.direction * MAX_RAY_DISTANCE, Color.red);
+                    }
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {

@@ -57,7 +57,7 @@ public class PetAI : MonoBehaviour
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         stateMachine = new StateMachine();
-        searchLayer = LayerMask.GetMask("Searchable");
+        searchLayer = LayerMask.GetMask("Interactable");
         searchRadius = 20f;
         searchTag = "Food";
 
@@ -68,23 +68,36 @@ public class PetAI : MonoBehaviour
     private void OnSearchCompleted(SearchResult searchResult)
     {
         interactionTarget = GetClosestObject(searchResult.AllHitCollidersInRadius);
+        Debug.Log(interactionTarget);
+
+        if(interactionTarget == null)
+        {
+            stateMachine.ChangeState(new IdleState(new Vector2(1, 4)));
+            return;
+        }
+
         navMeshAgent.SetDestination(interactionTarget.position);
         stateMachine.ChangeState(new MoveState(transform, interactionTarget.position, OnDestinationReached));
     }
 
     private void OnDestinationReached()
     {
-        stateMachine.ChangeState(new InteractState(4f, defaultColor, OnInteractionStart, OnInteractionEnd));
+        stateMachine.ChangeState(new InteractState(4f, OnInteractionStart, OnInteractionEnd));
     }
 
     private void OnInteractionStart()
     {
-
+        meshRenderer.material.color = Color.red;
     }
 
     private void OnInteractionEnd()
     {
+        meshRenderer.material.color = defaultColor;
 
+        interactionTarget.gameObject.SetActive(false);
+        interactionTarget = null;
+
+        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, searchRadius, searchTag, OnSearchCompleted));
     }
 
     private void OnEatStateEnd()
