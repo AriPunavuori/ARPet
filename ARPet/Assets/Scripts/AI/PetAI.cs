@@ -11,16 +11,30 @@ public class PetAI : MonoBehaviour
 
     private StateMachine stateMachine;
     private LayerMask searchLayer;
-    private float searchRadius;
-    private string searchTag;
 
-    private Color defaultColor, destinationReachedColor;
+    private Color defaultColor;
 
     #endregion VARIABLES
 
     #region PROPERTIES
 
     #endregion PROPERTIES
+
+    public float Happiness
+    {
+        get;
+        private set;
+    }
+    public float Sleepiness
+    {
+        get;
+        private set;
+    }
+    public float Energines
+    {
+        get;
+        private set;
+    }
 
     #region UNITY_FUNCTIONS
 
@@ -31,11 +45,15 @@ public class PetAI : MonoBehaviour
 
     private void Start()
     {
-        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, searchRadius, searchTag, OnSearchCompleted));
+        SetStats();
+
+        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
     }
 
     private void Update()
     {
+        UpdateStats();
+
         UpdateUI();
 
         stateMachine.ExecuteStateUpdate();
@@ -45,10 +63,36 @@ public class PetAI : MonoBehaviour
 
     #region CUSTOM_FUNCTIONS
 
+    private void SetStats()
+    {
+        Happiness = PlayerPrefs.HasKey("Happiness") ? PlayerPrefs.GetFloat("Happiness") : 100f;
+        Sleepiness = PlayerPrefs.HasKey("Sleepiness") ? PlayerPrefs.GetFloat("Sleepiness") : 100f;
+        Energines = PlayerPrefs.HasKey("Energines") ? PlayerPrefs.GetFloat("Energines") : 100f;
+    }
+
+    private void SaveStats()
+    {
+        PlayerPrefs.SetFloat("Happiness", Happiness);
+        PlayerPrefs.SetFloat("Sleepiness", Sleepiness);
+        PlayerPrefs.SetFloat("Energines", Energines);
+    }
+
+    private void UpdateStats()
+    {
+        var currentDeltaTime = Time.deltaTime;
+        Happiness -= currentDeltaTime;
+        Sleepiness -= currentDeltaTime;
+        Energines -= currentDeltaTime;
+    }
+
     private void UpdateUI()
     {
-        UIManager.Instance.CurrentStateText = stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NULL";
-        UIManager.Instance.PreviousStateText = stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NULL";
+        UIManager.Instance.UpdateUI(
+            Happiness,
+            Sleepiness,
+            Energines,
+            stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NULL",
+            stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NULL");
     }
 
     private void Initialize()
@@ -58,17 +102,13 @@ public class PetAI : MonoBehaviour
 
         stateMachine = new StateMachine();
         searchLayer = LayerMask.GetMask("Interactable");
-        searchRadius = 20f;
-        searchTag = "Food";
 
         defaultColor = meshRenderer.material.color;
-        destinationReachedColor = Color.red;
     }
 
     private void OnSearchCompleted(SearchResult searchResult)
     {
         interactionTarget = GetClosestObject(searchResult.AllHitCollidersInRadius);
-        Debug.Log(interactionTarget);
 
         if(interactionTarget == null)
         {
@@ -97,7 +137,7 @@ public class PetAI : MonoBehaviour
         interactionTarget.gameObject.SetActive(false);
         interactionTarget = null;
 
-        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, searchRadius, searchTag, OnSearchCompleted));
+        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
     }
 
     private void OnEatStateEnd()

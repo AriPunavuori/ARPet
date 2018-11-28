@@ -23,7 +23,6 @@ public class IdleState : IState
         if(moveTimer <= 0f)
         {
             moveTimer = Random.Range(randomMovementTimer.x, randomMovementTimer.y);
-            Debug.Log("!!!");
         }
     }
 

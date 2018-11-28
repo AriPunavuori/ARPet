@@ -12,7 +12,7 @@ public class UIManager : Singelton<UIManager>
 
     private Image happinessBar;
     private Image sleepinessBar;
-    private Image energinessBar;
+    private Image energinesBar;
 
     #endregion VARIABLES
 
@@ -34,56 +34,20 @@ public class UIManager : Singelton<UIManager>
         private set;
     }
 
-    public string CurrentStateText
-    {
-        set
-        {
-            currentStateText.text = "Current state: " + "<color=yellow>" + value+"</color>";
-        }
-    }
-    public string PreviousStateText
-    {
-        set
-        {
-            previousStateText.text = "Previous state: " + "<color=yellow>" + value + "</color>";
-        }
-    }
-    public string MainTaskText
-    {
-        set
-        {
-            mainTaskText.text = "MainTask: " + "<color=yellow>" + value + "</color>";
-        }
-    }
-    public string SecondaryTaskText
-    {
-        set
-        {
-            secondaryTaskText.text = "SecondaryTask: " + "<color=yellow>" + value + "</color>";
-        }
-    }
-
-    public float Happiness
-    {
-        get
-        {
-            return happinessBar.rectTransform.position.x;
-        }
-    }
-    public float Sleepiess
-    {
-        get
-        {
-            return sleepinessBar.rectTransform.position.x;
-        }
-    }
-    public float Energiness
-    {
-        get
-        {
-            return energinessBar.rectTransform.position.x;
-        }
-    }
+    //public string MainTaskText
+    //{
+    //    set
+    //    {
+    //        mainTaskText.text = "MainTask: " + "<color=yellow>" + value + "</color>";
+    //    }
+    //}
+    //public string SecondaryTaskText
+    //{
+    //    set
+    //    {
+    //        secondaryTaskText.text = "SecondaryTask: " + "<color=yellow>" + value + "</color>";
+    //    }
+    //}
 
     #endregion PROPERTIES
 
@@ -111,7 +75,22 @@ public class UIManager : Singelton<UIManager>
 
         happinessBar = PetStats.Find("Happiness").GetComponentInChildren<Image>();
         sleepinessBar = PetStats.Find("Sleepiness").GetComponentInChildren<Image>();
-        energinessBar = PetStats.Find("Energiness").GetComponentInChildren<Image>();
+        energinesBar = PetStats.Find("Energines").GetComponentInChildren<Image>();
+    }
+
+    public void UpdateUI(
+        float currentHappiness, 
+        float currentSleepiness, 
+        float currentEnergines, 
+        string currentState, 
+        string previousState)
+    {
+        happinessBar.rectTransform.localScale = new Vector2(currentHappiness / 100f, 1);
+        sleepinessBar.rectTransform.localScale = new Vector2(currentSleepiness / 100f, 1);
+        energinesBar.rectTransform.localScale = new Vector2(currentEnergines / 100f, 1);
+
+        currentStateText.text = "Current state: " + "<color=yellow>" + currentState + "</color>";
+        previousStateText.text = previousStateText.text = "Previous state: " + "<color=yellow>" + previousState + "</color>";
     }
 
     #endregion CUSTOM_FUNCTIONS
