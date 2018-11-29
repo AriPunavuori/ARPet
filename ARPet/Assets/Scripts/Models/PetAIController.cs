@@ -1,24 +1,33 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class PetAI : MonoBehaviour
+public class PetAIController : MonoBehaviour
 {
     #region VARIABLES
 
+    private const float MAX_HAPPINESS = 100f;
+    private const float MAX_SLEEPINESS = 100f;
+    private const float MAX_ENERGINES = 100f;
+
     private Transform interactionTarget;
     private NavMeshAgent navMeshAgent;
-    private MeshRenderer meshRenderer;
 
     private StateMachine stateMachine;
     private LayerMask searchLayer;
 
-    private Color defaultColor;
+    private readonly float statLoseRate = 0;
 
     #endregion VARIABLES
 
     #region PROPERTIES
 
-    #endregion PROPERTIES
+    public Vector3 CurrentDestination
+    {
+        get
+        {
+            return navMeshAgent.destination;
+        }
+    }
 
     public float Happiness
     {
@@ -36,6 +45,8 @@ public class PetAI : MonoBehaviour
         private set;
     }
 
+    #endregion PROPERTIES
+
     #region UNITY_FUNCTIONS
 
     private void Awake()
@@ -46,8 +57,12 @@ public class PetAI : MonoBehaviour
     private void Start()
     {
         SetStats();
-
-        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
+        stateMachine.ChangeState(new RoamingState(
+            transform,
+                new Vector3(
+                LevelManager.Instance.FloorSize.x - 1,
+                1, 
+                LevelManager.Instance.FloorSize.z - 1)));
     }
 
     private void Update()
@@ -65,9 +80,9 @@ public class PetAI : MonoBehaviour
 
     private void SetStats()
     {
-        Happiness = PlayerPrefs.HasKey("Happiness") ? PlayerPrefs.GetFloat("Happiness") : 100f;
-        Sleepiness = PlayerPrefs.HasKey("Sleepiness") ? PlayerPrefs.GetFloat("Sleepiness") : 100f;
-        Energines = PlayerPrefs.HasKey("Energines") ? PlayerPrefs.GetFloat("Energines") : 100f;
+        Happiness = PlayerPrefs.HasKey("Happiness") ? PlayerPrefs.GetFloat("Happiness") : MAX_HAPPINESS;
+        Sleepiness = PlayerPrefs.HasKey("Sleepiness") ? PlayerPrefs.GetFloat("Sleepiness") : MAX_SLEEPINESS;
+        Energines = PlayerPrefs.HasKey("Energines") ? PlayerPrefs.GetFloat("Energines") : MAX_ENERGINES;
     }
 
     private void SaveStats()
@@ -79,10 +94,11 @@ public class PetAI : MonoBehaviour
 
     private void UpdateStats()
     {
-        var currentDeltaTime = Time.deltaTime;
-        Happiness -= currentDeltaTime;
-        Sleepiness -= currentDeltaTime;
-        Energines -= currentDeltaTime;
+        var currentDeltaTime = Time.deltaTime + statLoseRate;
+
+        Happiness = Happiness > 0 ? Happiness -= currentDeltaTime : 0;
+        Sleepiness = Sleepiness > 0 ? Happiness -= currentDeltaTime : 0;
+        Energines = Energines > 0 ? Happiness -= currentDeltaTime : 0;
     }
 
     private void UpdateUI()
@@ -91,19 +107,16 @@ public class PetAI : MonoBehaviour
             Happiness,
             Sleepiness,
             Energines,
-            stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NULL",
-            stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NULL");
+            stateMachine.CurrentState != null ? stateMachine.CurrentState.ToString() : "NONE",
+            stateMachine.PreviousState != null ? stateMachine.PreviousState.ToString() : "NONE");
     }
 
     private void Initialize()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        navMeshAgent = GetComponentInParent<NavMeshAgent>();
 
         stateMachine = new StateMachine();
         searchLayer = LayerMask.GetMask("Interactable");
-
-        defaultColor = meshRenderer.material.color;
     }
 
     private void OnSearchCompleted(SearchResult searchResult)
@@ -116,8 +129,8 @@ public class PetAI : MonoBehaviour
             return;
         }
 
-        navMeshAgent.SetDestination(interactionTarget.position);
-        stateMachine.ChangeState(new MoveState(transform, interactionTarget.position, OnDestinationReached));
+        SetDestination(interactionTarget.position);
+        //stateMachine.ChangeState(new MoveState(transform, interactionTarget.position, OnDestinationReached));
     }
 
     private void OnDestinationReached()
@@ -127,29 +140,17 @@ public class PetAI : MonoBehaviour
 
     private void OnInteractionStart()
     {
-        meshRenderer.material.color = Color.red;
+        Pet.Instance.PetGraphicsController.ChangeMaterialColor(Color.red);
     }
 
     private void OnInteractionEnd()
     {
-        meshRenderer.material.color = defaultColor;
+        Pet.Instance.PetGraphicsController.ChangeMaterialColor(Color.white);
 
         interactionTarget.gameObject.SetActive(false);
         interactionTarget = null;
 
         stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
-    }
-
-    private void OnEatStateEnd()
-    {
-        Destroy(interactionTarget.gameObject);
-
-        stateMachine.ChangeState(new IdleState(new Vector2(1, 4)));
-    }
-
-    private void RandomMovement(Vector3 target)
-    {
-        navMeshAgent.SetDestination(target);
     }
 
     private Transform GetClosestObject(Collider[] hitColliders)
@@ -174,6 +175,11 @@ public class PetAI : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void SetDestination(Vector3 newDestination)
+    {
+        navMeshAgent.SetDestination(newDestination);
     }
 
     #endregion CUSTOM_FUNCTIONS

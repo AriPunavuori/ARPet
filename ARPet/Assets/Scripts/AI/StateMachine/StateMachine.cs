@@ -1,7 +1,21 @@
 ﻿public class StateMachine
 {
-    public IState CurrentState { get; private set; }
-    public IState PreviousState { get; private set; }
+    #region PROPERTIES
+
+    public IState CurrentState
+    {
+        get;
+        private set;
+    }
+    public IState PreviousState
+    {
+        get;
+        private set;
+    }
+
+    #endregion PROPERTIES
+
+    #region CUSTOM_FUNCTIONS
 
     public void ChangeState(IState newState)
     {
@@ -32,4 +46,6 @@
             ChangeState(PreviousState);
         }
     }
+
+    #endregion CUSTOM_FUNCTIONS
 }

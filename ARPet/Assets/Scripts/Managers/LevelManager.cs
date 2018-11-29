@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singelton<LevelManager>
 {
     #region VARIABLES
 
@@ -12,6 +12,12 @@ public class LevelManager : MonoBehaviour
     #endregion VARIABLES
 
     #region PROPERTIES
+
+    public Vector3 FloorSize
+    {
+        get;
+        private set;
+    }
 
     #endregion PROPERTIES
 
@@ -38,6 +44,8 @@ public class LevelManager : MonoBehaviour
         floorPrefab = Resources.Load<GameObject>("Prefabs/Floor");
         petPrefab = Resources.Load<GameObject>("Prefabs/Pet");
         foodPrefab = Resources.Load<GameObject>("Prefabs/Food");
+
+        FloorSize = new Vector3(floorPrefab.transform.localScale.x, 2, floorPrefab.transform.localScale.x) / 2;
     }
 
     private void CreateLevel()
@@ -48,21 +56,21 @@ public class LevelManager : MonoBehaviour
 
         CreatePrefabInstance(petPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity);
 
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
-        CreatePrefabInstance(foodPrefab, new Vector3(Random.Range(-4, 4), 0.5f, Random.Range(-2, 4)));
+        CreatePrefabInstanceRandomPosition(foodPrefab, -4, 4, 5);
     }
 
-    private void CreatePrefabInstance(GameObject prefab, Vector3 position = new Vector3(), Quaternion rotation = new Quaternion(), int amount = 1)
+    private void CreatePrefabInstance(GameObject prefab, Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
+    {     
+        var newInstance = Instantiate(prefab, position, rotation);
+        newInstance.transform.SetParent(modelContainer);
+        newInstance.name = prefab.name;       
+    }
+
+    private void CreatePrefabInstanceRandomPosition(GameObject prefab, float min, float max, int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            var newInstance = Instantiate(prefab, position, rotation);
-            newInstance.transform.SetParent(modelContainer);
-            newInstance.name = prefab.name;
+            CreatePrefabInstance(prefab, new Vector3(Random.Range(min, max), 0.5f, Random.Range(min, max)));
         }
     }
 
