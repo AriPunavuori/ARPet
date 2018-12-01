@@ -30,7 +30,6 @@
             }
         }
 
-
         public IntPtr GetJEnv()
         {
             if(IntPtr.Zero == m_jenvHandle)

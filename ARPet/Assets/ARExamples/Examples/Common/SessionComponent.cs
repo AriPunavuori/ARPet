@@ -9,7 +9,6 @@
         [Tooltip("config")]
         public ARConfigBase Config;
 
-
         private bool isFirstConnect = true;//this is used to avoid multiple permission request when it was rejected
         private bool isSessionCreated =false;
         private bool isErrorHappendWhenInit = false;
@@ -95,7 +94,6 @@
             AsyncTask.Update();
             ARSession.Update();
         }
-
 
         public void OnApplicationPause(bool isPaused)
         {

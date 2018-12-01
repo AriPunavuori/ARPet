@@ -33,8 +33,7 @@
             }
             else
             {
-                _DrawARLogo(touch);
-                
+                _DrawARLogo(touch);          
             }
         }
 

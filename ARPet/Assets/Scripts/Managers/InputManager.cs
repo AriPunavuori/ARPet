@@ -1,13 +1,20 @@
-﻿using UnityEngine;
+﻿using Common;
+using HuaweiARUnitySDK;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     #region VARIABLES
 
+    public GameObject Cube, Sphere;
+
+    private List<ARAnchor> addedAnchors = new List<ARAnchor>();
+
+    private const int anchorLimit = 16;
     private const float MAX_RAY_DISTANCE = 100f;
 
-    [SerializeField]
-    private LayerMask mouseInteractLayer;
+    public LayerMask TouchInteractLayer;
 
     #endregion VARIABLES
 
@@ -24,8 +31,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        MouseButton(0);
-        MouseButton(1);
+        OnTouch();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -37,50 +43,45 @@ public class InputManager : MonoBehaviour
 
     }
 
-    private void MouseButton(int mouseButtonIndex)
+    private void OnTouch()
     {
-        switch (mouseButtonIndex)
+        var touch = new Touch();
+
+        if (ARFrame.GetTrackingState() != ARTrackable.TrackingState.TRACKING
+                || Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
         {
-            case 0:
-                if (Input.GetMouseButtonDown(0))
-                {
-                   
-                }
-                else if (Input.GetMouseButton(0))
-                {
-                    var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(Input.mousePosition);
-                    var hit = new RaycastHit();
 
-                    if (Physics.Raycast(ray, out hit, MAX_RAY_DISTANCE, mouseInteractLayer))
-                    {
-                        Debug.Log(hit.collider.name);
-                        Debug.DrawRay(ray.origin, ray.direction * MAX_RAY_DISTANCE, Color.red);
-                    }
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
+        }
+        else
+        {
+            DrawObject(touch);
+        }
+    }
 
+    private void DrawObject(Touch touch)
+    {
+        List<ARHitResult> hitResults = ARFrame.HitTest(touch);
+        foreach (ARHitResult singleHit in hitResults)
+        {
+            ARTrackable trackable = singleHit.GetTrackable();
+            if ((trackable is ARPlane && ((ARPlane)trackable).IsPoseInPolygon(singleHit.HitPose)) ||
+                (trackable is ARPoint))
+            {
+                var prefab = trackable is ARPlane ? Cube : Sphere;
+
+                if (addedAnchors.Count > anchorLimit)
+                {
+                    ARAnchor toRemove = addedAnchors[0];
+                    toRemove.Detach();
+                    addedAnchors.RemoveAt(0);
                 }
+
+                ARAnchor anchor = singleHit.CreateAnchor();
+                var newObject = Instantiate(prefab, anchor.GetPose().position, anchor.GetPose().rotation);
+                newObject.GetComponent<ObjectVisualizer>().Initialize(anchor);
+                addedAnchors.Add(anchor);
                 break;
-
-            case 1:
-                if (Input.GetMouseButtonDown(1))
-                {
-
-                }
-                else if (Input.GetMouseButton(1))
-                {
-
-                }
-                else if (Input.GetMouseButtonUp(1))
-                {
-
-                }
-                break;
-
-            default:
-
-                break;
+            }
         }
     }
 

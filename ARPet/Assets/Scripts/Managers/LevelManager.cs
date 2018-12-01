@@ -30,7 +30,7 @@ public class LevelManager : Singelton<LevelManager>
 
     private void Start()
     {
-        CreateLevel();
+        //CreateLevel();
     }
 
     #endregion UNITY_FUNCTIONS

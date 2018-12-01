@@ -53,9 +53,19 @@ public class UIManager : Singelton<UIManager>
 
     #region UNITY_FUNCTIONS
 
-    private void Awake()
+    private void Start()
     {
         Initialize();
+    }
+
+    private void OnGUI()
+    {
+        GUIStyle guiStyle = new GUIStyle();
+        guiStyle.normal.background = null;
+        guiStyle.normal.textColor = new Color(1, 0, 0);
+        guiStyle.fontSize = 45;
+
+        GUI.Label(new Rect(0, Screen.height - 100, 200, 200), GameMaster.Instance.ErrorMessage, guiStyle);
     }
 
     #endregion UNITY_FUNCTIONS
@@ -78,12 +88,7 @@ public class UIManager : Singelton<UIManager>
         energinesBar = PetStats.Find("Energines").GetComponentInChildren<Image>();
     }
 
-    public void UpdateUI(
-        float currentHappiness, 
-        float currentSleepiness, 
-        float currentEnergines, 
-        string currentState, 
-        string previousState)
+    public void UpdateUI(float currentHappiness, float currentSleepiness, float currentEnergines, string currentState, string previousState)
     {
         happinessBar.rectTransform.localScale = new Vector2(currentHappiness / 100f, 1);
         sleepinessBar.rectTransform.localScale = new Vector2(currentSleepiness / 100f, 1);
@@ -91,6 +96,16 @@ public class UIManager : Singelton<UIManager>
 
         currentStateText.text = "Current state: " + "<color=yellow>" + currentState + "</color>";
         previousStateText.text = previousStateText.text = "Previous state: " + "<color=yellow>" + previousState + "</color>";
+    }
+
+    public void QuitButton()
+    {
+#if UNITY_EDITOR
+
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     #endregion CUSTOM_FUNCTIONS
