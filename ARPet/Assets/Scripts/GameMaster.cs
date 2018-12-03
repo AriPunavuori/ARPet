@@ -1,12 +1,16 @@
 ﻿using HuaweiARInternal;
 using HuaweiARUnitySDK;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMaster : SingeltonPersistant<GameMaster>
 {
     #region VARIABLES
 
+    public GameObject TestPrefab;
     public ARConfigBase Config;
+
+    private List<ARPlane> arPlanes = new List<ARPlane>();
 
     private const float QUIT_DELAY = 0.5f;
 
@@ -77,6 +81,28 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     {
         AsyncTask.Update();
         ARSession.Update();
+
+        UIManager.Instance.PoseText.text = "Pose: " + ARFrame.GetPose().ToString();
+
+        arPlanes.Clear();
+
+        ARFrame.GetTrackables(arPlanes, ARTrackableQueryFilter.NEW);
+
+        if(arPlanes.Count > 0)
+        {
+            var plane = arPlanes[0];
+
+            var planePolygons = new List<Vector3>();
+            plane.GetPlanePolygon(planePolygons);
+
+            var planePose = plane.GetCenterPose();
+
+            plane.CreateAnchor(planePose);
+
+            Instantiate(TestPrefab, planePose.position, planePose.rotation);
+        }
+
+        UIManager.Instance.PlanesText.text = "Planes: " + arPlanes.Count;
     }
 
     #endregion UNITY_FUNCTIONS
@@ -218,6 +244,5 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             UIManager.Instance.QuitButton(QUIT_DELAY);
         }
     }
-
-    #endregion CUSTOM_FUNCTIONS
+#endregion CUSTOM_FUNCTIONS
 }

@@ -125,7 +125,7 @@
             SessionStatus = ARSessionStatus.RUNNING;
         }
 
-        public  ARAnchor AddAnchor(Pose pose)
+        public ARAnchor AddAnchor(Pose pose)
         {
             if (ARSessionStatus.RUNNING != Instance.SessionStatus)
             {

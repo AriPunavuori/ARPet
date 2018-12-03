@@ -5,8 +5,8 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
-    public Text CanBuildText;
-    public Text PlaneSizeText;
+    public Text PoseText;
+    public Text PlanesText;
 
     private Text currentStateText;
     private Text previousStateText;
@@ -36,21 +36,6 @@ public class UIManager : Singelton<UIManager>
         get;
         private set;
     }
-
-    //public string MainTaskText
-    //{
-    //    set
-    //    {
-    //        mainTaskText.text = "MainTask: " + "<color=yellow>" + value + "</color>";
-    //    }
-    //}
-    //public string SecondaryTaskText
-    //{
-    //    set
-    //    {
-    //        secondaryTaskText.text = "SecondaryTask: " + "<color=yellow>" + value + "</color>";
-    //    }
-    //}
 
     #endregion PROPERTIES
 

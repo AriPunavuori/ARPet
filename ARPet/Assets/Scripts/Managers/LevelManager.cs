@@ -25,7 +25,7 @@ public class LevelManager : Singelton<LevelManager>
 
     private void Awake()
     {
-        Initialize();
+        //Initialize();
     }
 
     private void Start()

@@ -1,13 +1,9 @@
-﻿using HuaweiARUnitySDK;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
     #region VARIABLES
-
-    private List<ARAnchor> addedAnchors = new List<ARAnchor>(); 
 
     private const int anchorLimit = 16;
     private const float MAX_RAY_DISTANCE = 100f;
@@ -37,7 +33,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-       
+        
     }
 
     #endregion UNITY_FUNCTIONS

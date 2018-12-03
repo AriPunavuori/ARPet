@@ -14,7 +14,7 @@ public class CameraEngine : Singelton<CameraEngine>
     private static readonly float[] QUAD_TEXCOORDS = { 0f, 1f, 0f, 0f, 1f, 1f, 1f, 0f };
     private float[] transformedUVCoords = QUAD_TEXCOORDS;
 
-    public Material ARBackground_mat;
+    private Material ARBackground_mat;
 
     #endregion VARIABLES
 
@@ -29,7 +29,7 @@ public class CameraEngine : Singelton<CameraEngine>
     private void Awake()
     {
         MainCamera = GetComponent<Camera>();
-        //ARBackground_mat = Resources.Load<Material>("Materials/ARBackground_mat") as Material;
+        ARBackground_mat = Resources.Load<Material>("Materials/ARBackground_mat") as Material;
     }
 
     public void Update()

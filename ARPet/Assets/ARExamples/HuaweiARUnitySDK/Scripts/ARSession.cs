@@ -33,7 +33,6 @@
             ARSessionManager.Instance.Stop();
         }
 
-
         public static void SetCameraTextureNameAuto()
         {
             ARSessionManager.Instance.SetCameraTextureName();

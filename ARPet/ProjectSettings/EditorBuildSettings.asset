@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/ARExamples/Examples/FaceARSample/faceAR.unity
     guid: 9fced6bae376cda41a55624cc5ab6849
   - enabled: 1
-    path: Assets/Scenes/MathiasDevScene.unity
+    path: Assets/Scenes/ARPet.unity
     guid: d2d1e0b3cb072f64c8568f1c362f64bd
   - enabled: 0
     path: Assets/ARExamples/Examples/WorldARSample/preview.unity
