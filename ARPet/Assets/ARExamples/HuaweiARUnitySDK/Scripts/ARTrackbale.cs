@@ -53,7 +53,6 @@
             m_ndkSession.TrackableAdapter.GetAnchors(m_trackableHandle, anchors);
         }
 
-
         public override bool Equals(object obj)
         {
             if (obj != null && obj is ARTrackable)

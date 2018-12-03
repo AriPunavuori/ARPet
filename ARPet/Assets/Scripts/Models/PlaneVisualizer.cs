@@ -6,13 +6,8 @@ public class PlaneVisualizer : MonoBehaviour
 {
     private static int planeCount = 0;
 
-    private Vector3 targetSize = Vector3.one;
-    private bool canBuild = false;
-
-    //private readonly Color ableToBuildColor = Color.green;
-    //private readonly Color unableToBuildColor = Color.red;
-    //private Color defaultColor;
-    //private Material planeMaterial;
+    private Vector3 targetSize = new Vector3(0.5f, 0.5f, 0.5f);
+    private float targetMagnitude;
 
     private readonly Color[] planeColors = new Color[]
     {
@@ -39,9 +34,11 @@ public class PlaneVisualizer : MonoBehaviour
     {
         mesh = GetComponent<MeshFilter>().mesh;
         meshRenderer = GetComponent<MeshRenderer>();
+    }
 
-        //planeMaterial = meshRenderer.material;
-        //defaultColor = meshRenderer.material.color;
+    private void Start()
+    {
+        targetMagnitude = targetSize.magnitude;
     }
 
     public void Update()
@@ -64,8 +61,6 @@ public class PlaneVisualizer : MonoBehaviour
 
         meshRenderer.enabled = true;
         UpdateMeshIfNeeded();
-
-        CheckAreaSize();
     }
 
     public void Initialize(ARPlane plane)
@@ -73,7 +68,6 @@ public class PlaneVisualizer : MonoBehaviour
         trackedPlane = plane;
 
         meshRenderer.material.SetColor("_GridColor", planeColors[planeCount++ % planeColors.Length]);
-        // meshRenderer.material.SetColor("_GridColor", defaultColor);
 
         Update();
     }
@@ -127,25 +121,5 @@ public class PlaneVisualizer : MonoBehaviour
         }
 
         return true;
-    }
-
-    private void CheckAreaSize()
-    {
-        canBuild = mesh.bounds.size.magnitude >= targetSize.magnitude;
-
-        // meshRenderer.material.color = canBuild ? ableToBuildColor : unableToBuildColor;
-
-        UpdateUITexts();
-    }
-
-    private void UpdateUITexts()
-    {
-        UIManager.Instance.CanBuildText.text = canBuild
-            ? "Can build: " + "<color=green>" + mesh.bounds.size + "</color>"
-            : "Can build: " + "<color=red>" + mesh.bounds.size + "</color>";
-
-        UIManager.Instance.PlaneSizeText.text = canBuild 
-            ? "Plane size: " + "<color=green>" + mesh.bounds.size + "</color>"
-            : "Plane size: " + "<color=red>" + mesh.bounds.size + "</color>";       
     }
 }

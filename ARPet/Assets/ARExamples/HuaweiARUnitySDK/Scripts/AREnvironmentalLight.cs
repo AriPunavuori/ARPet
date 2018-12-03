@@ -19,14 +19,13 @@
 //-----------------------------------------------------------------------
 namespace HuaweiARUnitySDK
 {
-
     using UnityEngine;
     using HuaweiARInternal;
 
     [ExecuteInEditMode]
     public class AREnvironmentalLight : MonoBehaviour
     {
-        void Update()
+        private void Update()
         {
 #if UNITY_EDITOR
             Shader.SetGlobalFloat("_GlobalLightEstimation", 1.0f);

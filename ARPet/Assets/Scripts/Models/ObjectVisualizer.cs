@@ -8,7 +8,7 @@ public class ObjectVisualizer : MonoBehaviour
 
     public void Awake()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 
     public void Initialize(ARAnchor anchor)
@@ -33,8 +33,7 @@ public class ObjectVisualizer : MonoBehaviour
         {
             case ARTrackable.TrackingState.TRACKING:
                 Pose pose = anchor.GetPose();
-                gameObject.transform.position = pose.position;
-                gameObject.transform.rotation = pose.rotation;
+                gameObject.transform.SetPositionAndRotation(pose.position, pose.rotation);
                 gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
                 meshRenderer.enabled = true;
                 break;

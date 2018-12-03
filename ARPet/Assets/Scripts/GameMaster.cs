@@ -1,7 +1,5 @@
-﻿using Common;
-using HuaweiARInternal;
+﻿using HuaweiARInternal;
 using HuaweiARUnitySDK;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMaster : SingeltonPersistant<GameMaster>
@@ -9,9 +7,6 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     #region VARIABLES
 
     public ARConfigBase Config;
-
-    private List<ARPlane> newPlanes = new List<ARPlane>();
-    private GameObject planePrefab;
 
     private const float QUIT_DELAY = 0.5f;
 
@@ -24,11 +19,11 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
     #region PROPERTIES
 
+    public string ErrorMessage { get; private set; }
+
     public Transform HUDCanvas { get; private set; }
     public Transform Managers { get; private set; }
     public Transform Others { get; private set; }
-
-    public string ErrorMessage { get; private set; }
 
     #endregion PROPERTIES
 
@@ -40,14 +35,16 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
         Initialize();
     }
-
+    private void Start()
+    {
+       
+    }
     private void OnApplicationQuit()
     {
         ARSession.Stop();
         isFirstConnect = true;
         isSessionCreated = false;
     }
-
     private void OnApplicationPause(bool isPaused)
     {
         if (isPaused)
@@ -72,17 +69,14 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             {
                 ARDebug.LogError("camera permission is denied");
                 ErrorMessage = "This app require camera permission";
-                Invoke("_DoQuit", 0.5f);
+                UIManager.Instance.QuitButton(QUIT_DELAY);
             }
         }
     }
-
     private void Update()
     {
         AsyncTask.Update();
         ARSession.Update();
-
-        DrawPlane();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -93,13 +87,10 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-        planePrefab = Resources.Load<GameObject>("Prefabs/Plane");
-
         HUDCanvas = transform.Find("HUDCanvas");
         Managers = transform.Find("Managers");
         Others = transform.Find("Others");
     }
-
     private void InitializeAR()
     {
         //If you do not want to switch engines, AREnginesSelector is useless.
@@ -159,7 +150,6 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             isFirstConnect = false;
         }
     }
-
     private void Connect()
     {
         ARDebug.LogInfo("_connect begin");
@@ -180,12 +170,11 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             {
                 ARDebug.LogError("connection failed because a needed permission was rejected.");
                 ErrorMessage = "This app require camera permission";
-                Invoke("_DoQuit", 0.5f);
+                UIManager.Instance.QuitButton(QUIT_DELAY);
                 return;
             }
         });
     }
-
     private void ConnectToService()
     {
         try
@@ -227,17 +216,6 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             isErrorHappendWhenInit = true;
             ErrorMessage = "This config is not supported on this device, exit now.";
             UIManager.Instance.QuitButton(QUIT_DELAY);
-        }
-    }
-
-    private void DrawPlane()
-    {
-        newPlanes.Clear();
-        ARFrame.GetTrackables(newPlanes, ARTrackableQueryFilter.NEW);
-        for (int i = 0; i < newPlanes.Count; i++)
-        {
-            var planeObject = Instantiate(planePrefab, Vector3.zero, Quaternion.identity, transform);
-            planeObject.GetComponent<PlaneVisualizer>().Initialize(newPlanes[i]);
         }
     }
 
