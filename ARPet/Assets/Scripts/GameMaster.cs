@@ -13,6 +13,8 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     private List<ARPlane> newPlanes = new List<ARPlane>();
     private GameObject planePrefab;
 
+    private const float QUIT_DELAY = 0.5f;
+
     private bool isFirstConnect = true; //this is used to avoid multiple permission request when it was rejected
     private bool isSessionCreated = false;
     private bool isErrorHappendWhenInit = false;
@@ -108,14 +110,10 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         {
             AREnginesSelector.Instance.SetAREngine(AREnginesType.HUAWEI_AR_ENGINE);
         }
-        /*else if((AREnginesAvaliblity.GOOGLE_AR_CORE&ability) != 0)
-        {
-            AREnginesSelector.Instance.SetAREngine(AREnginesType.GOOGLE_AR_CORE);
-        }*/
         else
         {
             ErrorMessage = "This device does not support AR Engine. Exit.";
-            UIManager.Instance.QuitButton();
+            UIManager.Instance.QuitButton(QUIT_DELAY);
             return;
         }
 
@@ -134,25 +132,25 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         catch (ARUnavailableConnectServerTimeOutException /*e*/)
         {
             ErrorMessage = "Network is not available, retry later!";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
             return;
         }
         catch (ARUnavailableDeviceNotCompatibleException /*e*/)
         {
             ErrorMessage = "This Device does not support AR!";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
             return;
         }
         catch (ARUnavailableEmuiNotCompatibleException /*e*/)
         {
             ErrorMessage = "This EMUI does not support AR!";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
             return;
         }
         catch (ARUnavailableUserDeclinedInstallationException /*e*/)
         {
             ErrorMessage = "User decline installation right now, quit";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
             return;
         }
         if (isFirstConnect)
@@ -204,31 +202,31 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             isErrorHappendWhenInit = true;
             ARDebug.LogError("camera permission is denied");
             ErrorMessage = "This app require camera permission";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
         }
         catch (ARUnavailableDeviceNotCompatibleException /*e*/)
         {
             isErrorHappendWhenInit = true;
             ErrorMessage = "This device does not support AR";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
         }
         catch (ARUnavailableServiceApkTooOldException /*e*/)
         {
             isErrorHappendWhenInit = true;
             ErrorMessage = "This AR Engine is too old, please update";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
         }
         catch (ARUnavailableServiceNotInstalledException /*e*/)
         {
             isErrorHappendWhenInit = true;
             ErrorMessage = "This app depend on AREngine.apk, please install it";
-            Invoke("_DoQuit", 0.5f);
+            UIManager.Instance.QuitButton(QUIT_DELAY);
         }
         catch (ARUnSupportedConfigurationException /*e*/)
         {
             isErrorHappendWhenInit = true;
             ErrorMessage = "This config is not supported on this device, exit now.";
-            UIManager.Instance.QuitButton();
+            UIManager.Instance.QuitButton(QUIT_DELAY);
         }
     }
 
@@ -239,7 +237,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         for (int i = 0; i < newPlanes.Count; i++)
         {
             var planeObject = Instantiate(planePrefab, Vector3.zero, Quaternion.identity, transform);
-            planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(newPlanes[i]);
+            planeObject.GetComponent<PlaneVisualizer>().Initialize(newPlanes[i]);
         }
     }
 

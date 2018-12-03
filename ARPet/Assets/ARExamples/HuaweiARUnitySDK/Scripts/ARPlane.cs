@@ -46,7 +46,6 @@
             return m_ndkSession.PlaneAdapter.GetExtentZ(m_trackableHandle);
         }
 
-
         public void GetPlanePolygon(List<Vector3> polygonList)
         {
             if (polygonList == null)

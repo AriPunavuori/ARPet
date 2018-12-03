@@ -5,6 +5,9 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
+    public Text CanBuildText;
+    public Text PlaneSizeText;
+
     private Text currentStateText;
     private Text previousStateText;
     private Text mainTaskText;
@@ -88,6 +91,16 @@ public class UIManager : Singelton<UIManager>
         energinesBar = PetStats.Find("Energines").GetComponentInChildren<Image>();
     }
 
+    private void OnQuitPressed()
+    {
+#if UNITY_EDITOR
+
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     public void UpdateUI(float currentHappiness, float currentSleepiness, float currentEnergines, string currentState, string previousState)
     {
         happinessBar.rectTransform.localScale = new Vector2(currentHappiness / 100f, 1);
@@ -98,14 +111,9 @@ public class UIManager : Singelton<UIManager>
         previousStateText.text = previousStateText.text = "Previous state: " + "<color=yellow>" + previousState + "</color>";
     }
 
-    public void QuitButton()
+    public void QuitButton(float delay)
     {
-#if UNITY_EDITOR
-
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        Invoke("OnQuitPressed", delay);
     }
 
     #endregion CUSTOM_FUNCTIONS

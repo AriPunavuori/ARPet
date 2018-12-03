@@ -1,7 +1,7 @@
-﻿using Common;
-using HuaweiARUnitySDK;
+﻿using HuaweiARUnitySDK;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
 
     public GameObject Cube, Sphere;
 
-    private List<ARAnchor> addedAnchors = new List<ARAnchor>();
+    private List<ARAnchor> addedAnchors = new List<ARAnchor>(); 
 
     private const int anchorLimit = 16;
     private const float MAX_RAY_DISTANCE = 100f;
@@ -19,6 +19,14 @@ public class InputManager : MonoBehaviour
     #endregion VARIABLES
 
     #region PROPERTIES
+
+    public bool IsPointerOverGameObject
+    {
+        get
+        {
+            return EventSystem.current.IsPointerOverGameObject();
+        }
+    }
 
     #endregion PROPERTIES
 
@@ -31,7 +39,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        OnTouch();
+        CheckTouch();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -43,19 +51,18 @@ public class InputManager : MonoBehaviour
 
     }
 
-    private void OnTouch()
+    private void CheckTouch()
     {
         var touch = new Touch();
 
         if (ARFrame.GetTrackingState() != ARTrackable.TrackingState.TRACKING
-                || Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
+                || Input.touchCount < 1 
+                || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
         {
+            return;
+        }
 
-        }
-        else
-        {
-            DrawObject(touch);
-        }
+        DrawObject(touch);   
     }
 
     private void DrawObject(Touch touch)

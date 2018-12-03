@@ -14,10 +14,15 @@ public class ObjectVisualizer : MonoBehaviour
     public void Initialize(ARAnchor anchor)
     {
         this.anchor = anchor;
-        Update();
+        TrackObject();
     }
 
     private void Update()
+    {
+        TrackObject();
+    }
+
+    private void TrackObject()
     {
         if (null == anchor)
         {
@@ -27,9 +32,9 @@ public class ObjectVisualizer : MonoBehaviour
         switch (anchor.GetTrackingState())
         {
             case ARTrackable.TrackingState.TRACKING:
-                Pose p = anchor.GetPose();
-                gameObject.transform.position = p.position;
-                gameObject.transform.rotation = p.rotation;
+                Pose pose = anchor.GetPose();
+                gameObject.transform.position = pose.position;
+                gameObject.transform.rotation = pose.rotation;
                 gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
                 meshRenderer.enabled = true;
                 break;
