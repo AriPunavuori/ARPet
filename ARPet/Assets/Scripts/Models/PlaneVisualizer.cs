@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlaneVisualizer : MonoBehaviour
 {
-    private static int planeCount = 0;
+    #region VARIABLES
 
-    private Vector3 targetSize = new Vector3(0.5f, 0.5f, 0.5f);
-    private float targetMagnitude;
+    private static int planeCount = 0;
 
     private readonly Color[] planeColors = new Color[]
     {
@@ -30,15 +29,14 @@ public class PlaneVisualizer : MonoBehaviour
     private Mesh mesh;
     private MeshRenderer meshRenderer;
 
+    #endregion VARIABLES
+
+    #region UNITY_FUNCTIONS
+
     private void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;
         meshRenderer = GetComponent<MeshRenderer>();
-    }
-
-    private void Start()
-    {
-        targetMagnitude = targetSize.magnitude;
     }
 
     public void Update()
@@ -61,7 +59,12 @@ public class PlaneVisualizer : MonoBehaviour
 
         meshRenderer.enabled = true;
         UpdateMeshIfNeeded();
+
+        GameMaster.Instance.CheckCanWeBuild(mesh);
     }
+    #endregion UNITY_FUNCTIONS
+
+    #region CUSTOM_FUNCTIONS
 
     public void Initialize(ARPlane plane)
     {
@@ -122,4 +125,6 @@ public class PlaneVisualizer : MonoBehaviour
 
         return true;
     }
+
+    #endregion CUSTOM_FUNCTIONS
 }

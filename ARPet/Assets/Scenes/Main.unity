@@ -1706,7 +1706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2e580f774c11b4094569c83bd711f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestPrefab: {fileID: 100000, guid: 50e3d1205e791564f9b3a4b407a2c5a8, type: 3}
   Config: {fileID: 11400000, guid: 703c21845456e834397da8ebc62590ad, type: 2}
 --- !u!4 &1296213426
 Transform:

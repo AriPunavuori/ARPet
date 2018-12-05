@@ -7,10 +7,16 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 {
     #region VARIABLES
 
-    public GameObject TestPrefab;
+    private const int ANCHOR_LIMIT = 16;
+
+    private Vector2 currentPlaneSize;
+    private Vector2 buildArea = new Vector2(1f, 1f);
+    private GameObject planeObject;
+
     public ARConfigBase Config;
 
-    private List<ARPlane> arPlanes = new List<ARPlane>();
+    private List<ARAnchor> addedAnchors = new List<ARAnchor>();
+    private readonly List<ARPlane> newPlanes = new List<ARPlane>();
 
     private const float QUIT_DELAY = 0.5f;
 
@@ -19,9 +25,13 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     private bool isErrorHappendWhenInit = false;
     private bool installRequested = false;
 
+    private readonly bool IsWorldCreated = false;
+
     #endregion VARIABLES
 
     #region PROPERTIES
+
+    public bool CanCreateWorld { get; private set; }
 
     public string ErrorMessage { get; private set; }
 
@@ -41,7 +51,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
     }
     private void Start()
     {
-       
+        UIManager.Instance.PlanesText.text = "Plane size: " + "<color=red>" + Vector3.zero + "</color>";
     }
     private void OnApplicationQuit()
     {
@@ -84,25 +94,16 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
         UIManager.Instance.PoseText.text = "Pose: " + ARFrame.GetPose().ToString();
 
-        arPlanes.Clear();
+        DrawPlane();
 
-        ARFrame.GetTrackables(arPlanes, ARTrackableQueryFilter.NEW);
-
-        if(arPlanes.Count > 0)
+        if (CanCreateWorld)
         {
-            var plane = arPlanes[0];
-
-            var planePolygons = new List<Vector3>();
-            plane.GetPlanePolygon(planePolygons);
-
-            var planePose = plane.GetCenterPose();
-
-            plane.CreateAnchor(planePose);
-
-            Instantiate(TestPrefab, planePose.position, planePose.rotation);
+            UIManager.Instance.PlanesText.text = "Plane size: " + "<color=green>" + currentPlaneSize + "</color>";
         }
-
-        UIManager.Instance.PlanesText.text = "Planes: " + arPlanes.Count;
+        else
+        {
+            UIManager.Instance.PlanesText.text = "Plane size: " + "<color=red>" + currentPlaneSize + "</color>";
+        } 
     }
 
     #endregion UNITY_FUNCTIONS
@@ -117,6 +118,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         Managers = transform.Find("Managers");
         Others = transform.Find("Others");
     }
+
     private void InitializeAR()
     {
         //If you do not want to switch engines, AREnginesSelector is useless.
@@ -176,6 +178,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             isFirstConnect = false;
         }
     }
+
     private void Connect()
     {
         ARDebug.LogInfo("_connect begin");
@@ -201,6 +204,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             }
         });
     }
+
     private void ConnectToService()
     {
         try
@@ -244,5 +248,67 @@ public class GameMaster : SingeltonPersistant<GameMaster>
             UIManager.Instance.QuitButton(QUIT_DELAY);
         }
     }
-#endregion CUSTOM_FUNCTIONS
+
+    private void DrawPlane()
+    {
+        if (IsWorldCreated || CanCreateWorld)
+            return;
+
+        newPlanes.Clear();
+        ARFrame.GetTrackables(newPlanes, ARTrackableQueryFilter.NEW);
+        for (int i = 0; i < newPlanes.Count; i++)
+        {
+            planeObject = Instantiate(ResourceManager.Instance.Plane, Vector3.zero, Quaternion.identity, transform);
+            planeObject.GetComponent<PlaneVisualizer>().Initialize(newPlanes[i]);
+        }
+    }
+
+    public void DoTouch(Touch touch)
+    {
+        List<ARHitResult> hitResults = ARFrame.HitTest(touch);
+        ARDebug.LogInfo("_DrawARLogo hitResults count {0}", hitResults.Count);
+        foreach (ARHitResult singleHit in hitResults)
+        {
+            ARTrackable trackable = singleHit.GetTrackable();
+            ARDebug.LogInfo("_DrawARLogo GetTrackable {0}", singleHit.GetTrackable());
+            if ((trackable is ARPlane && ((ARPlane)trackable).IsPoseInPolygon(singleHit.HitPose)) ||
+                (trackable is ARPoint))
+            {
+                GameObject prefab = trackable is ARPlane ? ResourceManager.Instance.ARPalm : ResourceManager.Instance.TestSphere;
+
+                if (addedAnchors.Count > ANCHOR_LIMIT)
+                {
+                    ARAnchor toRemove = addedAnchors[0];
+                    toRemove.Detach();
+                    addedAnchors.RemoveAt(0);
+                }
+
+                ARAnchor anchor = singleHit.CreateAnchor();
+                var logoObject = Instantiate(prefab, anchor.GetPose().position, anchor.GetPose().rotation);
+                logoObject.GetComponent<ObjectVisualizer>().Initialize(anchor);
+                addedAnchors.Add(anchor);
+                break;
+            }
+        }
+    }
+
+    public void CheckCanWeBuild(Mesh mesh)
+    {
+        currentPlaneSize = new Vector2(mesh.bounds.size.x, mesh.bounds.size.z);
+
+        if (currentPlaneSize.x >= buildArea.x || currentPlaneSize.y >= buildArea.y)
+        {
+            CanCreateWorld = true;
+
+            // We do this multiple times!!
+            CreateWorld(mesh.bounds.center);
+        }
+    }
+
+    private void CreateWorld(Vector3 center)
+    {
+        Instantiate(ResourceManager.Instance.World, center, Quaternion.identity);
+    }
+
+    #endregion CUSTOM_FUNCTIONS
 }

@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using HuaweiARUnitySDK;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
     #region VARIABLES
 
-    private const int anchorLimit = 16;
     private const float MAX_RAY_DISTANCE = 100f;
 
     public LayerMask TouchInteractLayer;
@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
 
     #region PROPERTIES
 
+    public bool IsWorldCreated { get; private set; }
     public bool IsPointerOverGameObject
     {
         get
@@ -33,7 +34,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        
+        CanWeTouch();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -43,6 +44,25 @@ public class InputManager : MonoBehaviour
     private void Initialize()
     {
 
+    }
+
+    private void CanWeTouch()
+    {
+        Touch touch;
+
+        if (IsPointerOverGameObject)
+            return;
+
+        if (ARFrame.GetTrackingState() != ARTrackable.TrackingState.TRACKING
+            || Input.touchCount < 1
+            || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
+        {
+            return;
+        }
+        else
+        {
+            GameMaster.Instance.DoTouch(touch);
+        }
     }
 
     #endregion CUSTOM_FUNCTIONS
