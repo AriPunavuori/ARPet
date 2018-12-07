@@ -4,7 +4,6 @@
 
     internal class NDKSession
     {
-
         public IntPtr SessionHandle { get; private set; }
         public IntPtr FrameHandle { get; set; }
 
@@ -21,7 +20,6 @@
         public ARConfigBaseAdapter ConfigBaseAdapter { get; private set; }
         public ARLightEstimateAdapter LightEstimateAdapter { get; private set; }
         public ARAnchorAdapter AnchorAdapter { get; private set; }
-
 
         public ARTrackbaleAdapter TrackableAdapter { get; private set; }
         public ARPlaneAdapter PlaneAdapter { get; private set; }

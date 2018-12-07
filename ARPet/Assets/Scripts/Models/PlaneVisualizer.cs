@@ -59,8 +59,6 @@ public class PlaneVisualizer : MonoBehaviour
 
         meshRenderer.enabled = true;
         UpdateMeshIfNeeded();
-
-        GameMaster.Instance.CheckCanWeBuild(mesh);
     }
     #endregion UNITY_FUNCTIONS
 
@@ -86,6 +84,7 @@ public class PlaneVisualizer : MonoBehaviour
         }
 
         Pose centerPose = trackedPlane.GetCenterPose();
+
         for (int i = 0; i < meshVertices3D.Count; i++)
         {
             meshVertices3D[i] = centerPose.rotation * meshVertices3D[i] + centerPose.position;

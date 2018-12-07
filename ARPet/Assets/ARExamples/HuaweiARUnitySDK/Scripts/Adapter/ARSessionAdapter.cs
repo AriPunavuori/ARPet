@@ -20,7 +20,7 @@ namespace HuaweiARInternal
             IntPtr sessionHandle= IntPtr.Zero;
             ARDebug.LogInfo("native create seesion begin");
 
-            IntPtr jEnv = ARUnityHelper.Instance.GetJEnv();
+            IntPtr jEnv = ARUnityHelper.Instance.GetJEnv();          
             IntPtr activity = ARUnityHelper.Instance.GetActivityHandle();
             NDKARStatus status= NDKAPI.HwArSession_create(jEnv,activity, ref sessionHandle);
             ARDebug.LogInfo("native create seesion returns status {0}",status);
@@ -43,7 +43,7 @@ namespace HuaweiARInternal
 
         public void Config(ARConfigBase unityConfig)
         {
-            //ARDebug.LogInfo("native config begin" + unityConfig.ToString());
+            ARDebug.LogInfo("native config begin" + unityConfig.ToString());
             IntPtr configHandle = m_ndkSession.ConfigBaseAdapter.Create();
             m_ndkSession.ConfigBaseAdapter.UpdateNDKConfigWithUnityConfig(configHandle, unityConfig);
             NDKARStatus status = NDKAPI.HwArSession_configure(m_ndkSession.SessionHandle, configHandle);

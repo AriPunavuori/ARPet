@@ -5,8 +5,66 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
-    public Text PoseText;
-    public Text PlanesText;
+    [SerializeField]
+    private Text poseText;
+    [SerializeField]
+    private Text planesText;
+    [SerializeField]
+    private Text deviceText;
+    [SerializeField]
+    private Text hitObjectText;
+    [SerializeField]
+    private Text hitDistanceText;
+    [SerializeField]
+    private Text hitPoseText;
+
+    [SerializeField]
+    private Text touchPhaseText;
+    [SerializeField]
+    private Text planeAnchorsText;
+
+    public string UpdatePoseText
+    {
+        get { return poseText.text; }
+        set { poseText.text = "Pose: " + value; }
+    }
+    public string UpdatePlanesText
+    {
+        get { return planesText.text; }
+        set { planesText.text = "Planes: " + value; }
+    }
+    public string UpdateDeviceText
+    {
+        get { return deviceText.text; }
+        set { deviceText.text = "Device: " + value; }
+    }
+    public string UpdateHitObjectText
+    {
+        get { return hitObjectText.text; }
+        set { hitObjectText.text = "HitObject: " + value; }
+    }
+    public string UpdateHitDistance
+    {
+        get { return hitDistanceText.text; }
+        set { hitDistanceText.text = "Hit distance: " + value; }
+    }
+    public string UpdateHitPoseText
+    {
+        get { return hitPoseText.text; }
+        set { hitPoseText.text = "Hit pose: " + value; }
+    }
+
+    public string UpdateTouchPhase
+    {
+        get { return touchPhaseText.text; }
+        set { touchPhaseText.text = "Touch phase: " + value; }
+    }
+
+    public string UpdatePlaneAnchorsText
+    {
+        get { return planeAnchorsText.text; }
+        set { planeAnchorsText.text = "Plane anchors: " + value; }
+    }
 
     private Text currentStateText;
     private Text previousStateText;
@@ -53,7 +111,7 @@ public class UIManager : Singelton<UIManager>
         guiStyle.normal.textColor = new Color(1, 0, 0);
         guiStyle.fontSize = 45;
 
-        GUI.Label(new Rect(0, Screen.height - 100, 200, 200), GameMaster.Instance.ErrorMessage, guiStyle);
+        GUI.Label(new Rect(0, Screen.height - 100, 200, 200), SessionManager.Instance.ErrorMessage, guiStyle);
     }
 
     #endregion UNITY_FUNCTIONS
