@@ -9,6 +9,8 @@ public class AudioManager : Singelton<AudioManager>
 
     #region PROPERTIES
 
+    public string Device { get; private set; }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
@@ -17,8 +19,7 @@ public class AudioManager : Singelton<AudioManager>
     {
         foreach (var device in Microphone.devices)
         {
-            Debug.Log("Name: " + device);
-            UIManager.Instance.UpdateDeviceText = device[0].ToString();
+            Device = device[0].ToString();
         }
     }
 

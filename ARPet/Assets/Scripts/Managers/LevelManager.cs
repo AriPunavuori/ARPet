@@ -5,8 +5,8 @@ public class LevelManager : Singelton<LevelManager>
 {
     #region VARIABLES
 
+    private Pet pet;
     private NavMeshSurface[] navMeshSurfaces;
-    private GameObject floorPrefab, petPrefab, foodPrefab;
     private Transform modelContainer;
 
     #endregion VARIABLES
@@ -25,12 +25,7 @@ public class LevelManager : Singelton<LevelManager>
 
     private void Awake()
     {
-        //Initialize();
-    }
-
-    private void Start()
-    {
-        //CreateLevel();
+        Initialize();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -40,38 +35,13 @@ public class LevelManager : Singelton<LevelManager>
     private void Initialize()
     {
         modelContainer = transform.Find("ModelContainer");
-
-        floorPrefab = Resources.Load<GameObject>("Prefabs/Floor");
-        petPrefab = Resources.Load<GameObject>("Prefabs/Pet");
-        foodPrefab = Resources.Load<GameObject>("Prefabs/Food");
-
-        FloorSize = new Vector3(floorPrefab.transform.localScale.x, 2, floorPrefab.transform.localScale.x) / 2;
     }
 
-    private void CreateLevel()
+    public void CreateLevel(Vector3 petStartPosition)
     {
-        CreatePrefabInstance(floorPrefab);
-
         BuildNavMesh();
 
-        CreatePrefabInstance(petPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-        CreatePrefabInstanceRandomPosition(foodPrefab, -4, 4, 5);
-    }
-
-    private void CreatePrefabInstance(GameObject prefab, Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
-    {     
-        var newInstance = Instantiate(prefab, position, rotation);
-        newInstance.transform.SetParent(modelContainer);
-        newInstance.name = prefab.name;       
-    }
-
-    private void CreatePrefabInstanceRandomPosition(GameObject prefab, float min, float max, int amount)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            CreatePrefabInstance(prefab, new Vector3(Random.Range(min, max), 0.5f, Random.Range(min, max)));
-        }
+        CreatePet(petStartPosition);
     }
 
     private void BuildNavMesh()
@@ -82,6 +52,12 @@ public class LevelManager : Singelton<LevelManager>
         {
             navMeshSurfaces[i].BuildNavMesh();
         }
+    }
+
+    public void CreatePet(Vector3 petStartPosition)
+    {
+        pet = Instantiate(ResourceManager.Instance.PetPrefab, petStartPosition, Quaternion.identity).GetComponent<Pet>();
+        pet.PetAnchor = GameMaster.Instance.World.WorldAnchor;
     }
 
     #endregion CUSTOM_FUNCTIONS

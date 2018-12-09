@@ -9,7 +9,7 @@ public class SessionManager : Singelton<SessionManager>
     
     private ARConfigBase configBase;
 
-    private List<ARAnchor> addedAnchors = new List<ARAnchor>();
+    private readonly List<ARAnchor> addedAnchors = new List<ARAnchor>();
     private readonly List<ARPlane> newPlanes = new List<ARPlane>();
 
     private const int ANCHOR_LIMIT = 16;
@@ -47,7 +47,7 @@ public class SessionManager : Singelton<SessionManager>
 
     private void Awake()
     {
-        InitializeARConfig(ResourceManager.Instance.GetFromResources<ARConfigBase>("ArConfig", "PetARConfig"));
+        configBase = ResourceManager.Instance.PetARConfig;
     }
 
     private void Update()
@@ -228,11 +228,6 @@ public class SessionManager : Singelton<SessionManager>
             ErrorMessage = "This config is not supported on this device, exit now.";
             UIManager.Instance.QuitButton(QUIT_DELAY);
         }
-    }
-
-    private void InitializeARConfig(ARConfigBase configBase)
-    {
-        this.configBase = configBase;
     }
 
 #endregion CUSTOM_FUNCTIONS

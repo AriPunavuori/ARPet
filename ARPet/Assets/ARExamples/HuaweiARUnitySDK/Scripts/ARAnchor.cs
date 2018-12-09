@@ -8,7 +8,7 @@
     {
         internal  IntPtr m_anchorHandle = IntPtr.Zero;
         private NDKSession m_ndkSession;
-        //this method must be called in ARAnchorMaager
+        //this method must be called in ARAnchorManager
         internal ARAnchor(IntPtr anchorHandle,NDKSession session)
         {
             m_anchorHandle = anchorHandle;

@@ -22,49 +22,8 @@ public class UIManager : Singelton<UIManager>
     private Text touchPhaseText;
     [SerializeField]
     private Text planeAnchorsText;
-
-    public string UpdatePoseText
-    {
-        get { return poseText.text; }
-        set { poseText.text = "Pose: " + value; }
-    }
-    public string UpdatePlanesText
-    {
-        get { return planesText.text; }
-        set { planesText.text = "Planes: " + value; }
-    }
-    public string UpdateDeviceText
-    {
-        get { return deviceText.text; }
-        set { deviceText.text = "Device: " + value; }
-    }
-    public string UpdateHitObjectText
-    {
-        get { return hitObjectText.text; }
-        set { hitObjectText.text = "HitObject: " + value; }
-    }
-    public string UpdateHitDistance
-    {
-        get { return hitDistanceText.text; }
-        set { hitDistanceText.text = "Hit distance: " + value; }
-    }
-    public string UpdateHitPoseText
-    {
-        get { return hitPoseText.text; }
-        set { hitPoseText.text = "Hit pose: " + value; }
-    }
-
-    public string UpdateTouchPhase
-    {
-        get { return touchPhaseText.text; }
-        set { touchPhaseText.text = "Touch phase: " + value; }
-    }
-
-    public string UpdatePlaneAnchorsText
-    {
-        get { return planeAnchorsText.text; }
-        set { planeAnchorsText.text = "Plane anchors: " + value; }
-    }
+    [SerializeField]
+    private Text isWorldCreatedText;
 
     private Text currentStateText;
     private Text previousStateText;
@@ -158,6 +117,27 @@ public class UIManager : Singelton<UIManager>
     {
         Invoke("OnQuitPressed", delay);
     }
+
+    public void UpdateDebugTexts(
+        string poseText, 
+        string planesText,
+        string deviceText,
+        string hitObjectText,
+        string hitDistanceText, 
+        string hitPoseText, 
+        string touchPhaseText, 
+        string planeAnchorsText)
+    {        
+        this.poseText.text = "Pose: " + poseText;
+        this.planesText.text = "Planes: " + planesText;
+        this.deviceText.text = "Device: " + deviceText;
+        this.hitObjectText.text = "HitObject: " + hitObjectText;
+        this.hitDistanceText.text = "Hit distance: " + hitDistanceText;
+        this.hitPoseText.text = "Hit pose: " + hitPoseText;
+        this.touchPhaseText.text = "Touch phase: " + touchPhaseText;
+        this.planeAnchorsText.text = "Plane anchors: " + planeAnchorsText;
+        isWorldCreatedText.text = "Is world created: " + GameMaster.Instance.IsWorldCreated.ToString();
+}
 
     #endregion CUSTOM_FUNCTIONS
 }
