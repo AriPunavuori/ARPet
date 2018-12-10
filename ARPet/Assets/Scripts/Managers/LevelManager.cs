@@ -7,19 +7,18 @@ public class LevelManager : Singelton<LevelManager>
 
     private Pet pet;
     private NavMeshSurface[] navMeshSurfaces;
-    private Transform modelContainer;
 
     #endregion VARIABLES
 
     #region PROPERTIES
 
-    public Vector3 FloorSize
+    #endregion PROPERTIES
+
+    public Transform ModelContainer
     {
         get;
         private set;
     }
-
-    #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
 
@@ -34,7 +33,7 @@ public class LevelManager : Singelton<LevelManager>
 
     private void Initialize()
     {
-        modelContainer = transform.Find("ModelContainer");
+        ModelContainer = transform.Find("ModelContainer");
     }
 
     public void CreateLevel(Vector3 petStartPosition)

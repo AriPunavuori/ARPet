@@ -5,26 +5,6 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
-    [SerializeField]
-    private Text poseText;
-    [SerializeField]
-    private Text planesText;
-    [SerializeField]
-    private Text deviceText;
-    [SerializeField]
-    private Text hitObjectText;
-    [SerializeField]
-    private Text hitDistanceText;
-    [SerializeField]
-    private Text hitPoseText;
-
-    [SerializeField]
-    private Text touchPhaseText;
-    [SerializeField]
-    private Text planeAnchorsText;
-    [SerializeField]
-    private Text isWorldCreatedText;
-
     private Text currentStateText;
     private Text previousStateText;
     private Text mainTaskText;
@@ -38,7 +18,17 @@ public class UIManager : Singelton<UIManager>
 
     #region PROPERTIES
 
-    public Transform DebugBox
+    public Transform GameDebugBox
+    {
+        get;
+        private set;
+    }
+    public Transform AudioDebugBox
+    {
+        get;
+        private set;
+    }
+    public Transform ARSessionDebugBox
     {
         get;
         private set;
@@ -54,23 +44,49 @@ public class UIManager : Singelton<UIManager>
         private set;
     }
 
+    public Text ARSessionStatusText
+    {
+        get;
+        private set;
+    }
+    public Text DevicePoseText
+    {
+        get;
+        private set;
+    }
+    public Text ARErrorMessageText
+    {
+        get;
+        private set;
+    }
+    public Text TrackableText
+    {
+        get;
+        private set;
+    }
+    public Text HitPoseText
+    {
+        get;
+        private set;
+    }
+    public Text HitDistanceText
+    {
+        get;
+        private set;
+    }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
     }
 
-    private void OnGUI()
+    private void Update()
     {
-        GUIStyle guiStyle = new GUIStyle();
-        guiStyle.normal.background = null;
-        guiStyle.normal.textColor = new Color(1, 0, 0);
-        guiStyle.fontSize = 45;
-
-        GUI.Label(new Rect(0, Screen.height - 100, 200, 200), SessionManager.Instance.ErrorMessage, guiStyle);
+        UpdateARSessionUI();
     }
 
     #endregion UNITY_FUNCTIONS
@@ -79,9 +95,16 @@ public class UIManager : Singelton<UIManager>
 
     private void Initialize()
     {
-        DebugBox = GameMaster.Instance.HUDCanvas.Find("DebugBox");
-        PetStates = DebugBox.Find("PetStates");
-        PetStats = DebugBox.Find("PetStats");
+        InitializeGameDebugBox();
+        InitializeARSessionDebugBox();
+        InitializeAudioDebugBox();      
+    }
+
+    private void InitializeGameDebugBox()
+    {
+        GameDebugBox = GameMaster.Instance.HUDCanvas.Find("GameDebugBox");
+        PetStates = GameDebugBox.Find("PetStates");
+        PetStats = GameDebugBox.Find("PetStats");
 
         currentStateText = PetStates.Find("CurrentStateText").GetComponent<Text>();
         previousStateText = PetStates.Find("PreviousStateText").GetComponent<Text>();
@@ -91,6 +114,22 @@ public class UIManager : Singelton<UIManager>
         happinessBar = PetStats.Find("Happiness").GetComponentInChildren<Image>();
         sleepinessBar = PetStats.Find("Sleepiness").GetComponentInChildren<Image>();
         energinesBar = PetStats.Find("Energines").GetComponentInChildren<Image>();
+    }
+
+    private void InitializeARSessionDebugBox()
+    {
+        ARSessionDebugBox = GameMaster.Instance.HUDCanvas.Find("ARSessionDebugBox");
+        ARSessionStatusText = ARSessionDebugBox.Find("ARSessionStatus").GetComponent<Text>();
+        ARErrorMessageText = ARSessionDebugBox.Find("ARErrorMessage").GetComponent<Text>();
+        DevicePoseText = ARSessionDebugBox.Find("DevicePose").GetComponent<Text>();
+        TrackableText = ARSessionDebugBox.Find("Trackable").GetComponent<Text>();
+        HitPoseText = ARSessionDebugBox.Find("HitPose").GetComponent<Text>();
+        HitDistanceText = ARSessionDebugBox.Find("HitDistance").GetComponent<Text>();
+    }
+
+    private void InitializeAudioDebugBox()
+    {
+        AudioDebugBox = GameMaster.Instance.HUDCanvas.Find("AudioDebugBox");
     }
 
     private void OnQuitPressed()
@@ -113,31 +152,20 @@ public class UIManager : Singelton<UIManager>
         previousStateText.text = previousStateText.text = "Previous state: " + "<color=yellow>" + previousState + "</color>";
     }
 
-    public void QuitButton(float delay)
+    public void UpdateARSessionUI()
     {
-        Invoke("OnQuitPressed", delay);
+        ARSessionStatusText.text = "Session status: " + SessionManager.Instance.CurrentARSessionStatus;
+        ARErrorMessageText.text = "Error: " + SessionManager.Instance.ErrorMessage;
+        DevicePoseText.text = "Device pose: " + CameraEngine.Instance.CameraPose.ToString();
+        TrackableText.text = "Trackable: " + InputManager.Instance.CurrentTrackable;
+        HitPoseText.text = "Hit pose: " + InputManager.Instance.CurrentHitPose;
+        HitDistanceText.text = "Hit distance: " + InputManager.Instance.CurrentHitDistance;
     }
 
-    public void UpdateDebugTexts(
-        string poseText, 
-        string planesText,
-        string deviceText,
-        string hitObjectText,
-        string hitDistanceText, 
-        string hitPoseText, 
-        string touchPhaseText, 
-        string planeAnchorsText)
-    {        
-        this.poseText.text = "Pose: " + poseText;
-        this.planesText.text = "Planes: " + planesText;
-        this.deviceText.text = "Device: " + deviceText;
-        this.hitObjectText.text = "HitObject: " + hitObjectText;
-        this.hitDistanceText.text = "Hit distance: " + hitDistanceText;
-        this.hitPoseText.text = "Hit pose: " + hitPoseText;
-        this.touchPhaseText.text = "Touch phase: " + touchPhaseText;
-        this.planeAnchorsText.text = "Plane anchors: " + planeAnchorsText;
-        isWorldCreatedText.text = "Is world created: " + GameMaster.Instance.IsWorldCreated.ToString();
-}
+    public void QuitButton(float quitDelay)
+    {
+        Invoke("OnQuitPressed", quitDelay);
+    }
 
     #endregion CUSTOM_FUNCTIONS
 }

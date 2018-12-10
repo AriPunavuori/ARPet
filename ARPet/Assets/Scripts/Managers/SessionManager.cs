@@ -1,6 +1,5 @@
 ﻿using HuaweiARInternal;
 using HuaweiARUnitySDK;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SessionManager : Singelton<SessionManager>
@@ -8,10 +7,6 @@ public class SessionManager : Singelton<SessionManager>
     #region VARIABLE
     
     private ARConfigBase configBase;
-
-    private readonly List<ARAnchor> addedAnchors = new List<ARAnchor>();
-    private readonly List<ARPlane> newPlanes = new List<ARPlane>();
-
     private const int ANCHOR_LIMIT = 16;
     private const float QUIT_DELAY = 0.5f;
 
@@ -27,6 +22,8 @@ public class SessionManager : Singelton<SessionManager>
 
     #region PROPERTIES
 
+    public string CurrentARSessionStatus { get { return ARSessionManager.Instance.SessionStatus.ToString(); } }
+
     public bool CanUpdateSession
     {
         get
@@ -38,7 +35,6 @@ public class SessionManager : Singelton<SessionManager>
 #endif
         }      
     }
-
     public string ErrorMessage { get; private set; }
 
 #endregion PROPERTIES
@@ -70,7 +66,11 @@ public class SessionManager : Singelton<SessionManager>
         {
             if (!isSessionCreated)
             {
+#if UNITY_EDITOR
+                return;
+#else
                 InitializeAR();
+#endif
             }
             if (isErrorHappendWhenInit)
             {
