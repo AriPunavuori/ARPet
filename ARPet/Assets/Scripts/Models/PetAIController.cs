@@ -56,13 +56,13 @@ public class PetAIController : MonoBehaviour
 
     private void Start()
     {
-        SetStats();
-        stateMachine.ChangeState(new RoamingState(
-            transform,
-                new Vector3(
-                LevelManager.Instance.FloorSize.x - 1,
-                1, 
-                LevelManager.Instance.FloorSize.z - 1)));
+        //SetStats();
+        //stateMachine.ChangeState(new RoamingState(
+        //    transform,
+        //        new Vector3(
+        //        LevelManager.Instance.FloorSize.x - 1,
+        //        1, 
+        //        LevelManager.Instance.FloorSize.z - 1)));
     }
 
     private void Update()
@@ -184,4 +184,3 @@ public class PetAIController : MonoBehaviour
 
     #endregion CUSTOM_FUNCTIONS
 }
-

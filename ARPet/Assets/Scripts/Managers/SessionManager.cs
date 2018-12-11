@@ -6,12 +6,11 @@ using UnityEngine;
 public class SessionManager : Singelton<SessionManager>
 {
     #region VARIABLE
-    
+
+    private List<ARPlane> newARPlanes = new List<ARPlane>();
+    private List<ARAnchor> createdARAnchors = new List<ARAnchor>();
+
     private ARConfigBase configBase;
-
-    private readonly List<ARAnchor> addedAnchors = new List<ARAnchor>();
-    private readonly List<ARPlane> newPlanes = new List<ARPlane>();
-
     private const int ANCHOR_LIMIT = 16;
     private const float QUIT_DELAY = 0.5f;
 
@@ -27,6 +26,8 @@ public class SessionManager : Singelton<SessionManager>
 
     #region PROPERTIES
 
+    public string CurrentARSessionStatus { get { return ARSessionManager.Instance.SessionStatus.ToString(); } }
+
     public bool CanUpdateSession
     {
         get
@@ -38,7 +39,6 @@ public class SessionManager : Singelton<SessionManager>
 #endif
         }      
     }
-
     public string ErrorMessage { get; private set; }
 
 #endregion PROPERTIES
@@ -57,6 +57,8 @@ public class SessionManager : Singelton<SessionManager>
         if (CanUpdateSession)
         {
             ARSession.Update();
+
+            CheckNewARPlanes();
         }
     }
 
@@ -70,7 +72,11 @@ public class SessionManager : Singelton<SessionManager>
         {
             if (!isSessionCreated)
             {
+#if UNITY_EDITOR
+                return;
+#else
                 InitializeAR();
+#endif
             }
             if (isErrorHappendWhenInit)
             {
@@ -227,6 +233,48 @@ public class SessionManager : Singelton<SessionManager>
             isErrorHappendWhenInit = true;
             ErrorMessage = "This config is not supported on this device, exit now.";
             UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+    }
+
+    public void CreateARAnchor(Pose newAnchorPosition)
+    {
+        Anchor newAnchor = Instantiate(
+            ResourceManager.Instance.AnchorPrefab,
+            newAnchorPosition.position,
+            newAnchorPosition.rotation,
+            GameMaster.Instance.ModelContainer
+            ). GetComponent<Anchor>();
+
+        newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
+       
+    }
+
+    public void CheckNewARPlanes()
+    {
+        if(newARPlanes.Count > 0)
+        {
+            newARPlanes.Clear();
+        }
+
+        ARFrame.GetTrackables(newARPlanes, ARTrackableQueryFilter.NEW);
+       
+        if(newARPlanes.Count == 1)
+        {
+            CreateARAnchor(newARPlanes[0].GetCenterPose());
+        }
+
+    }
+
+    public void RemoveARPlane(ARPlane arPlane)
+    {
+        
+    }
+
+    public void DetachARAnchor(ARAnchor anchorToDetach)
+    {
+        if(anchorToDetach != null)
+        {
+            anchorToDetach.Detach();
         }
     }
 

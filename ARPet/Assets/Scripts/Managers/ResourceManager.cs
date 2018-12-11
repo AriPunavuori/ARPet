@@ -1,5 +1,6 @@
 ﻿using HuaweiARUnitySDK;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class ResourceManager : Singelton<ResourceManager>
 {
@@ -15,6 +16,8 @@ public class ResourceManager : Singelton<ResourceManager>
 
     public Material ARBackground_mat { get; private set; }
 
+    public AudioMixer AudioMixer { get; private set; }
+
     private void Awake()
     {
         PetARConfig = Resources.Load<ARConfigBase>("Prefabs/ArConfig/PetARConfig");
@@ -27,5 +30,7 @@ public class ResourceManager : Singelton<ResourceManager>
         PetPrefab = Resources.Load<GameObject>("Prefabs/Models/Pet");
 
         ARBackground_mat = Resources.Load<Material>("Prefabs/Materials/ARBackground_mat");
+
+        AudioMixer = Resources.Load<AudioMixer>("Audio/Mixers/AudioMixer");
     }
 }

@@ -59,6 +59,7 @@ public class HorizontalPlane : MonoBehaviour
     public void Update()
     {
         UpdateHorizontalPlaneTracking();
+
         UpdateARHorizontalPlane();
     }
 
@@ -68,6 +69,27 @@ public class HorizontalPlane : MonoBehaviour
         meshRenderer.material.SetColor("_GridColor", planeColor[planeCount++ % planeColor.Length]);
         meshRenderer.enabled = true;
         //Update();
+    }
+
+    private void UpdateHorizontalPlaneTracking()
+    {
+        if (trackedPlane == null)
+        {
+            return;
+        }
+        else if (trackedPlane.GetSubsumedBy() != null
+            || trackedPlane.GetTrackingState() == ARTrackable.TrackingState.STOPPED)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else if (trackedPlane.GetTrackingState() == ARTrackable.TrackingState.PAUSED) // whether to destory gameobject if not tracking
+        {
+            meshRenderer.enabled = false;
+            return;
+        }
+
+        //meshRenderer.enabled = true;
     }
 
     private void UpdateARHorizontalPlane()
@@ -100,27 +122,6 @@ public class HorizontalPlane : MonoBehaviour
         mesh.SetVertices(meshVertices3D);
         mesh.SetIndices(triangulator.Triangulate(), MeshTopology.Triangles, 0);
         mesh.SetColors(meshColors);
-    }
-
-    private void UpdateHorizontalPlaneTracking()
-    {
-        if (trackedPlane == null)
-        {
-            return;
-        }
-        else if (trackedPlane.GetSubsumedBy() != null
-            || trackedPlane.GetTrackingState() == ARTrackable.TrackingState.STOPPED)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else if (trackedPlane.GetTrackingState() == ARTrackable.TrackingState.PAUSED) // whether to destory gameobject if not tracking
-        {
-            meshRenderer.enabled = false;
-            return;
-        }
-
-        //meshRenderer.enabled = true;
     }
 
     private bool AreVerticesListsEqual(List<Vector3> firstList, List<Vector3> secondList)
