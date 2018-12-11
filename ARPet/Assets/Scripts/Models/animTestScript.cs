@@ -15,5 +15,9 @@ public class animTestScript : MonoBehaviour {
             m_Animator.Play("spook");
             print("Eek!");
         }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            m_Animator.Play("laugh");
+            print("Hihi!");
+        }
     }
 }
