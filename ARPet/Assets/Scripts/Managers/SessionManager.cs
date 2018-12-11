@@ -272,7 +272,10 @@ public class SessionManager : Singelton<SessionManager>
 
     public void DetachARAnchor(ARAnchor anchorToDetach)
     {
-        anchorToDetach.Detach();
+        if(anchorToDetach != null)
+        {
+            anchorToDetach.Detach();
+        }
     }
 
 #endregion CUSTOM_FUNCTIONS

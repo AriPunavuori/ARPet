@@ -88,6 +88,11 @@ public class InputManager : Singelton<InputManager>
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
                     currentTouchHitPointObject.SetActive(true);
                     currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+
+                    if(LevelManager.Instance.IsWorldCreated == false)
+                    {
+                        LevelManager.Instance.CreateWorld();
+                    }
                 }
                 
                 break;

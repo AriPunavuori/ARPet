@@ -29,7 +29,7 @@ public class World : MonoBehaviour
         WorldAnchor = anchor;
         pose = anchor.GetPose();
 
-        //transform.SetPositionAndRotation(pose.position, pose.rotation);
+        transform.SetPositionAndRotation(pose.position, pose.rotation);
 
         //meshRenderer.enabled = false;
     }
@@ -40,6 +40,43 @@ public class World : MonoBehaviour
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
         defaultColor = meshRenderer.material.color;
+    }
+
+    private void OnEnable()
+    {
+
+    }
+
+    private void Update()
+    {
+        if (WorldAnchor == null)
+        {
+            meshRenderer.enabled = false;
+            return;
+        }
+        switch (WorldAnchor.GetTrackingState())
+        {
+            case ARTrackable.TrackingState.TRACKING:
+                Pose p = WorldAnchor.GetPose();
+                gameObject.transform.position = p.position;
+                gameObject.transform.rotation = p.rotation;
+                gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
+                meshRenderer.enabled = true;
+                break;
+            case ARTrackable.TrackingState.PAUSED:
+                meshRenderer.enabled = false;
+                break;
+            case ARTrackable.TrackingState.STOPPED:
+            default:
+                meshRenderer.enabled = false;
+                Destroy(gameObject);
+                break;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        SessionManager.Instance.DetachARAnchor(WorldAnchor);
     }
 
     public void MoveWorld(Pose newPose)

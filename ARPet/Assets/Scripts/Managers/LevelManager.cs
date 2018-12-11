@@ -48,7 +48,7 @@ public class LevelManager : Singelton<LevelManager>
     public void CreateWorld()
     {
         World = Instantiate(ResourceManager.Instance.WorldObjectPrefab, GameMaster.Instance.ModelContainer).GetComponent<World>();
-
+        //World.Initialize();
         IsWorldCreated = true;
     }
 
