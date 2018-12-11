@@ -286,7 +286,8 @@ GameObject:
   - component: {fileID: 169654832}
   - component: {fileID: 169654833}
   - component: {fileID: 169654834}
-  m_Layer: 10
+  - component: {fileID: 169654835}
+  m_Layer: 8
   m_Name: Eye R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,6 +372,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &169654835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 169654831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc94599e8b67fb4180f47c2c39705a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &175211893
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +930,8 @@ GameObject:
   - component: {fileID: 708181200}
   - component: {fileID: 708181201}
   - component: {fileID: 708181202}
-  m_Layer: 10
+  - component: {fileID: 708181203}
+  m_Layer: 8
   m_Name: Eye L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,6 +1016,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &708181203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 708181199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc94599e8b67fb4180f47c2c39705a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &809099952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 826182375}
   - component: {fileID: 826182376}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Eyelid L (Mask)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5861,7 +5885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 980329397}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: EyeRParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5893,7 +5917,7 @@ GameObject:
   - component: {fileID: 1074086644}
   - component: {fileID: 1074086643}
   - component: {fileID: 1074086642}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Black
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5978,7 +6002,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 85a071a9d37567f48a6790971b48738e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.04
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 85a071a9d37567f48a6790971b48738e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5986,7 +6010,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 85a071a9d37567f48a6790971b48738e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.47
+      value: 6.77
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 85a071a9d37567f48a6790971b48738e, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6031,7 +6055,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1215561310}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: EyeLParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6114,7 +6138,7 @@ GameObject:
   - component: {fileID: 1294058858}
   - component: {fileID: 1294058859}
   - component: {fileID: 1294058861}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: VisorCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6410,7 +6434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2003981466}
   - component: {fileID: 2003981467}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Eyelid R (Mask)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
