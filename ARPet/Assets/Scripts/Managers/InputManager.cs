@@ -1,6 +1,7 @@
 ﻿using HuaweiARUnitySDK;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : Singelton<InputManager>
 {
@@ -39,6 +40,8 @@ public class InputManager : Singelton<InputManager>
         }
     }
 
+    public GameObject CurrentlySelectedPrefab { get; set; }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
@@ -49,12 +52,23 @@ public class InputManager : Singelton<InputManager>
         SetLinePositions(Vector3.zero, Vector3.zero, false);
     }
 
+    private void Start()
+    {
+
+    }
+
+    public void ChangeCurrentlySelectedObject()
+    {
+
+    }
+
     private void Update()
     {
         if (Input.touchCount > 0)
         {
             currentTouch = Input.GetTouch(0);
-            ShootRayFromTouch(currentTouch);
+            //ARShootRayFromTouch(currentTouch);
+            ShootRayUnity(currentTouch);
         }
     }
 
@@ -69,13 +83,14 @@ public class InputManager : Singelton<InputManager>
         currentTouchHitPointObject.SetActive(false);
     }
 
-    private void ShootRayFromTouch(Touch touch)
+    private void ARShootRayFromTouch(Touch touch)
     {
-        List<ARHitResult> hitResults = ARFrame.HitTest(touch);
+        List<ARHitResult> arHitResults = ARFrame.HitTest(touch);
 
-        if(hitResults.Count > 0)
+        if(arHitResults.Count > 0)
         {
-            currentHitResult = hitResults[0];
+            currentHitResult = arHitResults[0];
+
             currentTrackable = currentHitResult.GetTrackable();
         }   
 
@@ -89,10 +104,9 @@ public class InputManager : Singelton<InputManager>
                     currentTouchHitPointObject.SetActive(true);
                     currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
 
-                    if(LevelManager.Instance.IsWorldCreated == false)
-                    {
-                        LevelManager.Instance.CreateWorld();
-                    }
+                    if(currentTrackable is ARPlane)
+                    WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
+                    
                 }
                 
                 break;
@@ -104,11 +118,6 @@ public class InputManager : Singelton<InputManager>
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
                     currentTouchHitPointObject.SetActive(true);
                     currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
-
-                    if(currentTrackable is ARPlane)
-                    {
-                        LevelManager.Instance.World.MoveWorld(CurrentHitPose);
-                    }
                 }
 
                 break;
@@ -119,11 +128,8 @@ public class InputManager : Singelton<InputManager>
                 break;
 
             case TouchPhase.Ended:
-
-                if(currentTrackable != null)
-                {
-     
-                }
+                
+                CurrentlySelectedPrefab = null;
 
                 currentTrackable = null;
                 currentHitResult = null;
@@ -147,27 +153,82 @@ public class InputManager : Singelton<InputManager>
         }
     }
 
-    private void ShootRayFromScreenPosition()
+    private void ShootRayUnity(Touch touch)
     {
-        List<ARHitResult> hitResults = ARFrame.HitTest(Screen.width / 2, Screen.height / 2);
+        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(touch.position);
+        RaycastHit hit; 
 
-        if(hitResults.Count > 0)
+        switch (touch.phase)
         {
-            currentHitResult = hitResults[0];
+            case TouchPhase.Began:
 
-            currentTrackable = currentHitResult.GetTrackable();
+                if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    CurrentlySelectedPrefab = null;
+                    return;
+                }
 
-            SetLinePositions(new Vector3(Screen.width / 2, Screen.height / 2, 0), currentHitResult.HitPose.position, true);
-            currentTouchHitPointObject.SetActive(true);
-            currentTouchHitPointObject.transform.position = currentHitResult.HitPose.position;
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    SetLinePositions(ray.origin, hit.point, false);
+                    currentTouchHitPointObject.SetActive(true);
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
 
-        }
-        else
-        {
-            currentHitResult = null;
-            currentTrackable = null;
-            SetLinePositions(Vector3.zero, Vector3.zero, false);
-            currentTouchHitPointObject.SetActive(false);
+                    if (CurrentlySelectedPrefab != null)
+                    {
+                        var newObject = Instantiate(CurrentlySelectedPrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                    }
+                }
+
+                break;
+
+            case TouchPhase.Moved:
+
+                if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    CurrentlySelectedPrefab = null;
+                    return;
+                }
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    SetLinePositions(ray.origin, hit.point, false);
+                    currentTouchHitPointObject.SetActive(true);
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+
+                    if (CurrentlySelectedPrefab != null)
+                    {
+
+                    }
+                }
+
+                break;
+
+            case TouchPhase.Stationary:
+
+
+                break;
+
+            case TouchPhase.Ended:
+
+
+                SetLinePositions(Vector3.zero, Vector3.zero, false);
+                currentTouchHitPointObject.SetActive(false);
+                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+
+                break;
+
+            case TouchPhase.Canceled:
+
+                SetLinePositions(Vector3.zero, Vector3.zero, false);
+                currentTouchHitPointObject.SetActive(false);
+                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+
+                break;
+
+            default:
+
+                break;
         }
     }
 

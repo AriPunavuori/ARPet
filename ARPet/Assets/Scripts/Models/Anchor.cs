@@ -3,8 +3,14 @@ using UnityEngine;
 
 public class Anchor : MonoBehaviour
 {
-    private ARAnchor arAnchor;
     private MeshRenderer meshRenderer;
+
+    private Pose currentPose;
+
+    public ARAnchor ARAnchor { get; private set; }
+
+    private Vector3 lastAnchoredPosition;
+    private Quaternion lastAnchoredRotation;
 
     private void Awake()
     {
@@ -13,23 +19,27 @@ public class Anchor : MonoBehaviour
 
     public void Initialize(ARAnchor arAnchor)
     {
-        this.arAnchor = arAnchor;
+        this.ARAnchor = arAnchor;
     }
 
     private void Update()
     {
-        if (arAnchor == null)
+        // UpdateAnchorPose();
+    }
+
+    private void UpdateAnchorPose()
+    {
+        if (ARAnchor == null)
         {
             meshRenderer.enabled = false;
             return;
         }
-        switch (arAnchor.GetTrackingState())
+        switch (ARAnchor.GetTrackingState())
         {
             case ARTrackable.TrackingState.TRACKING:
-                Pose p = arAnchor.GetPose();
-                gameObject.transform.position = p.position;
-                gameObject.transform.rotation = p.rotation;
-                gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
+                currentPose = ARAnchor.GetPose();
+                transform.SetPositionAndRotation(currentPose.position, currentPose.rotation);
+                //gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
                 meshRenderer.enabled = true;
                 break;
             case ARTrackable.TrackingState.PAUSED:
@@ -45,6 +55,6 @@ public class Anchor : MonoBehaviour
 
     private void OnDestroy()
     {
-        SessionManager.Instance.DetachARAnchor(arAnchor);
+        SessionManager.Instance.DetachARAnchor(ARAnchor);
     }
 }

@@ -26,33 +26,35 @@ public class HorizontalPlane : MonoBehaviour
 
     private Mesh mesh;
 
+    private MeshCollider meshCollider;
     private MeshRenderer meshRenderer;
 
-    public Pose CenterPose
+    public Pose TrackedPlaneCenterPose
     {
         get
         {
             return trackedPlane.GetCenterPose();
         }
     }
-    public Vector3 PlaneNormal
+    public Vector3 TrackedPlanePlaneNormal
     {
         get
         {
-            return CenterPose.rotation * Vector3.up;
+            return TrackedPlaneCenterPose.rotation * Vector3.up;
         }
     }
-    public Bounds PlaneBounds
+    public Bounds PlaneColliderBounds
     {
         get
         {
-            return mesh.bounds;
+            return meshCollider.bounds;
         }
     }
 
     public void Awake()
     {
         mesh = GetComponentInChildren<MeshFilter>().mesh;
+        meshCollider = GetComponentInChildren<MeshCollider>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 
@@ -60,15 +62,23 @@ public class HorizontalPlane : MonoBehaviour
     {
         UpdateHorizontalPlaneTracking();
 
-        UpdateARHorizontalPlane();
+        //UIManager.Instance.UpdateBounds(meshCollider.bounds, WorldManager.Instance.World.WorldBounds);
+
+        //if (CanWeBuild(WorldManager.Instance.World.WorldBounds) == false)
+        //{
+        //    return;
+        //}
+
+        UpdateARHorizontalPlane();   
     }
 
     public void Initialize(ARPlane plane)
     {
         trackedPlane = plane;
+
         meshRenderer.material.SetColor("_GridColor", planeColor[planeCount++ % planeColor.Length]);
         meshRenderer.enabled = true;
-        //Update();
+        Update();
     }
 
     private void UpdateHorizontalPlaneTracking()
@@ -88,8 +98,6 @@ public class HorizontalPlane : MonoBehaviour
             meshRenderer.enabled = false;
             return;
         }
-
-        //meshRenderer.enabled = true;
     }
 
     private void UpdateARHorizontalPlane()
@@ -105,10 +113,10 @@ public class HorizontalPlane : MonoBehaviour
 
         for (int i = 0; i < meshVertices3D.Count; i++)
         {
-            meshVertices3D[i] = CenterPose.rotation * meshVertices3D[i] + CenterPose.position;
+            meshVertices3D[i] = TrackedPlaneCenterPose.rotation * meshVertices3D[i] + TrackedPlaneCenterPose.position;
         }
 
-        meshRenderer.material.SetVector("_PlaneNormal", PlaneNormal);
+        meshRenderer.material.SetVector("_PlaneNormal", TrackedPlanePlaneNormal);
 
         previousFrameMeshVertices.Clear();
         previousFrameMeshVertices.AddRange(meshVertices3D);
@@ -122,6 +130,8 @@ public class HorizontalPlane : MonoBehaviour
         mesh.SetVertices(meshVertices3D);
         mesh.SetIndices(triangulator.Triangulate(), MeshTopology.Triangles, 0);
         mesh.SetColors(meshColors);
+
+        meshCollider.sharedMesh = mesh;
     }
 
     private bool AreVerticesListsEqual(List<Vector3> firstList, List<Vector3> secondList)
@@ -140,5 +150,17 @@ public class HorizontalPlane : MonoBehaviour
         }
 
         return true;
+    }
+
+    private bool CanWeBuild(Bounds bounds)
+    {
+       if( PlaneColliderBounds.size.x >= bounds.size.x && PlaneColliderBounds.size.z >= bounds.size.z)
+       {
+            WorldManager.Instance.World.MoveWorld(TrackedPlaneCenterPose);
+
+            return true;
+       }
+
+        return false;
     }
 }

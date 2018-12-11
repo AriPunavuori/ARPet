@@ -75,6 +75,16 @@ public class UIManager : Singelton<UIManager>
         private set;
     }
 
+    public Text WorldBoundsText;
+    public Text PlaneBoundsText;
+    public Text AnchorPose;
+
+    public void UpdateBounds(Bounds worldBounds, Bounds planeBounds)
+    {
+        WorldBoundsText.text = "World bounds: " + worldBounds.ToString();
+        PlaneBoundsText.text = "World bounds: " + planeBounds.ToString();
+    }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
@@ -165,6 +175,34 @@ public class UIManager : Singelton<UIManager>
     public void QuitButton(float quitDelay)
     {
         Invoke("OnQuitPressed", quitDelay);
+    }
+
+    public void SelectPrefabButton(int prefabIndex)
+    {
+        switch (prefabIndex)
+        {
+            case 0:
+
+                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.BlockPrefab;
+
+                break;
+
+            case 1:
+
+                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.PetPrefab;
+
+                break;
+
+            case 2:
+
+                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.PalmPrefab;
+
+                break;
+
+            default:
+
+                break;
+        }
     }
 
     #endregion CUSTOM_FUNCTIONS

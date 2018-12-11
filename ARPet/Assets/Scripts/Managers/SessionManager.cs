@@ -7,6 +7,7 @@ public class SessionManager : Singelton<SessionManager>
 {
     #region VARIABLE
 
+    private List<HorizontalPlane> newHorizontalPlanes = new List<HorizontalPlane>();
     private List<ARPlane> newARPlanes = new List<ARPlane>();
     private List<ARAnchor> createdARAnchors = new List<ARAnchor>();
 
@@ -236,7 +237,7 @@ public class SessionManager : Singelton<SessionManager>
         }
     }
 
-    public void CreateARAnchor(Pose newAnchorPosition)
+    public Anchor CreateAnchor(Pose newAnchorPosition)
     {
         Anchor newAnchor = Instantiate(
             ResourceManager.Instance.AnchorPrefab,
@@ -246,7 +247,8 @@ public class SessionManager : Singelton<SessionManager>
             ). GetComponent<Anchor>();
 
         newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
-       
+
+        return newAnchor;
     }
 
     public void CheckNewARPlanes()
@@ -260,9 +262,11 @@ public class SessionManager : Singelton<SessionManager>
        
         if(newARPlanes.Count == 1)
         {
-            CreateARAnchor(newARPlanes[0].GetCenterPose());
+            var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
+            horizontalPlane.Initialize(newARPlanes[0]);
+            newHorizontalPlanes.Add(horizontalPlane);
+            WorldManager.Instance.CreateWorld(horizontalPlane.TrackedPlaneCenterPose);
         }
-
     }
 
     public void RemoveARPlane(ARPlane arPlane)
