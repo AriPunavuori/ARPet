@@ -157,7 +157,7 @@ public class UIManager : Singelton<UIManager>
         ARSessionStatusText.text = "Session status: " + SessionManager.Instance.CurrentARSessionStatus;
         ARErrorMessageText.text = "Error: " + SessionManager.Instance.ErrorMessage;
         DevicePoseText.text = "Device pose: " + CameraEngine.Instance.CameraPose.ToString();
-        TrackableText.text = "Trackable: " + InputManager.Instance.CurrentTrackable;
+        TrackableText.text = "Trackable: " + InputManager.Instance.CurrentTrackableName;
         HitPoseText.text = "Hit pose: " + InputManager.Instance.CurrentHitPose;
         HitDistanceText.text = "Hit distance: " + InputManager.Instance.CurrentHitDistance;
     }

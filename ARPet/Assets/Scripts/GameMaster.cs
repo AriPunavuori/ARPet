@@ -1,6 +1,4 @@
-﻿using HuaweiARUnitySDK;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameMaster : SingeltonPersistant<GameMaster>
 {
@@ -10,12 +8,26 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
     #region PROPERTIES
 
-    public Transform HUDCanvas { get; private set; }
-    public Transform Managers { get; private set; }
-    public Transform Others { get; private set; }
-
-    public bool IsWorldCreated { get; private set; }
-    public World World { get; private set; }
+    public Transform HUDCanvas
+    {
+        get;
+        private set;
+    }
+    public Transform Managers
+    {
+        get;
+        private set;
+    }
+    public Transform Others
+    {
+        get;
+        private set;
+    }
+    public Transform ModelContainer
+    {
+        get;
+        private set;
+    }
 
     #endregion PROPERTIES
 
@@ -44,16 +56,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         HUDCanvas = transform.Find("HUDCanvas");
         Managers = transform.Find("Managers");
         Others = transform.Find("Others");
-    }
-
-    private void CreateWorld(Vector3 centerPosition, Quaternion rotation)
-    {
-
-    }
-
-    private void DrawNewARHorizontalPlane()
-    {
-       
+        ModelContainer = Managers.Find("LevelManager").Find("ModelContainer");
     }
 
     #endregion CUSTOM_FUNCTIONS

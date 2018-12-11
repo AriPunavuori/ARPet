@@ -1,11 +1,15 @@
 ﻿using HuaweiARInternal;
 using HuaweiARUnitySDK;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SessionManager : Singelton<SessionManager>
 {
     #region VARIABLE
-    
+
+    private List<ARPlane> newARPlanes = new List<ARPlane>();
+    private List<ARAnchor> createdARAnchors = new List<ARAnchor>();
+
     private ARConfigBase configBase;
     private const int ANCHOR_LIMIT = 16;
     private const float QUIT_DELAY = 0.5f;
@@ -53,6 +57,8 @@ public class SessionManager : Singelton<SessionManager>
         if (CanUpdateSession)
         {
             ARSession.Update();
+
+            CheckNewARPlanes();
         }
     }
 
@@ -228,6 +234,45 @@ public class SessionManager : Singelton<SessionManager>
             ErrorMessage = "This config is not supported on this device, exit now.";
             UIManager.Instance.QuitButton(QUIT_DELAY);
         }
+    }
+
+    public void CreateARAnchor(Pose newAnchorPosition)
+    {
+        Anchor newAnchor = Instantiate(
+            ResourceManager.Instance.AnchorPrefab,
+            newAnchorPosition.position,
+            newAnchorPosition.rotation,
+            GameMaster.Instance.ModelContainer
+            ). GetComponent<Anchor>();
+
+        newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
+       
+    }
+
+    public void CheckNewARPlanes()
+    {
+        if(newARPlanes.Count > 0)
+        {
+            newARPlanes.Clear();
+        }
+
+        ARFrame.GetTrackables(newARPlanes, ARTrackableQueryFilter.NEW);
+       
+        if(newARPlanes.Count == 1)
+        {
+            CreateARAnchor(newARPlanes[0].GetCenterPose());
+        }
+
+    }
+
+    public void RemoveARPlane(ARPlane arPlane)
+    {
+        
+    }
+
+    public void DetachARAnchor(ARAnchor anchorToDetach)
+    {
+        anchorToDetach.Detach();
     }
 
 #endregion CUSTOM_FUNCTIONS

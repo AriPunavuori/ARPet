@@ -11,13 +11,13 @@ public class InputManager : Singelton<InputManager>
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
-    private GameObject currentTouchHitPoint;
+    private GameObject currentTouchHitPointObject;
 
     #endregion VARIABLES
 
     #region PROPERTIES
 
-    public string CurrentTrackable
+    public string CurrentTrackableName
     {
         get
         {
@@ -65,15 +65,19 @@ public class InputManager : Singelton<InputManager>
     private void Initialize()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
-        currentTouchHitPoint = Instantiate(ResourceManager.Instance.TouchHitPointPrefab, LevelManager.Instance.ModelContainer);
-        currentTouchHitPoint.SetActive(false);
+        currentTouchHitPointObject = Instantiate(ResourceManager.Instance.TouchHitPointPrefab, GameMaster.Instance.ModelContainer);
+        currentTouchHitPointObject.SetActive(false);
     }
 
     private void ShootRayFromTouch(Touch touch)
     {
         List<ARHitResult> hitResults = ARFrame.HitTest(touch);
-        currentHitResult = hitResults[0];
-        currentTrackable = currentHitResult.GetTrackable();
+
+        if(hitResults.Count > 0)
+        {
+            currentHitResult = hitResults[0];
+            currentTrackable = currentHitResult.GetTrackable();
+        }   
 
         switch (touch.phase)
         {
@@ -82,8 +86,8 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPoint.SetActive(true);
-                    currentTouchHitPoint.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    currentTouchHitPointObject.SetActive(true);
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
                 }
                 
                 break;
@@ -93,8 +97,13 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPoint.SetActive(true);
-                    currentTouchHitPoint.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    currentTouchHitPointObject.SetActive(true);
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+
+                    if(currentTrackable is ARPlane)
+                    {
+                        LevelManager.Instance.World.MoveWorld(CurrentHitPose);
+                    }
                 }
 
                 break;
@@ -106,10 +115,15 @@ public class InputManager : Singelton<InputManager>
 
             case TouchPhase.Ended:
 
+                if(currentTrackable != null)
+                {
+     
+                }
+
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPoint.SetActive(false);
+                currentTouchHitPointObject.SetActive(false);
 
                     break;
 
@@ -118,7 +132,7 @@ public class InputManager : Singelton<InputManager>
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPoint.SetActive(false);
+                currentTouchHitPointObject.SetActive(false);
 
                     break;
 
@@ -139,8 +153,8 @@ public class InputManager : Singelton<InputManager>
             currentTrackable = currentHitResult.GetTrackable();
 
             SetLinePositions(new Vector3(Screen.width / 2, Screen.height / 2, 0), currentHitResult.HitPose.position, true);
-            currentTouchHitPoint.SetActive(true);
-            currentTouchHitPoint.transform.position = currentHitResult.HitPose.position;
+            currentTouchHitPointObject.SetActive(true);
+            currentTouchHitPointObject.transform.position = currentHitResult.HitPose.position;
 
         }
         else
@@ -148,7 +162,7 @@ public class InputManager : Singelton<InputManager>
             currentHitResult = null;
             currentTrackable = null;
             SetLinePositions(Vector3.zero, Vector3.zero, false);
-            currentTouchHitPoint.SetActive(false);
+            currentTouchHitPointObject.SetActive(false);
         }
     }
 

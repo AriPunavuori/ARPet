@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class Anchor : MonoBehaviour
 {
-    private Pose anchorePose;
+    private ARAnchor arAnchor;
 
-    public Anchor(Pose anchorePose)
+    public void Initialize(ARAnchor arAnchor)
     {
-        this.anchorePose = anchorePose;
+        this.arAnchor = arAnchor;
+    }
 
-        ARSession.AddAnchor(anchorePose);
+    private void OnDestroy()
+    {
+        SessionManager.Instance.DetachARAnchor(arAnchor);
     }
 }

@@ -6,19 +6,23 @@ public class LevelManager : Singelton<LevelManager>
     #region VARIABLES
 
     private Pet pet;
-    private NavMeshSurface[] navMeshSurfaces;
 
     #endregion VARIABLES
 
-    #region PROPERTIES
-
-    #endregion PROPERTIES
-
-    public Transform ModelContainer
+    public bool IsWorldCreated
     {
         get;
         private set;
     }
+    public World World
+    {
+        get;
+        private set;
+    }
+
+    #region PROPERTIES
+
+    #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
 
@@ -27,26 +31,29 @@ public class LevelManager : Singelton<LevelManager>
         Initialize();
     }
 
+    private void Start()
+    {
+        CreateWorld();
+    }
+
     #endregion UNITY_FUNCTIONS
 
     #region CUSTOM_FUNCTIONS
 
     private void Initialize()
     {
-        ModelContainer = transform.Find("ModelContainer");
+       
     }
 
-    public void CreateLevel(Vector3 petStartPosition)
+    public void CreateWorld()
     {
-        BuildNavMesh();
+        World = Instantiate(ResourceManager.Instance.WorldObjectPrefab, GameMaster.Instance.ModelContainer).GetComponent<World>();
 
-        CreatePet(petStartPosition);
+        IsWorldCreated = true;
     }
 
-    private void BuildNavMesh()
+    public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)
     {
-        navMeshSurfaces = FindObjectsOfType<NavMeshSurface>();
-
         for (int i = 0; i < navMeshSurfaces.Length; i++)
         {
             navMeshSurfaces[i].BuildNavMesh();
@@ -55,8 +62,8 @@ public class LevelManager : Singelton<LevelManager>
 
     public void CreatePet(Vector3 petStartPosition)
     {
-        pet = Instantiate(ResourceManager.Instance.PetPrefab, petStartPosition, Quaternion.identity).GetComponent<Pet>();
-        pet.PetAnchor = GameMaster.Instance.World.WorldAnchor;
+        //pet = Instantiate(ResourceManager.Instance.PetPrefab, petStartPosition, Quaternion.identity).GetComponent<Pet>();
+        //pet.PetAnchor = GameMaster.Instance.World.WorldAnchor;
     }
 
     #endregion CUSTOM_FUNCTIONS

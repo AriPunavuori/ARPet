@@ -11,7 +11,11 @@ public class World : MonoBehaviour
     private Collider worldCollider;
     private MeshRenderer meshRenderer;
 
-    public ARAnchor WorldAnchor { get; private set; }
+    public ARAnchor WorldAnchor
+    {
+        get;
+        private set;
+    }
     public Bounds WorldBounds
     {
         get
@@ -25,7 +29,7 @@ public class World : MonoBehaviour
         WorldAnchor = anchor;
         pose = anchor.GetPose();
 
-        transform.SetPositionAndRotation(pose.position, pose.rotation);
+        //transform.SetPositionAndRotation(pose.position, pose.rotation);
 
         //meshRenderer.enabled = false;
     }
@@ -38,18 +42,8 @@ public class World : MonoBehaviour
         defaultColor = meshRenderer.material.color;
     }
 
-    private void Update()
-    {
-        
-    }
-
     public void MoveWorld(Pose newPose)
     {
         transform.SetPositionAndRotation(newPose.position, newPose.rotation);
-    }
-    
-    private void OnMouseDown()
-    {
-        meshRenderer.material.color = Color.yellow;
     }
 }
