@@ -25,7 +25,7 @@ public class Grabber : MonoBehaviour, IDragger
                 if(Input.GetMouseButtonDown(0)) {
                     dragDistance = hitInfo.distance;
                     currentDrag = draggable;
-                    currentDrag.OnDragStart(this);
+                    currentDrag.OnDragStart(this, transform.rotation);
                 }
             }
         }

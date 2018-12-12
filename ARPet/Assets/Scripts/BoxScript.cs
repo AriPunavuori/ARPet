@@ -13,26 +13,31 @@ public class BoxScript : MonoBehaviour,IDraggable {
     float movingThreshold = 0.1f;
     Collider scareCol;
     Quaternion dragStartRot;
+    Quaternion draggerStartRot;
+
     Rigidbody rb;
 
-    public void OnDragStart(IDragger dragger) {
+    public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
         this.dragger = dragger;
         dragStartRot = transform.rotation;
+        draggerStartRot = draggerRotation;
+        rb.isKinematic = true;
     }
 
     public void OnDragEnd() {
         dragger = null;
+        rb.isKinematic = false;
     }
 
     public void OnDragContinue(Vector3 target) {
         OnDragContinue(target, transform.rotation);
     }
 
-    public void OnDragContinue(Vector3 target, Quaternion rotation) {
+    public void OnDragContinue(Vector3 target, Quaternion draggerRotation) {
         rb.velocity = Vector3.zero;
-        var targetRot = dragStartRot * rotation;
+        var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
         rb.MovePosition(target);
-        rb.MoveRotation(rotation);
+        rb.MoveRotation(targetRot);
     }
 
     public bool IsCurrentlyDraggable() {
