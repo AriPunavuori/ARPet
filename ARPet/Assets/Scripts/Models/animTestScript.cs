@@ -25,7 +25,7 @@ public class animTestScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.H)) {
             m_Animator.Play("hello");
-            print("hello!");
+            print("hey there!");
         }
     }
 }
