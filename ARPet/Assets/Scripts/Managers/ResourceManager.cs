@@ -10,7 +10,7 @@ public class ResourceManager : Singelton<ResourceManager>
     public GameObject AnchorPrefab { get; private set; }
     public GameObject HorizontalPlanePrefab { get; private set; }
     public GameObject WorldObjectPrefab { get; private set; }
-    public GameObject TouchHitPointPrefab { get; private set; }
+    public GameObject HitPointIndicatorPrefab { get; private set; }
     public GameObject BlockPrefab { get; private set; }
 
     public GameObject PetPrefab { get; private set; }
@@ -27,7 +27,7 @@ public class ResourceManager : Singelton<ResourceManager>
         AnchorPrefab = Resources.Load<GameObject>("Prefabs/Models/Anchor");
         HorizontalPlanePrefab = Resources.Load<GameObject>("Prefabs/Models/HorizontalPlane");
         WorldObjectPrefab = Resources.Load<GameObject>("Prefabs/Models/World");
-        TouchHitPointPrefab = Resources.Load<GameObject>("Prefabs/Models/TouchHitPoint");
+        HitPointIndicatorPrefab = Resources.Load<GameObject>("Prefabs/Models/HitPointIndicator");
         PetPrefab = Resources.Load<GameObject>("Prefabs/Models/Pet");
 
         BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/Block");

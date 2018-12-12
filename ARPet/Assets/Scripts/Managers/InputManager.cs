@@ -15,9 +15,11 @@ public class InputManager : Singelton<InputManager>
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
-    private GameObject currentTouchHitPointObject;
+    private GameObject hitPointIndicator;
 
     private RaycastHit hitInfo;
+
+    private Vector2 screenCenterPoint;
 
     #endregion VARIABLES
 
@@ -41,7 +43,7 @@ public class InputManager : Singelton<InputManager>
     {
         get
         {
-            return currentHitResult != null ? currentHitResult.HitPose : new Pose(Vector3.zero, Quaternion.Euler(Vector3.zero));
+            return currentHitResult != null ? currentHitResult.HitPose : new Pose(Vector3.zero, Quaternion.identity);
         }
     }
 
@@ -59,17 +61,19 @@ public class InputManager : Singelton<InputManager>
 
     private void Start()
     {
-
+        screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
     }
 
     private void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            currentTouch = Input.GetTouch(0);
-            //ARShootRayFromTouch(currentTouch);
-            ShootRayUnity(currentTouch);
-        }
+        ARShootRayFromScreenpoint(screenCenterPoint.x, screenCenterPoint.y);
+
+        //if (Input.touchCount > 0)
+        //{
+        //    currentTouch = Input.GetTouch(0);
+        //    ARShootRayFromTouch(currentTouch);
+        //    ShootRayUnity(currentTouch);
+        //}
     }
 
     #endregion UNITY_FUNCTIONS
@@ -79,8 +83,35 @@ public class InputManager : Singelton<InputManager>
     private void Initialize()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
-        currentTouchHitPointObject = Instantiate(ResourceManager.Instance.TouchHitPointPrefab, GameMaster.Instance.ModelContainer);
-        currentTouchHitPointObject.SetActive(false);
+        hitPointIndicator = Instantiate(ResourceManager.Instance.HitPointIndicatorPrefab, GameMaster.Instance.ModelContainer);
+        hitPointIndicator.SetActive(false);
+    }
+
+    private void ARShootRayFromScreenpoint(float xCoordinate, float yCoordinate)
+    {
+        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(new Vector3(xCoordinate, yCoordinate, 0));
+
+        if(Physics.Raycast(ray, out hitInfo, hitLayer))
+        {
+            List<ARHitResult> arHitResults = ARFrame.HitTest(xCoordinate, yCoordinate);
+
+            if (arHitResults.Count > 0)
+            {
+                currentHitResult = arHitResults[0];
+                currentTrackable = currentHitResult.GetTrackable();
+
+                if(currentTrackable != null && currentTrackable is ARPlane)
+                {
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(CurrentHitPose.position, CurrentHitPose.rotation);
+                }
+                else
+                {
+                    hitPointIndicator.SetActive(false);
+                    hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                }
+            }
+        }
     }
 
     private void ARShootRayFromTouch(Touch touch)
@@ -101,8 +132,8 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
 
                     if(currentTrackable is ARPlane)
                     WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
@@ -116,8 +147,8 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
                 }
 
                 break;
@@ -134,7 +165,7 @@ public class InputManager : Singelton<InputManager>
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
+                hitPointIndicator.SetActive(false);
 
                     break;
 
@@ -143,7 +174,7 @@ public class InputManager : Singelton<InputManager>
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
+                hitPointIndicator.SetActive(false);
 
                     break;
 
@@ -152,7 +183,6 @@ public class InputManager : Singelton<InputManager>
                 break;
         }
     }
-
     private void ShootRayUnity(Touch touch)
     {
         var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(touch.position);
@@ -169,8 +199,8 @@ public class InputManager : Singelton<InputManager>
                 if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
                     SetLinePositions(ray.origin, hitInfo.point, false);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
                 }
 
                 break;
@@ -185,8 +215,8 @@ public class InputManager : Singelton<InputManager>
                 if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
                     SetLinePositions(ray.origin, hitInfo.point, false);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
 
                     //if (selectedObject != null)
                     //{
@@ -204,8 +234,8 @@ public class InputManager : Singelton<InputManager>
             case TouchPhase.Ended:
 
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
-                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+                hitPointIndicator.SetActive(false);
+                hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
 
                 if (CurrentlySelectedPrefab != null && EventSystem.current.IsPointerOverGameObject(0) == false)
                 {
@@ -217,8 +247,8 @@ public class InputManager : Singelton<InputManager>
             case TouchPhase.Canceled:
 
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
-                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+                hitPointIndicator.SetActive(false);
+                hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
 
                 break;
 
@@ -227,7 +257,6 @@ public class InputManager : Singelton<InputManager>
                 break;
         }
     }
-
     private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)
     {
         lineRenderer.SetPosition(0, startPosition);
