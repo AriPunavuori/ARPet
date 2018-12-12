@@ -1,12 +1,12 @@
 ﻿using HuaweiARUnitySDK;
 using UnityEngine;
 
-public class Pet : Singelton<Pet>
+public class Huabot : Singelton<Huabot>
 {
     #region PROPERTIES
 
-    public PetAIController PetAIController { get; private set; }
-    public PetGraphicsController PetGraphicsController { get; private set; }
+    public HuabotAIController PetAIController { get; private set; }
+    public HuaGraphicsController HuabotGraphicsController { get; private set; }
     public ARAnchor PetAnchor { get; set; }
     public Pose PetPose { get; private set; }
 
@@ -25,8 +25,8 @@ public class Pet : Singelton<Pet>
 
     private void Initialize()
     {
-        PetAIController = GetComponentInChildren<PetAIController>();
-        PetGraphicsController = GetComponentInChildren<PetGraphicsController>();
+        PetAIController = GetComponentInChildren<HuabotAIController>();
+        HuabotGraphicsController = GetComponentInChildren<HuaGraphicsController>();
     }
 
     #endregion CUSTOM_FUNCTIONS

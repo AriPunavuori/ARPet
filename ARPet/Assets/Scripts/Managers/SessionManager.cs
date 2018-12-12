@@ -48,7 +48,7 @@ public class SessionManager : Singelton<SessionManager>
 
     private void Awake()
     {
-        configBase = ResourceManager.Instance.PetARConfig;
+        configBase = ResourceManager.Instance.HuabotARConfig;
     }
 
     private void Update()
@@ -249,6 +249,11 @@ public class SessionManager : Singelton<SessionManager>
         newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
 
         return newAnchor;
+    }
+
+    public void SetPlaneFindingMode(ARConfigPlaneFindingMode newPlaneFindingMode)
+    {
+        configBase.SetPlaneFindingMode(newPlaneFindingMode);
     }
 
     public void CheckNewARPlanes()
