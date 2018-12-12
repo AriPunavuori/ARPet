@@ -15,9 +15,17 @@ public class animTestScript : MonoBehaviour {
             m_Animator.Play("spook");
             print("Eek!");
         }
-        if (Input.GetKeyDown(KeyCode.K)) {
+        if (Input.GetKeyDown(KeyCode.L)) {
             m_Animator.Play("laugh");
             print("Hihi!");
+        }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            m_Animator.Play("battery");
+            print("I'm running out of juice!");
+        }
+        if (Input.GetKeyDown(KeyCode.H)) {
+            m_Animator.Play("hello");
+            print("hello!");
         }
     }
 }
