@@ -7,12 +7,17 @@ public class InputManager : Singelton<InputManager>
 {
     #region VARIABLES
 
+    [SerializeField]
+    private LayerMask hitLayer;
+
     private ARHitResult currentHitResult;
     private ARTrackable currentTrackable;
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
     private GameObject currentTouchHitPointObject;
+
+    private RaycastHit hitInfo;
 
     #endregion VARIABLES
 
@@ -53,11 +58,6 @@ public class InputManager : Singelton<InputManager>
     }
 
     private void Start()
-    {
-
-    }
-
-    public void ChangeCurrentlySelectedObject()
     {
 
     }
@@ -156,50 +156,42 @@ public class InputManager : Singelton<InputManager>
     private void ShootRayUnity(Touch touch)
     {
         var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(touch.position);
-        RaycastHit hit; 
 
         switch (touch.phase)
         {
             case TouchPhase.Began:
 
-                if (EventSystem.current.IsPointerOverGameObject())
+                if (EventSystem.current.IsPointerOverGameObject(0))
                 {
-                    CurrentlySelectedPrefab = null;
                     return;
                 }
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
-                    SetLinePositions(ray.origin, hit.point, false);
+                    SetLinePositions(ray.origin, hitInfo.point, false);
                     currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-
-                    if (CurrentlySelectedPrefab != null)
-                    {
-                        var newObject = Instantiate(CurrentlySelectedPrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-                    }
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
                 }
 
                 break;
 
             case TouchPhase.Moved:
 
-                if (EventSystem.current.IsPointerOverGameObject())
+                if (EventSystem.current.IsPointerOverGameObject(0))
                 {
-                    CurrentlySelectedPrefab = null;
                     return;
                 }
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
-                    SetLinePositions(ray.origin, hit.point, false);
+                    SetLinePositions(ray.origin, hitInfo.point, false);
                     currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
 
-                    if (CurrentlySelectedPrefab != null)
-                    {
-
-                    }
+                    //if (selectedObject != null)
+                    //{
+                    //    selectedObject.transform.SetPositionAndRotation(currentHit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                    //}
                 }
 
                 break;
@@ -211,10 +203,14 @@ public class InputManager : Singelton<InputManager>
 
             case TouchPhase.Ended:
 
-
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
                 currentTouchHitPointObject.SetActive(false);
                 currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+
+                if (CurrentlySelectedPrefab != null && EventSystem.current.IsPointerOverGameObject(0) == false)
+                {
+                    Instantiate(CurrentlySelectedPrefab, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+                }
 
                 break;
 
