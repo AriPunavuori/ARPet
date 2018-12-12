@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4755976318806302}
-  - component: {fileID: 114775421891292256}
   - component: {fileID: 33654969494283600}
   - component: {fileID: 23763138459543482}
   - component: {fileID: 64700899662358558}
+  - component: {fileID: 114102450316855518}
   m_Layer: 0
   m_Name: HorizontalPlane
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114775421891292256
+--- !u!114 &114102450316855518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1831192407629374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cfe98d48f8f1f489ad338485c7fce4, type: 3}
+  m_Script: {fileID: 11500000, guid: a823d18035c358245a6e9bcc96b60e67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

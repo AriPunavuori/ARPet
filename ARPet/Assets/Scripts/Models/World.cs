@@ -7,7 +7,6 @@ public class World : MonoBehaviour
     private Color ableToPlaceColor = new Color(0, 1, 0, 0.5f);
     private Color unAbleToPlaceColor = new Color(1, 0, 0, 0.5f);
 
-    private Pose pose;
     private Collider worldCollider;
     private MeshRenderer meshRenderer;
 
@@ -15,6 +14,13 @@ public class World : MonoBehaviour
     {
         get;
         private set;
+    }
+    public Pose WorldAnchorPose
+    {
+        get
+        {
+            return WorldAnchor.GetPose();
+        }
     }
     public Bounds WorldBounds
     {
@@ -24,12 +30,11 @@ public class World : MonoBehaviour
         }
     }
 
-    public void Initialize(ARAnchor anchor)
+    public void Initialize(Anchor anchor)
     {
-        WorldAnchor = anchor;
-        pose = anchor.GetPose();
+        WorldAnchor = anchor.ARAnchor;
 
-        transform.SetPositionAndRotation(pose.position, pose.rotation);
+        transform.SetPositionAndRotation(WorldAnchorPose.position, WorldAnchorPose.rotation);
 
         //meshRenderer.enabled = false;
     }
@@ -49,6 +54,16 @@ public class World : MonoBehaviour
 
     private void Update()
     {
+        // TrackWorld();
+    }
+
+    private void OnDestroy()
+    {
+        SessionManager.Instance.DetachARAnchor(WorldAnchor);
+    }
+
+    private void TrackWorld()
+    {
         if (WorldAnchor == null)
         {
             meshRenderer.enabled = false;
@@ -57,10 +72,11 @@ public class World : MonoBehaviour
         switch (WorldAnchor.GetTrackingState())
         {
             case ARTrackable.TrackingState.TRACKING:
-                Pose p = WorldAnchor.GetPose();
-                gameObject.transform.position = p.position;
-                gameObject.transform.rotation = p.rotation;
-                gameObject.transform.Rotate(0f, 225f, 0f, Space.Self);
+
+                MoveWorld(WorldAnchorPose);
+
+                // transform.Rotate(0f, 225f, 0f, Space.Self);
+
                 meshRenderer.enabled = true;
                 break;
             case ARTrackable.TrackingState.PAUSED:
@@ -72,11 +88,6 @@ public class World : MonoBehaviour
                 Destroy(gameObject);
                 break;
         }
-    }
-
-    private void OnDestroy()
-    {
-        SessionManager.Instance.DetachARAnchor(WorldAnchor);
     }
 
     public void MoveWorld(Pose newPose)

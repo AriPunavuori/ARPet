@@ -56,7 +56,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
         HUDCanvas = transform.Find("HUDCanvas");
         Managers = transform.Find("Managers");
         Others = transform.Find("Others");
-        ModelContainer = Managers.Find("LevelManager").Find("ModelContainer");
+        ModelContainer = Managers.Find("WorldManager").Find("ModelContainer");
     }
 
     #endregion CUSTOM_FUNCTIONS
