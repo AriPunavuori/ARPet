@@ -5,6 +5,13 @@ public class UIManager : Singelton<UIManager>
 {
     #region VARIABLES
 
+    [SerializeField]
+    private Sprite devicePanSprite;
+    [SerializeField]
+    private Sprite deviceTapSprite;
+
+    private Image DeviceImage;
+
     private Text currentStateText;
     private Text previousStateText;
     private Text mainTaskText;
@@ -73,16 +80,6 @@ public class UIManager : Singelton<UIManager>
     {
         get;
         private set;
-    }
-
-    public Text WorldBoundsText;
-    public Text PlaneBoundsText;
-    public Text AnchorPose;
-
-    public void UpdateBounds(Bounds worldBounds, Bounds planeBounds)
-    {
-        WorldBoundsText.text = "World bounds: " + worldBounds.ToString();
-        PlaneBoundsText.text = "World bounds: " + planeBounds.ToString();
     }
 
     #endregion PROPERTIES
@@ -179,30 +176,12 @@ public class UIManager : Singelton<UIManager>
 
     public void SelectPrefabButton(int prefabIndex)
     {
-        switch (prefabIndex)
-        {
-            case 0:
+        
+    }
 
-                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.BlockPrefab;
-
-                break;
-
-            case 1:
-
-                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.PetPrefab;
-
-                break;
-
-            case 2:
-
-                InputManager.Instance.CurrentlySelectedPrefab = ResourceManager.Instance.PalmPrefab;
-
-                break;
-
-            default:
-
-                break;
-        }
+    public void SwitchDeviceImage()
+    {
+        DeviceImage.sprite = DeviceImage.sprite == devicePanSprite ? deviceTapSprite : devicePanSprite;
     }
 
     #endregion CUSTOM_FUNCTIONS

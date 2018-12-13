@@ -49,8 +49,14 @@ public class WorldManager : Singelton<WorldManager>
         }
 
         World = Instantiate(ResourceManager.Instance.WorldObjectPrefab, newPose.position, newPose.rotation).GetComponent<World>();
-        World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
+        //World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
         IsWorldCreated = true;
+
+        Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + Vector3.up, Quaternion.identity);
+
+        SessionManager.Instance.ClearHorizontalPlanes();
+
+        UIManager.Instance.SwitchDeviceImage();
     }
 
     public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)

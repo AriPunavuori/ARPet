@@ -14,7 +14,7 @@ public class ResourceManager : Singelton<ResourceManager>
 
     public GameObject BlockPrefab { get; private set; }
 
-    public GameObject PetPrefab { get; private set; }
+    public GameObject HuabotPrefab { get; private set; }
 
     public Material ARBackground_mat { get; private set; }
 
@@ -29,7 +29,7 @@ public class ResourceManager : Singelton<ResourceManager>
         HorizontalPlanePrefab = Resources.Load<GameObject>("Prefabs/Models/HorizontalPlane");
         WorldObjectPrefab = Resources.Load<GameObject>("Prefabs/Models/World");
         HitIndicatorPrefab = Resources.Load<GameObject>("Prefabs/Models/HitIndicator");
-        PetPrefab = Resources.Load<GameObject>("Prefabs/Models/Pet");
+        HuabotPrefab = Resources.Load<GameObject>("Prefabs/Models/Huabot");
 
         BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/Block");
 

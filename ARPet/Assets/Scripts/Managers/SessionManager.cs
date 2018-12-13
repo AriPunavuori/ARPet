@@ -8,6 +8,7 @@ public class SessionManager : Singelton<SessionManager>
     #region VARIABLE
 
     private List<ARPlane> newARPlanes = new List<ARPlane>();
+    private List<HorizontalPlane> horizontalPlanes = new List<HorizontalPlane>();
 
     private ARConfigBase configBase;
     private const int ANCHOR_LIMIT = 16;
@@ -267,6 +268,15 @@ public class SessionManager : Singelton<SessionManager>
         {
             var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
             horizontalPlane.Initialize(newARPlanes[0]);
+            horizontalPlanes.Add(horizontalPlane);
+        }
+    }
+
+    public void ClearHorizontalPlanes()
+    {
+        if(horizontalPlanes != null)
+        {
+            horizontalPlanes.Clear();
         }
     }
 

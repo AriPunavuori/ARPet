@@ -7,7 +7,7 @@ public class InputManager : Singelton<InputManager>
 {
     #region VARIABLES
 
-    private Vector3 targetPlacementArea = new Vector3(2f, 1, 2f);
+    private Vector3 targetPlacementArea = new Vector3(1f, 1, 1f);
 
     [SerializeField]
     private LayerMask horizontalPlaneMask;
@@ -20,7 +20,7 @@ public class InputManager : Singelton<InputManager>
     private Vector2 screenCenterPoint;
     private readonly float rayMaxDistance = 10f;
 
-    private GameObject currentTrackable;
+    private GameObject currentHitTarget;
 
     #endregion VARIABLES
 
@@ -30,10 +30,9 @@ public class InputManager : Singelton<InputManager>
     {
         get
         {
-            return currentTrackable == null ? "NULL" : currentTrackable.name;
+            return currentHitTarget == null ? "NULL" : currentHitTarget.name;
         }
     }
-
     public float CurrentHitDistance
     {
         get
@@ -41,7 +40,6 @@ public class InputManager : Singelton<InputManager>
             return hitInfo.distance > 0 ? hitInfo.distance : 0;
         }
     }
-
     public Vector3 CurrentHitPosition
     {
         get
@@ -49,8 +47,6 @@ public class InputManager : Singelton<InputManager>
             return hitInfo.point != null ? hitInfo.point : Vector3.zero;
         }
     }
-
-    public GameObject CurrentlySelectedPrefab { get; set; }
 
     #endregion PROPERTIES
 
@@ -69,12 +65,7 @@ public class InputManager : Singelton<InputManager>
 
     private void Update()
     {
-        UnityShootRayFromScreenPoint(screenCenterPoint);
-
-        if (Input.touchCount > 0)
-        {
-            currentTouch = Input.GetTouch(0);
-        }
+        UnityShootRayFromScreenPoint(screenCenterPoint);      
     }
 
     #endregion UNITY_FUNCTIONS
@@ -94,27 +85,58 @@ public class InputManager : Singelton<InputManager>
 
         if(Physics.Raycast(ray, out hitInfo, rayMaxDistance, horizontalPlaneMask))
         {
-            currentTrackable = hitInfo.collider.gameObject;
-            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+            hitIndicator.ChangeState(true);
 
+            currentHitTarget = hitInfo.collider.gameObject;
             var bounds = hitInfo.collider.bounds;
+            var normal = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
-            hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, normal);
             SetLinePositions(screenCenterPoint, hitInfo.point, true);
 
-            if(bounds.size.x >= targetPlacementArea.x && bounds.size.z >= targetPlacementArea.z)
+
+            CanWeBuildWorld(bounds, normal);
+        }
+        else
+        {
+            currentHitTarget = null;
+            hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            SetLinePositions(Vector3.zero, Vector3.zero, false);
+        }
+    }
+
+    private void CanWeBuildWorld(Bounds bounds, Quaternion hitNormal)
+    {
+        if (bounds.size.x >= targetPlacementArea.x && bounds.size.z >= targetPlacementArea.z)
+        {
+            hitIndicator.transform.SetPositionAndRotation(bounds.center, hitNormal);
+            hitIndicator.ChangeColor(Color.green);
+
+            if (Input.touchCount > 0)
             {
-                hitIndicator.ChangeColor(Color.green);
-            }
-            else
-            {
-                hitIndicator.ChangeColor(Color.red);
+                currentTouch = Input.GetTouch(0);
+
+                switch (currentTouch.phase)
+                {
+                    case TouchPhase.Began:
+                        break;
+                    case TouchPhase.Moved:
+                        break;
+                    case TouchPhase.Stationary:
+                        break;
+                    case TouchPhase.Ended:
+                        WorldManager.Instance.CreateWorld(new Pose(hitInfo.point, hitNormal));
+                        break;
+                    case TouchPhase.Canceled:
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         else
         {
-            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
-            SetLinePositions(Vector3.zero, Vector3.zero, false);
+            hitIndicator.ChangeColor(Color.red);
         }
     }
 
