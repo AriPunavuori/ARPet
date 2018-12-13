@@ -263,19 +263,10 @@ public class SessionManager : Singelton<SessionManager>
 
         ARFrame.GetTrackables(newARPlanes, ARTrackableQueryFilter.NEW);
 
-<<<<<<< HEAD
         if(newARPlanes.Count == 1)
         {
             var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
             horizontalPlane.Initialize(newARPlanes[0]);
-            newHorizontalPlanes.Add(horizontalPlane);
-            // WorldManager.Instance.CreateWorld(horizontalPlane.TrackedPlaneCenterPose);
-=======
-        if (DoWeHaveNewHorizontalPlanes)
-        {
-            var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
-            horizontalPlane.Initialize(newARPlanes[0]);
->>>>>>> master
         }
     }
 

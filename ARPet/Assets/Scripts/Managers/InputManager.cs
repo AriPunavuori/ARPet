@@ -19,17 +19,11 @@ public class InputManager : Singelton<InputManager>
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
-<<<<<<< HEAD
     private HitIndicator hitIndicator;
-=======
-    private GameObject hitPointIndicator;
->>>>>>> master
 
     private RaycastHit hitInfo;
     private Vector2 screenCenterPoint;
     private readonly float maxRayDistance = 10f;
-
-    private Vector2 screenCenterPoint;
 
     #endregion VARIABLES
 
@@ -76,22 +70,11 @@ public class InputManager : Singelton<InputManager>
 
     private void Update()
     {
-<<<<<<< HEAD
         UnityShootRayFromScreenPoint(screenCenterPoint);
-=======
-        // ARShootRayFromScreenpoint(screenCenterPoint.x, screenCenterPoint.y);
->>>>>>> master
 
         if (Input.touchCount > 0)
         {
             currentTouch = Input.GetTouch(0);
-<<<<<<< HEAD
-            //ARShootRayFromTouch(currentTouch);
-            UnityShootRayFromTouch(currentTouch);
-=======
-            ARShootRayFromTouch(currentTouch);
-            // ShootRayUnity(currentTouch);
->>>>>>> master
         }
     }
 
@@ -102,252 +85,8 @@ public class InputManager : Singelton<InputManager>
     private void Initialize()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
-<<<<<<< HEAD
         hitIndicator = Instantiate(ResourceManager.Instance.HitIndicatorPrefab, GameMaster.Instance.ModelContainer).GetComponent<HitIndicator>();
         hitIndicator.ChangeState(false);
-=======
-        hitPointIndicator = Instantiate(ResourceManager.Instance.HitPointIndicatorPrefab, GameMaster.Instance.ModelContainer);
-        hitPointIndicator.SetActive(false);
->>>>>>> master
-    }
-
-    private void ARShootRayFromScreenpoint(float xCoordinate, float yCoordinate)
-    {
-        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(new Vector3(xCoordinate, yCoordinate, 0));
-
-        if (Physics.Raycast(ray, out hitInfo, hitLayer))
-        {
-            List<ARHitResult> arHitResults = ARFrame.HitTest(xCoordinate, yCoordinate);
-
-            if (arHitResults.Count > 0)
-            {
-                currentHitResult = arHitResults[0];
-                currentTrackable = currentHitResult.GetTrackable();
-
-                if (currentTrackable != null && currentTrackable is ARPlane)
-                {
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(CurrentHitPose.position, CurrentHitPose.rotation);
-                }
-                else
-                {
-                    hitPointIndicator.SetActive(false);
-                    hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                }
-            }
-        }
-    }
-    private void ARShootRayFromTouch(Touch touch)
-    {
-        List<ARHitResult> arHitResults = ARFrame.HitTest(touch);
-
-        if (arHitResults.Count > 0)
-        {
-            currentHitResult = arHitResults[0];
-
-            currentTrackable = currentHitResult.GetTrackable();
-        }
-
-        switch (touch.phase)
-        {
-            case TouchPhase.Began:
-
-                if (currentTrackable != null)
-                {
-                    SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-<<<<<<< HEAD
-                    hitIndicator.ChangeState(true);
-                    hitIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
-=======
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
-
-                    if (currentTrackable is ARPlane)
-                        WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
->>>>>>> master
-
-                }
-
-                break;
-
-            case TouchPhase.Moved:
-
-                if (currentTrackable != null)
-                {
-                    SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-<<<<<<< HEAD
-                    hitIndicator.ChangeState(true);
-                    hitIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
-=======
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
->>>>>>> master
-                }
-
-                break;
-
-            case TouchPhase.Stationary:
-
-
-                break;
-
-            case TouchPhase.Ended:
-
-                CurrentlySelectedPrefab = null;
-
-                currentTrackable = null;
-                currentHitResult = null;
-                SetLinePositions(Vector3.zero, Vector3.zero, false);
-<<<<<<< HEAD
-                hitIndicator.ChangeState(false);
-=======
-                hitPointIndicator.SetActive(false);
->>>>>>> master
-
-                break;
-
-            case TouchPhase.Canceled:
-
-                currentTrackable = null;
-                currentHitResult = null;
-                SetLinePositions(Vector3.zero, Vector3.zero, false);
-<<<<<<< HEAD
-                hitIndicator.ChangeState(false);
-=======
-                hitPointIndicator.SetActive(false);
->>>>>>> master
-
-                break;
-
-            default:
-
-                break;
-        }
-    }
-
-<<<<<<< HEAD
-    private void UnityShootRayFromTouch(Touch touch)
-=======
-    private void UnityShootRayFromScreenpoint(float xCoordinate, float yCoordinate)
-    {
-        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(new Vector3(xCoordinate, yCoordinate, 0));
-
-        if (Physics.Raycast(ray, out hitInfo, hitLayer))
-        {
-            List<ARHitResult> arHitResults = ARFrame.HitTest(xCoordinate, yCoordinate);
-
-            if (arHitResults.Count > 0)
-            {
-                currentHitResult = arHitResults[0];
-                currentTrackable = currentHitResult.GetTrackable();
-
-                if (currentTrackable != null && currentTrackable is ARPlane)
-                {
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(CurrentHitPose.position, CurrentHitPose.rotation);
-                }
-                else
-                {
-                    hitPointIndicator.SetActive(false);
-                    hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                }
-            }
-        }
-    }
-    private void ShootRayUnity(Touch touch)
->>>>>>> master
-    {
-        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(touch.position);
-
-        switch (touch.phase)
-        {
-            case TouchPhase.Began:
-
-                if (EventSystem.current.IsPointerOverGameObject(0))
-                {
-                    return;
-                }
-
-                if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
-                {
-                    SetLinePositions(ray.origin, hitInfo.point, false);
-<<<<<<< HEAD
-                    hitIndicator.ChangeState(true);
-                    hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
-=======
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
->>>>>>> master
-                }
-
-                break;
-
-            case TouchPhase.Moved:
-
-                if (EventSystem.current.IsPointerOverGameObject(0))
-                {
-                    return;
-                }
-
-                if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
-                {
-                    SetLinePositions(ray.origin, hitInfo.point, false);
-<<<<<<< HEAD
-                    hitIndicator.ChangeState(true);
-                    hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
-=======
-                    hitPointIndicator.SetActive(true);
-                    hitPointIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
->>>>>>> master
-
-                    //if (selectedObject != null)
-                    //{
-                    //    selectedObject.transform.SetPositionAndRotation(currentHit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-                    //}
-                }
-
-                break;
-
-            case TouchPhase.Stationary:
-
-
-                break;
-
-            case TouchPhase.Ended:
-
-                SetLinePositions(Vector3.zero, Vector3.zero, false);
-<<<<<<< HEAD
-                hitIndicator.ChangeState(false);
-                hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
-=======
-                hitPointIndicator.SetActive(false);
-                hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
->>>>>>> master
-
-                if (CurrentlySelectedPrefab != null && EventSystem.current.IsPointerOverGameObject(0) == false)
-                {
-                    Instantiate(CurrentlySelectedPrefab, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
-                }
-
-                break;
-
-            case TouchPhase.Canceled:
-
-                SetLinePositions(Vector3.zero, Vector3.zero, false);
-<<<<<<< HEAD
-                hitIndicator.ChangeState(false);
-                hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
-=======
-                hitPointIndicator.SetActive(false);
-                hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
->>>>>>> master
-
-                break;
-
-            default:
-
-                break;
-        }
     }
 
     private void UnityShootRayFromScreenPoint(Vector2 screenPoint)

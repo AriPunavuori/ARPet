@@ -77,11 +77,7 @@ public class RoamingState : IState
         randomIdleTime = Random.Range(randomMinIdleTime, randomMaxIdleTime);
 
         roamingDestination = RandomDestinationFromArea(roamingArea);
-<<<<<<< HEAD
         Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
-=======
-        Huabot.Instance.PetAIController.SetDestination(roamingDestination);
->>>>>>> master
     }  
 
     #endregion CUSTOM_FUNCTIONS

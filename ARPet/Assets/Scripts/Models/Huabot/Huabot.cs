@@ -5,10 +5,8 @@ public class Huabot : Singelton<Huabot>
 {
     #region PROPERTIES
 
-    public HuabotAIController PetAIController { get; private set; }
-    public HuaGraphicsController HuabotGraphicsController { get; private set; }
-    public ARAnchor PetAnchor { get; set; }
-    public Pose PetPose { get; private set; }
+    public HuabotAIController HuabotAIController { get; private set; }
+    public HuabotGraphicsController HuabotGraphicsController { get; private set; }
 
     #endregion PROPERTIES
 
@@ -25,8 +23,8 @@ public class Huabot : Singelton<Huabot>
 
     private void Initialize()
     {
-        PetAIController = GetComponentInChildren<HuabotAIController>();
-        HuabotGraphicsController = GetComponentInChildren<HuaGraphicsController>();
+        HuabotAIController = GetComponentInChildren<HuabotAIController>();
+        HuabotGraphicsController = GetComponentInChildren<HuabotGraphicsController>();
     }
 
     #endregion CUSTOM_FUNCTIONS
