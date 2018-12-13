@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4172501751767626}
   m_Layer: 0
-  m_Name: TouchHitPoint
+  m_Name: HitPointIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

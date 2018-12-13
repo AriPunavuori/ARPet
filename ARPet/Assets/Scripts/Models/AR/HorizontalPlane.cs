@@ -61,14 +61,6 @@ public class HorizontalPlane : MonoBehaviour
     public void Update()
     {
         UpdateHorizontalPlaneTracking();
-
-        //UIManager.Instance.UpdateBounds(meshCollider.bounds, WorldManager.Instance.World.WorldBounds);
-
-        //if (CanWeBuild(WorldManager.Instance.World.WorldBounds) == false)
-        //{
-        //    return;
-        //}
-
         UpdateARHorizontalPlane();   
     }
 
@@ -150,17 +142,5 @@ public class HorizontalPlane : MonoBehaviour
         }
 
         return true;
-    }
-
-    private bool CanWeBuild(Bounds bounds)
-    {
-       if( PlaneColliderBounds.size.x >= bounds.size.x && PlaneColliderBounds.size.z >= bounds.size.z)
-       {
-            WorldManager.Instance.World.MoveWorld(TrackedPlaneCenterPose);
-
-            return true;
-       }
-
-        return false;
     }
 }

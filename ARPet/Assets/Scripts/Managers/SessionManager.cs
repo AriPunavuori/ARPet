@@ -7,9 +7,7 @@ public class SessionManager : Singelton<SessionManager>
 {
     #region VARIABLE
 
-    private List<HorizontalPlane> newHorizontalPlanes = new List<HorizontalPlane>();
     private List<ARPlane> newARPlanes = new List<ARPlane>();
-    private List<ARAnchor> createdARAnchors = new List<ARAnchor>();
 
     private ARConfigBase configBase;
     private const int ANCHOR_LIMIT = 16;
@@ -28,7 +26,7 @@ public class SessionManager : Singelton<SessionManager>
     #region PROPERTIES
 
     public string CurrentARSessionStatus { get { return ARSessionManager.Instance.SessionStatus.ToString(); } }
-
+    public bool DoWeHaveNewHorizontalPlanes { get { return newARPlanes.Count > 0; } }
     public bool CanUpdateSession
     {
         get
@@ -107,172 +105,178 @@ public class SessionManager : Singelton<SessionManager>
 
     #region CUSTOM_FUNCTIONS
 
-        private void InitializeAR()
+    private void InitializeAR()
+    {
+        //If you do not want to switch engines, AREnginesSelector is useless.
+        // You just need to use AREnginesApk.Instance.requestInstall() and the default engine
+        // is Huawei AR Engine.
+        AREnginesAvaliblity ability = AREnginesSelector.Instance.CheckDeviceExecuteAbility();
+        if ((AREnginesAvaliblity.HUAWEI_AR_ENGINE & ability) != 0)
         {
-            //If you do not want to switch engines, AREnginesSelector is useless.
-            // You just need to use AREnginesApk.Instance.requestInstall() and the default engine
-            // is Huawei AR Engine.
-            AREnginesAvaliblity ability = AREnginesSelector.Instance.CheckDeviceExecuteAbility();
-            if ((AREnginesAvaliblity.HUAWEI_AR_ENGINE & ability) != 0)
+            AREnginesSelector.Instance.SetAREngine(AREnginesType.HUAWEI_AR_ENGINE);
+        }
+        else
+        {
+            ErrorMessage = "This device does not support AR Engine. Exit.";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+            return;
+        }
+
+        try
+        {
+            switch (AREnginesApk.Instance.RequestInstall(!installRequested))
             {
-                AREnginesSelector.Instance.SetAREngine(AREnginesType.HUAWEI_AR_ENGINE);
+                case ARInstallStatus.INSTALL_REQUESTED:
+                    installRequested = true;
+                    return;
+                case ARInstallStatus.INSTALLED:
+                    break;
+            }
+
+        }
+        catch (ARUnavailableConnectServerTimeOutException /*e*/)
+        {
+            ErrorMessage = "Network is not available, retry later!";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+            return;
+        }
+        catch (ARUnavailableDeviceNotCompatibleException /*e*/)
+        {
+            ErrorMessage = "This Device does not support AR!";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+            return;
+        }
+        catch (ARUnavailableEmuiNotCompatibleException /*e*/)
+        {
+            ErrorMessage = "This EMUI does not support AR!";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+            return;
+        }
+        catch (ARUnavailableUserDeclinedInstallationException /*e*/)
+        {
+            ErrorMessage = "User decline installation right now, quit";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+            return;
+        }
+        if (isFirstConnect)
+        {
+            Connect();
+            isFirstConnect = false;
+        }
+    }
+
+    private void Connect()
+    {
+        ARDebug.LogInfo("_connect begin");
+        const string ANDROID_CAMERA_PERMISSION_NAME = "android.permission.CAMERA";
+        if (AndroidPermissionsRequest.IsPermissionGranted(ANDROID_CAMERA_PERMISSION_NAME))
+        {
+            ConnectToService();
+            return;
+        }
+        var permissionsArray = new string[] { ANDROID_CAMERA_PERMISSION_NAME };
+        AndroidPermissionsRequest.RequestPermission(permissionsArray).ThenAction((requestResult) =>
+        {
+            if (requestResult.IsAllGranted)
+            {
+                ConnectToService();
             }
             else
             {
-                ErrorMessage = "This device does not support AR Engine. Exit.";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-                return;
-            }
-
-            try
-            {
-                switch (AREnginesApk.Instance.RequestInstall(!installRequested))
-                {
-                    case ARInstallStatus.INSTALL_REQUESTED:
-                        installRequested = true;
-                        return;
-                    case ARInstallStatus.INSTALLED:
-                        break;
-                }
-
-            }
-            catch (ARUnavailableConnectServerTimeOutException /*e*/)
-            {
-                ErrorMessage = "Network is not available, retry later!";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-                return;
-            }
-            catch (ARUnavailableDeviceNotCompatibleException /*e*/)
-            {
-                ErrorMessage = "This Device does not support AR!";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-                return;
-            }
-            catch (ARUnavailableEmuiNotCompatibleException /*e*/)
-            {
-                ErrorMessage = "This EMUI does not support AR!";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-                return;
-            }
-            catch (ARUnavailableUserDeclinedInstallationException /*e*/)
-            {
-                ErrorMessage = "User decline installation right now, quit";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-                return;
-            }
-            if (isFirstConnect)
-            {
-                Connect();
-                isFirstConnect = false;
-            }
-        }
-
-        private void Connect()
-        {
-            ARDebug.LogInfo("_connect begin");
-            const string ANDROID_CAMERA_PERMISSION_NAME = "android.permission.CAMERA";
-            if (AndroidPermissionsRequest.IsPermissionGranted(ANDROID_CAMERA_PERMISSION_NAME))
-            {
-                ConnectToService();
-                return;
-            }
-            var permissionsArray = new string[] { ANDROID_CAMERA_PERMISSION_NAME };
-            AndroidPermissionsRequest.RequestPermission(permissionsArray).ThenAction((requestResult) =>
-            {
-                if (requestResult.IsAllGranted)
-                {
-                    ConnectToService();
-                }
-                else
-                {
-                    ARDebug.LogError("connection failed because a needed permission was rejected.");
-                    ErrorMessage = "This app require camera permission";
-                    UIManager.Instance.QuitButton(QUIT_DELAY);
-                    return;
-                }
-            });
-        }
-
-        private void ConnectToService()
-        {
-            try
-            {
-                ARSession.CreateSession();
-                isSessionCreated = true;
-                ARSession.Config(configBase);
-                ARSession.Resume();
-                ARSession.SetCameraTextureNameAuto();
-                ARSession.SetDisplayGeometry(Screen.width, Screen.height);
-            }
-            catch (ARCameraPermissionDeniedException /*e*/)
-            {
-                isErrorHappendWhenInit = true;
-                ARDebug.LogError("camera permission is denied");
+                ARDebug.LogError("connection failed because a needed permission was rejected.");
                 ErrorMessage = "This app require camera permission";
                 UIManager.Instance.QuitButton(QUIT_DELAY);
+                return;
             }
-            catch (ARUnavailableDeviceNotCompatibleException /*e*/)
-            {
-                isErrorHappendWhenInit = true;
-                ErrorMessage = "This device does not support AR";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-            }
-            catch (ARUnavailableServiceApkTooOldException /*e*/)
-            {
-                isErrorHappendWhenInit = true;
-                ErrorMessage = "This AR Engine is too old, please update";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-            }
-            catch (ARUnavailableServiceNotInstalledException /*e*/)
-            {
-                isErrorHappendWhenInit = true;
-                ErrorMessage = "This app depend on AREngine.apk, please install it";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-            }
-            catch (ARUnSupportedConfigurationException /*e*/)
-            {
-                isErrorHappendWhenInit = true;
-                ErrorMessage = "This config is not supported on this device, exit now.";
-                UIManager.Instance.QuitButton(QUIT_DELAY);
-            }
-        }
+        });
+    }
 
-        public Anchor CreateAnchor(Pose newAnchorPosition)
+    private void ConnectToService()
+    {
+        try
         {
-            Anchor newAnchor = Instantiate(
-                ResourceManager.Instance.AnchorPrefab,
-                newAnchorPosition.position,
-                newAnchorPosition.rotation,
-                GameMaster.Instance.ModelContainer
-                ). GetComponent<Anchor>();
-
-            newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
-
-            return newAnchor;
+            ARSession.CreateSession();
+            isSessionCreated = true;
+            ARSession.Config(configBase);
+            ARSession.Resume();
+            ARSession.SetCameraTextureNameAuto();
+            ARSession.SetDisplayGeometry(Screen.width, Screen.height);
         }
-
-        public void SetPlaneFindingMode(ARConfigPlaneFindingMode newPlaneFindingMode)
+        catch (ARCameraPermissionDeniedException /*e*/)
         {
-            configBase.SetPlaneFindingMode(newPlaneFindingMode);
+            isErrorHappendWhenInit = true;
+            ARDebug.LogError("camera permission is denied");
+            ErrorMessage = "This app require camera permission";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+        catch (ARUnavailableDeviceNotCompatibleException /*e*/)
+        {
+            isErrorHappendWhenInit = true;
+            ErrorMessage = "This device does not support AR";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+        catch (ARUnavailableServiceApkTooOldException /*e*/)
+        {
+            isErrorHappendWhenInit = true;
+            ErrorMessage = "This AR Engine is too old, please update";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+        catch (ARUnavailableServiceNotInstalledException /*e*/)
+        {
+            isErrorHappendWhenInit = true;
+            ErrorMessage = "This app depend on AREngine.apk, please install it";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+        catch (ARUnSupportedConfigurationException /*e*/)
+        {
+            isErrorHappendWhenInit = true;
+            ErrorMessage = "This config is not supported on this device, exit now.";
+            UIManager.Instance.QuitButton(QUIT_DELAY);
+        }
+    }
+
+    public Anchor CreateAnchor(Pose newAnchorPosition)
+    {
+        Anchor newAnchor = Instantiate(
+            ResourceManager.Instance.AnchorPrefab,
+            newAnchorPosition.position,
+            newAnchorPosition.rotation,
+            GameMaster.Instance.ModelContainer
+            ). GetComponent<Anchor>();
+
+        newAnchor.Initialize(ARSessionManager.Instance.AddAnchor(newAnchorPosition));
+
+        return newAnchor;
+    }
+
+    public void SetPlaneFindingMode(ARConfigPlaneFindingMode newPlaneFindingMode)
+    {
+        configBase.SetPlaneFindingMode(newPlaneFindingMode);
+    }
+
+    private void CheckNewARPlanes()
+    {
+        if(DoWeHaveNewHorizontalPlanes)
+        {
+            newARPlanes.Clear();
         }
 
-        private void CheckNewARPlanes()
-        {
-            
-        }
+        ARFrame.GetTrackables(newARPlanes, ARTrackableQueryFilter.NEW);
 
-        public void RemoveARPlane(ARPlane arPlane)
+        if (DoWeHaveNewHorizontalPlanes)
         {
-        
+            var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
+            horizontalPlane.Initialize(newARPlanes[0]);
         }
+    }
 
-        public void DetachARAnchor(ARAnchor anchorToDetach)
+    public void DetachARAnchor(ARAnchor anchorToDetach)
+    {
+        if(anchorToDetach != null)
         {
-            if(anchorToDetach != null)
-            {
-                anchorToDetach.Detach();
-            }
+            anchorToDetach.Detach();
         }
+    }
 
     #endregion CUSTOM_FUNCTIONS
 }

@@ -66,14 +66,14 @@ public class InputManager : Singelton<InputManager>
 
     private void Update()
     {
-        ARShootRayFromScreenpoint(screenCenterPoint.x, screenCenterPoint.y);
+        // ARShootRayFromScreenpoint(screenCenterPoint.x, screenCenterPoint.y);
 
-        //if (Input.touchCount > 0)
-        //{
-        //    currentTouch = Input.GetTouch(0);
-        //    ARShootRayFromTouch(currentTouch);
-        //    ShootRayUnity(currentTouch);
-        //}
+        if (Input.touchCount > 0)
+        {
+            currentTouch = Input.GetTouch(0);
+            ARShootRayFromTouch(currentTouch);
+            // ShootRayUnity(currentTouch);
+        }
     }
 
     #endregion UNITY_FUNCTIONS
@@ -91,7 +91,7 @@ public class InputManager : Singelton<InputManager>
     {
         var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(new Vector3(xCoordinate, yCoordinate, 0));
 
-        if(Physics.Raycast(ray, out hitInfo, hitLayer))
+        if (Physics.Raycast(ray, out hitInfo, hitLayer))
         {
             List<ARHitResult> arHitResults = ARFrame.HitTest(xCoordinate, yCoordinate);
 
@@ -100,7 +100,7 @@ public class InputManager : Singelton<InputManager>
                 currentHitResult = arHitResults[0];
                 currentTrackable = currentHitResult.GetTrackable();
 
-                if(currentTrackable != null && currentTrackable is ARPlane)
+                if (currentTrackable != null && currentTrackable is ARPlane)
                 {
                     hitPointIndicator.SetActive(true);
                     hitPointIndicator.transform.SetPositionAndRotation(CurrentHitPose.position, CurrentHitPose.rotation);
@@ -113,35 +113,34 @@ public class InputManager : Singelton<InputManager>
             }
         }
     }
-
     private void ARShootRayFromTouch(Touch touch)
     {
         List<ARHitResult> arHitResults = ARFrame.HitTest(touch);
 
-        if(arHitResults.Count > 0)
+        if (arHitResults.Count > 0)
         {
             currentHitResult = arHitResults[0];
 
             currentTrackable = currentHitResult.GetTrackable();
-        }   
+        }
 
         switch (touch.phase)
         {
             case TouchPhase.Began:
-                                       
+
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
                     hitPointIndicator.SetActive(true);
                     hitPointIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
 
-                    if(currentTrackable is ARPlane)
-                    WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
-                    
+                    if (currentTrackable is ARPlane)
+                        WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
+
                 }
-                
+
                 break;
-                
+
             case TouchPhase.Moved:
 
                 if (currentTrackable != null)
@@ -159,7 +158,7 @@ public class InputManager : Singelton<InputManager>
                 break;
 
             case TouchPhase.Ended:
-                
+
                 CurrentlySelectedPrefab = null;
 
                 currentTrackable = null;
@@ -167,7 +166,7 @@ public class InputManager : Singelton<InputManager>
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
                 hitPointIndicator.SetActive(false);
 
-                    break;
+                break;
 
             case TouchPhase.Canceled:
 
@@ -176,11 +175,38 @@ public class InputManager : Singelton<InputManager>
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
                 hitPointIndicator.SetActive(false);
 
-                    break;
+                break;
 
             default:
 
                 break;
+        }
+    }
+
+    private void UnityShootRayFromScreenpoint(float xCoordinate, float yCoordinate)
+    {
+        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(new Vector3(xCoordinate, yCoordinate, 0));
+
+        if (Physics.Raycast(ray, out hitInfo, hitLayer))
+        {
+            List<ARHitResult> arHitResults = ARFrame.HitTest(xCoordinate, yCoordinate);
+
+            if (arHitResults.Count > 0)
+            {
+                currentHitResult = arHitResults[0];
+                currentTrackable = currentHitResult.GetTrackable();
+
+                if (currentTrackable != null && currentTrackable is ARPlane)
+                {
+                    hitPointIndicator.SetActive(true);
+                    hitPointIndicator.transform.SetPositionAndRotation(CurrentHitPose.position, CurrentHitPose.rotation);
+                }
+                else
+                {
+                    hitPointIndicator.SetActive(false);
+                    hitPointIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                }
+            }
         }
     }
     private void ShootRayUnity(Touch touch)
@@ -257,6 +283,7 @@ public class InputManager : Singelton<InputManager>
                 break;
         }
     }
+
     private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)
     {
         lineRenderer.SetPosition(0, startPosition);
