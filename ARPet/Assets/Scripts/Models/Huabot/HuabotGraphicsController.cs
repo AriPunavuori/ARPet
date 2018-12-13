@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PetGraphicsController : MonoBehaviour
+public class HuaGraphicsController : MonoBehaviour
 {
     #region VARIABLES
 

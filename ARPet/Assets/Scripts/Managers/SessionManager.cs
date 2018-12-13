@@ -7,9 +7,7 @@ public class SessionManager : Singelton<SessionManager>
 {
     #region VARIABLE
 
-    private List<HorizontalPlane> newHorizontalPlanes = new List<HorizontalPlane>();
     private List<ARPlane> newARPlanes = new List<ARPlane>();
-    private List<ARAnchor> createdARAnchors = new List<ARAnchor>();
 
     private ARConfigBase configBase;
     private const int ANCHOR_LIMIT = 16;
@@ -28,7 +26,7 @@ public class SessionManager : Singelton<SessionManager>
     #region PROPERTIES
 
     public string CurrentARSessionStatus { get { return ARSessionManager.Instance.SessionStatus.ToString(); } }
-
+    public bool DoWeHaveNewHorizontalPlanes { get { return newARPlanes.Count > 0; } }
     public bool CanUpdateSession
     {
         get
@@ -44,11 +42,11 @@ public class SessionManager : Singelton<SessionManager>
 
 #endregion PROPERTIES
 
-#region UNITY_FUNCTIONS
+    #region UNITY_FUNCTIONS
 
     private void Awake()
     {
-        configBase = ResourceManager.Instance.PetARConfig;
+        configBase = ResourceManager.Instance.HuabotARConfig;
     }
 
     private void Update()
@@ -73,11 +71,11 @@ public class SessionManager : Singelton<SessionManager>
         {
             if (!isSessionCreated)
             {
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
                 return;
-#else
+    #else
                 InitializeAR();
-#endif
+    #endif
             }
             if (isErrorHappendWhenInit)
             {
@@ -103,9 +101,9 @@ public class SessionManager : Singelton<SessionManager>
         isSessionCreated = false;
     }
 
-#endregion UNITY_FUNCTIONS
+    #endregion UNITY_FUNCTIONS
 
-#region CUSTOM_FUNCTIONS
+    #region CUSTOM_FUNCTIONS
 
     private void InitializeAR()
     {
@@ -251,27 +249,25 @@ public class SessionManager : Singelton<SessionManager>
         return newAnchor;
     }
 
-    public void CheckNewARPlanes()
+    public void SetPlaneFindingMode(ARConfigPlaneFindingMode newPlaneFindingMode)
     {
-        if(newARPlanes.Count > 0)
+        configBase.SetPlaneFindingMode(newPlaneFindingMode);
+    }
+
+    private void CheckNewARPlanes()
+    {
+        if(DoWeHaveNewHorizontalPlanes)
         {
             newARPlanes.Clear();
         }
 
         ARFrame.GetTrackables(newARPlanes, ARTrackableQueryFilter.NEW);
-       
-        if(newARPlanes.Count == 1)
+
+        if (DoWeHaveNewHorizontalPlanes)
         {
             var horizontalPlane = Instantiate(ResourceManager.Instance.HorizontalPlanePrefab).GetComponent<HorizontalPlane>();
             horizontalPlane.Initialize(newARPlanes[0]);
-            newHorizontalPlanes.Add(horizontalPlane);
-            WorldManager.Instance.CreateWorld(horizontalPlane.TrackedPlaneCenterPose);
         }
-    }
-
-    public void RemoveARPlane(ARPlane arPlane)
-    {
-        
     }
 
     public void DetachARAnchor(ARAnchor anchorToDetach)
@@ -282,5 +278,5 @@ public class SessionManager : Singelton<SessionManager>
         }
     }
 
-#endregion CUSTOM_FUNCTIONS
+    #endregion CUSTOM_FUNCTIONS
 }

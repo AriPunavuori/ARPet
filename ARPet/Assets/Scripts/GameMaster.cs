@@ -42,7 +42,7 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
     private void Update()
     {
-       
+
     }
 
     #endregion UNITY_FUNCTIONS
@@ -61,3 +61,4 @@ public class GameMaster : SingeltonPersistant<GameMaster>
 
     #endregion CUSTOM_FUNCTIONS
 }
+   
