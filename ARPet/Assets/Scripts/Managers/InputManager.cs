@@ -7,6 +7,10 @@ public class InputManager : Singelton<InputManager>
 {
     #region VARIABLES
 
+    private Vector3 targetPlacementArea = new Vector3(.5f, 1, .5f);
+
+    [SerializeField]
+    private LayerMask horizontalPlaneMask;
     [SerializeField]
     private LayerMask hitLayer;
 
@@ -15,9 +19,11 @@ public class InputManager : Singelton<InputManager>
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
-    private GameObject currentTouchHitPointObject;
+    private HitIndicator hitIndicator;
 
     private RaycastHit hitInfo;
+    private Vector2 screenCenterPoint;
+    private readonly float maxRayDistance = 10f;
 
     #endregion VARIABLES
 
@@ -59,16 +65,18 @@ public class InputManager : Singelton<InputManager>
 
     private void Start()
     {
-
+        screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
     }
 
     private void Update()
     {
+        UnityShootRayFromScreenPoint(screenCenterPoint);
+
         if (Input.touchCount > 0)
         {
             currentTouch = Input.GetTouch(0);
             //ARShootRayFromTouch(currentTouch);
-            ShootRayUnity(currentTouch);
+            UnityShootRayFromTouch(currentTouch);
         }
     }
 
@@ -79,15 +87,15 @@ public class InputManager : Singelton<InputManager>
     private void Initialize()
     {
         lineRenderer = GetComponentInChildren<LineRenderer>();
-        currentTouchHitPointObject = Instantiate(ResourceManager.Instance.TouchHitPointPrefab, GameMaster.Instance.ModelContainer);
-        currentTouchHitPointObject.SetActive(false);
+        hitIndicator = Instantiate(ResourceManager.Instance.HitIndicatorPrefab, GameMaster.Instance.ModelContainer).GetComponent<HitIndicator>();
+        hitIndicator.ChangeState(false);
     }
 
     private void ARShootRayFromTouch(Touch touch)
     {
         List<ARHitResult> arHitResults = ARFrame.HitTest(touch);
 
-        if(arHitResults.Count > 0)
+        if (arHitResults.Count > 0)
         {
             currentHitResult = arHitResults[0];
 
@@ -101,8 +109,8 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    hitIndicator.ChangeState(true);
+                    hitIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
 
                     if(currentTrackable is ARPlane)
                     WorldManager.Instance.TryPlaceObject(CurrentlySelectedPrefab, CurrentHitPose);
@@ -116,8 +124,8 @@ public class InputManager : Singelton<InputManager>
                 if (currentTrackable != null)
                 {
                     SetLinePositions(touch.position, currentHitResult.HitPose.position, true);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
+                    hitIndicator.ChangeState(true);
+                    hitIndicator.transform.SetPositionAndRotation(currentHitResult.HitPose.position, currentHitResult.HitPose.rotation);
                 }
 
                 break;
@@ -134,7 +142,7 @@ public class InputManager : Singelton<InputManager>
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
+                hitIndicator.ChangeState(false);
 
                     break;
 
@@ -143,7 +151,7 @@ public class InputManager : Singelton<InputManager>
                 currentTrackable = null;
                 currentHitResult = null;
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
+                hitIndicator.ChangeState(false);
 
                     break;
 
@@ -153,7 +161,7 @@ public class InputManager : Singelton<InputManager>
         }
     }
 
-    private void ShootRayUnity(Touch touch)
+    private void UnityShootRayFromTouch(Touch touch)
     {
         var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(touch.position);
 
@@ -169,8 +177,8 @@ public class InputManager : Singelton<InputManager>
                 if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
                     SetLinePositions(ray.origin, hitInfo.point, false);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+                    hitIndicator.ChangeState(true);
+                    hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
                 }
 
                 break;
@@ -185,8 +193,8 @@ public class InputManager : Singelton<InputManager>
                 if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, hitLayer))
                 {
                     SetLinePositions(ray.origin, hitInfo.point, false);
-                    currentTouchHitPointObject.SetActive(true);
-                    currentTouchHitPointObject.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+                    hitIndicator.ChangeState(true);
+                    hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
 
                     //if (selectedObject != null)
                     //{
@@ -204,8 +212,8 @@ public class InputManager : Singelton<InputManager>
             case TouchPhase.Ended:
 
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
-                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+                hitIndicator.ChangeState(false);
+                hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
 
                 if (CurrentlySelectedPrefab != null && EventSystem.current.IsPointerOverGameObject(0) == false)
                 {
@@ -217,14 +225,41 @@ public class InputManager : Singelton<InputManager>
             case TouchPhase.Canceled:
 
                 SetLinePositions(Vector3.zero, Vector3.zero, false);
-                currentTouchHitPointObject.SetActive(false);
-                currentTouchHitPointObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
+                hitIndicator.ChangeState(false);
+                hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(Vector3.zero));
 
                 break;
 
             default:
 
                 break;
+        }
+    }
+
+    private void UnityShootRayFromScreenPoint(Vector2 screenPoint)
+    {
+        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(screenCenterPoint);
+
+        if(Physics.Raycast(ray, out hitInfo, Mathf.Infinity, horizontalPlaneMask))
+        {
+            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+            SetLinePositions(screenCenterPoint, hitInfo.point, true);
+
+            if(hitInfo.collider.bounds.size.sqrMagnitude >= targetPlacementArea.sqrMagnitude)
+            {
+                hitIndicator.ChangeColor(Color.green);
+            }
+            else
+            {
+                hitIndicator.ChangeColor(Color.red);
+            }
+
+
+        }
+        else
+        {
+            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+            SetLinePositions(Vector3.zero, Vector3.zero, false);
         }
     }
 

@@ -264,6 +264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18562fcdce106e947b80577b4f153c8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalPlaneMask:
+    serializedVersion: 2
+    m_Bits: 0
   hitLayer:
     serializedVersion: 2
     m_Bits: 513
@@ -3932,7 +3935,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 'New Text:'
 --- !u!222 &1946572820
 CanvasRenderer:
   m_ObjectHideFlags: 0

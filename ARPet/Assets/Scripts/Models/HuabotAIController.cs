@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class PetAIController : MonoBehaviour
+public class HuabotAIController : MonoBehaviour
 {
     #region VARIABLES
 
@@ -140,12 +140,12 @@ public class PetAIController : MonoBehaviour
 
     private void OnInteractionStart()
     {
-        Pet.Instance.PetGraphicsController.ChangeMaterialColor(Color.red);
+        Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.red);
     }
 
     private void OnInteractionEnd()
     {
-        Pet.Instance.PetGraphicsController.ChangeMaterialColor(Color.white);
+        Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.white);
 
         interactionTarget.gameObject.SetActive(false);
         interactionTarget = null;
