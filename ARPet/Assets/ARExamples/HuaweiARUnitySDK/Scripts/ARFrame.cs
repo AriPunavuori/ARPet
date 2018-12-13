@@ -195,17 +195,17 @@
         }
 
         [Obsolete]
-        public static List<ARPlane> GetPlanes(ARTrackableQueryFilter filter)
+        public static List<ARPlane> GetPlanes(List<ARPlane> newARPlanes, ARTrackableQueryFilter filter)
         {
             List<ARPlane> planeList = new List<ARPlane>();
             GetTrackables<ARPlane>(planeList, filter);
             return planeList;
         }
-        [Obsolete]
-        public static List<ARPlane> GetUpdatedPlanes()
-        {
-            return GetPlanes(ARTrackableQueryFilter.UPDATED);
-        }
+        //[Obsolete]
+        //public static List<ARPlane> GetUpdatedPlanes()
+        //{
+        //    return GetPlanes(ARTrackableQueryFilter.UPDATED);
+        //}
 
         [Obsolete]
         public static List<ARAnchor> GetUpdatedAnchors()

@@ -61,12 +61,6 @@ public class WorldManager : Singelton<WorldManager>
         }
     }
 
-    public void CreatePet(Vector3 petStartPosition)
-    {
-        //pet = Instantiate(ResourceManager.Instance.PetPrefab, petStartPosition, Quaternion.identity).GetComponent<Pet>();
-        //pet.PetAnchor = GameMaster.Instance.World.WorldAnchor;
-    }
-
     public void TryPlaceObject(GameObject selectedPrefab, Pose currentHitPose)
     {
         var newInstance = Instantiate(selectedPrefab, currentHitPose.position, currentHitPose.rotation);

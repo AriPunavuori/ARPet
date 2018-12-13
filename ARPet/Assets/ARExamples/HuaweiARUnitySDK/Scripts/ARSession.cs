@@ -67,7 +67,6 @@
             Resume();
         }
 
-
         [Obsolete]
         public static void RemoveAnchors(List<ARAnchor> anchors)
         {
@@ -91,13 +90,13 @@
         
         public static Matrix4x4 GetProjectionMatrix(float nearClipPlane, float farClipPlane)
         {
-            return ARSessionManager.Instance.GetProjectionMatrix(nearClipPlane, farClipPlane); ;
+            return ARSessionManager.Instance.GetProjectionMatrix(nearClipPlane, farClipPlane);
         }
 
-        [Obsolete]
-        public static List<ARPlane> GetAllPlanes()
-        {
-            return ARFrame.GetPlanes(ARTrackableQueryFilter.ALL); ;
-        }
+        //[Obsolete]
+        //public static List<ARPlane> GetAllPlanes()
+        //{
+        //    return ARFrame.GetPlanes(ARTrackableQueryFilter.ALL); ;
+        //}
     }
 }
