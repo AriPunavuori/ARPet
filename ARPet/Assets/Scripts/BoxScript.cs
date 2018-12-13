@@ -81,7 +81,7 @@ public class BoxScript : MonoBehaviour,IDraggable {
             var escapeVector = other.transform.position - transform.position;
             //escapeVector.y = 0;
             escapeVector = Vector3.ProjectOnPlane(escapeVector,Vector3.up);
-            other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Acceleration);
+            other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Force);
         }
     }
 
