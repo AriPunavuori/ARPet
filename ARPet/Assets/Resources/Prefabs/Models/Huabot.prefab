@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54905887052914624}
   - component: {fileID: 114983605418608110}
   m_Layer: 0
-  m_Name: Pet
+  m_Name: Huabot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

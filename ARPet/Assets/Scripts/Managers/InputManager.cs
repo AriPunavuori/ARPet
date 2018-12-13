@@ -7,15 +7,10 @@ public class InputManager : Singelton<InputManager>
 {
     #region VARIABLES
 
-    private Vector3 targetPlacementArea = new Vector3(.5f, 1, .5f);
+    private Vector3 targetPlacementArea = new Vector3(2f, 1, 2f);
 
     [SerializeField]
     private LayerMask horizontalPlaneMask;
-    [SerializeField]
-    private LayerMask hitLayer;
-
-    private ARHitResult currentHitResult;
-    private ARTrackable currentTrackable;
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
@@ -23,7 +18,9 @@ public class InputManager : Singelton<InputManager>
 
     private RaycastHit hitInfo;
     private Vector2 screenCenterPoint;
-    private readonly float maxRayDistance = 10f;
+    private readonly float rayMaxDistance = 10f;
+
+    private GameObject currentTrackable;
 
     #endregion VARIABLES
 
@@ -33,21 +30,23 @@ public class InputManager : Singelton<InputManager>
     {
         get
         {
-            return currentTrackable == null ? "NULL" : currentTrackable.GetType().Name;
+            return currentTrackable == null ? "NULL" : currentTrackable.name;
         }
     }
+
     public float CurrentHitDistance
     {
         get
         {
-            return currentHitResult != null ? currentHitResult.Distance : 0;
+            return hitInfo.distance > 0 ? hitInfo.distance : 0;
         }
     }
-    public Pose CurrentHitPose
+
+    public Vector3 CurrentHitPosition
     {
         get
         {
-            return currentHitResult != null ? currentHitResult.HitPose : new Pose(Vector3.zero, Quaternion.identity);
+            return hitInfo.point != null ? hitInfo.point : Vector3.zero;
         }
     }
 
@@ -93,12 +92,17 @@ public class InputManager : Singelton<InputManager>
     {
         var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(screenCenterPoint);
 
-        if(Physics.Raycast(ray, out hitInfo, Mathf.Infinity, horizontalPlaneMask))
+        if(Physics.Raycast(ray, out hitInfo, rayMaxDistance, horizontalPlaneMask))
         {
+            currentTrackable = hitInfo.collider.gameObject;
             hitIndicator.transform.SetPositionAndRotation(hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal));
+
+            var bounds = hitInfo.collider.bounds;
+
+            hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             SetLinePositions(screenCenterPoint, hitInfo.point, true);
 
-            if(hitInfo.collider.bounds.size.sqrMagnitude >= targetPlacementArea.sqrMagnitude)
+            if(bounds.size.x >= targetPlacementArea.x && bounds.size.z >= targetPlacementArea.z)
             {
                 hitIndicator.ChangeColor(Color.green);
             }
@@ -106,8 +110,6 @@ public class InputManager : Singelton<InputManager>
             {
                 hitIndicator.ChangeColor(Color.red);
             }
-
-
         }
         else
         {

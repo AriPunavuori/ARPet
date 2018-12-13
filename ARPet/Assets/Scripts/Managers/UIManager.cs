@@ -33,12 +33,12 @@ public class UIManager : Singelton<UIManager>
         get;
         private set;
     }
-    public Transform PetStates
+    public Transform HuabotStates
     {
         get;
         private set;
     }
-    public Transform PetStats
+    public Transform HuabotStats
     {
         get;
         private set;
@@ -59,12 +59,12 @@ public class UIManager : Singelton<UIManager>
         get;
         private set;
     }
-    public Text TrackableText
+    public Text HitTargetText
     {
         get;
         private set;
     }
-    public Text HitPoseText
+    public Text HitPositionText
     {
         get;
         private set;
@@ -113,17 +113,17 @@ public class UIManager : Singelton<UIManager>
     private void InitializeGameDebugBox()
     {
         GameDebugBox = GameMaster.Instance.HUDCanvas.Find("GameDebugBox");
-        PetStates = GameDebugBox.Find("PetStates");
-        PetStats = GameDebugBox.Find("PetStats");
+        HuabotStates = GameDebugBox.Find("HuabotStates");
+        HuabotStats = GameDebugBox.Find("HuabotStats");
 
-        currentStateText = PetStates.Find("CurrentStateText").GetComponent<Text>();
-        previousStateText = PetStates.Find("PreviousStateText").GetComponent<Text>();
-        mainTaskText = PetStates.Find("MainTaskText").GetComponent<Text>();
-        secondaryTaskText = PetStates.Find("SecondaryTaskText").GetComponent<Text>();
+        currentStateText = HuabotStates.Find("CurrentStateText").GetComponent<Text>();
+        previousStateText = HuabotStates.Find("PreviousStateText").GetComponent<Text>();
+        mainTaskText = HuabotStates.Find("MainTaskText").GetComponent<Text>();
+        secondaryTaskText = HuabotStates.Find("SecondaryTaskText").GetComponent<Text>();
 
-        happinessBar = PetStats.Find("Happiness").GetComponentInChildren<Image>();
-        sleepinessBar = PetStats.Find("Sleepiness").GetComponentInChildren<Image>();
-        energinesBar = PetStats.Find("Energines").GetComponentInChildren<Image>();
+        happinessBar = HuabotStats.Find("Happiness").GetComponentInChildren<Image>();
+        sleepinessBar = HuabotStats.Find("Sleepiness").GetComponentInChildren<Image>();
+        energinesBar = HuabotStats.Find("Energines").GetComponentInChildren<Image>();
     }
 
     private void InitializeARSessionDebugBox()
@@ -132,8 +132,8 @@ public class UIManager : Singelton<UIManager>
         ARSessionStatusText = ARSessionDebugBox.Find("ARSessionStatus").GetComponent<Text>();
         ARErrorMessageText = ARSessionDebugBox.Find("ARErrorMessage").GetComponent<Text>();
         DevicePoseText = ARSessionDebugBox.Find("DevicePose").GetComponent<Text>();
-        TrackableText = ARSessionDebugBox.Find("Trackable").GetComponent<Text>();
-        HitPoseText = ARSessionDebugBox.Find("HitPose").GetComponent<Text>();
+        HitTargetText = ARSessionDebugBox.Find("HitTarget").GetComponent<Text>();
+        HitPositionText = ARSessionDebugBox.Find("HitPosition").GetComponent<Text>();
         HitDistanceText = ARSessionDebugBox.Find("HitDistance").GetComponent<Text>();
     }
 
@@ -167,8 +167,8 @@ public class UIManager : Singelton<UIManager>
         ARSessionStatusText.text = "Session status: " + SessionManager.Instance.CurrentARSessionStatus;
         ARErrorMessageText.text = "Error: " + SessionManager.Instance.ErrorMessage;
         DevicePoseText.text = "Device pose: " + CameraEngine.Instance.CameraPose.ToString();
-        TrackableText.text = "Trackable: " + InputManager.Instance.CurrentTrackableName;
-        HitPoseText.text = "Hit pose: " + InputManager.Instance.CurrentHitPose;
+        HitTargetText.text = "Hit Target: " + InputManager.Instance.CurrentTrackableName;
+        HitPositionText.text = "Hit position: " + InputManager.Instance.CurrentHitPosition;
         HitDistanceText.text = "Hit distance: " + InputManager.Instance.CurrentHitDistance;
     }
 
