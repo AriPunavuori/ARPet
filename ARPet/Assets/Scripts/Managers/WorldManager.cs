@@ -10,6 +10,8 @@ public class WorldManager : Singelton<WorldManager>
 
     #endregion VARIABLES
 
+    #region PROPERTIES
+
     public bool IsWorldCreated
     {
         get;
@@ -20,8 +22,6 @@ public class WorldManager : Singelton<WorldManager>
         get;
         private set;
     }
-
-    #region PROPERTIES
 
     #endregion PROPERTIES
 
@@ -54,9 +54,9 @@ public class WorldManager : Singelton<WorldManager>
 
         Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + Vector3.up, Quaternion.identity);
 
-        SessionManager.Instance.ClearHorizontalPlanes();
+        SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
 
-        UIManager.Instance.SwitchDeviceImage();
+        UIManager.Instance.SwitchDeviceImage(false);
     }
 
     public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)

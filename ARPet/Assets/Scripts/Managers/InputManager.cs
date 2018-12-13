@@ -1,6 +1,4 @@
-﻿using HuaweiARUnitySDK;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : Singelton<InputManager>
@@ -10,7 +8,7 @@ public class InputManager : Singelton<InputManager>
     private Vector3 targetPlacementArea = new Vector3(1f, 1, 1f);
 
     [SerializeField]
-    private LayerMask horizontalPlaneMask;
+    private LayerMask hitLayerMask;
 
     private Touch currentTouch;
     private LineRenderer lineRenderer;
@@ -40,7 +38,7 @@ public class InputManager : Singelton<InputManager>
             return hitInfo.distance > 0 ? hitInfo.distance : 0;
         }
     }
-    public Vector3 CurrentHitPosition
+    public Vector3 CurrentHitPoint
     {
         get
         {
@@ -81,9 +79,8 @@ public class InputManager : Singelton<InputManager>
 
     private void UnityShootRayFromScreenPoint(Vector2 screenPoint)
     {
-        var ray = CameraEngine.Instance.MainCamera.ScreenPointToRay(screenCenterPoint);
-
-        if(Physics.Raycast(ray, out hitInfo, rayMaxDistance, horizontalPlaneMask))
+        var ray = CameraEngine.Instance.MainCamera./*ScreenPointToRay(screenCenterPoint)*/ViewportPointToRay(new Vector2( 0.5f, 0.5f));
+        if(Physics.Raycast(ray, out hitInfo, rayMaxDistance, hitLayerMask))
         {
             hitIndicator.ChangeState(true);
 
@@ -91,16 +88,19 @@ public class InputManager : Singelton<InputManager>
             var bounds = hitInfo.collider.bounds;
             var normal = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
-            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, normal);
-            SetLinePositions(screenCenterPoint, hitInfo.point, true);
+            hitIndicator.transform.SetPositionAndRotation(CurrentHitPoint, normal);
+            SetLinePositions(/*screenCenterPoint*/ray.origin, CurrentHitPoint, true);
 
-
-            CanWeBuildWorld(bounds, normal);
+            if(WorldManager.Instance.IsWorldCreated == false)
+            {
+                CanWeBuildWorld(bounds, normal);
+            }
         }
         else
         {
             currentHitTarget = null;
             hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            hitIndicator.ChangeState(false);
             SetLinePositions(Vector3.zero, Vector3.zero, false);
         }
     }
@@ -109,6 +109,8 @@ public class InputManager : Singelton<InputManager>
     {
         if (bounds.size.x >= targetPlacementArea.x && bounds.size.z >= targetPlacementArea.z)
         {
+            UIManager.Instance.SwitchDeviceImage(true, 2);
+
             hitIndicator.transform.SetPositionAndRotation(bounds.center, hitNormal);
             hitIndicator.ChangeColor(Color.green);
 
@@ -119,25 +121,108 @@ public class InputManager : Singelton<InputManager>
                 switch (currentTouch.phase)
                 {
                     case TouchPhase.Began:
+
                         break;
+
                     case TouchPhase.Moved:
+
                         break;
+
                     case TouchPhase.Stationary:
+
                         break;
+
                     case TouchPhase.Ended:
-                        WorldManager.Instance.CreateWorld(new Pose(hitInfo.point, hitNormal));
+
+                        WorldManager.Instance.CreateWorld(new Pose(hitIndicator.transform.position, hitNormal));
+
+                        UIManager.Instance.SwitchDeviceImage(false);
+
                         break;
+
                     case TouchPhase.Canceled:
+
                         break;
+
                     default:
+
                         break;
                 }
             }
         }
         else
         {
+            UIManager.Instance.SwitchDeviceImage(true, 1);
+
             hitIndicator.ChangeColor(Color.red);
         }
+    }
+
+    public void CanWeCreateBox()
+    {
+        if(currentHitTarget != null)
+        {
+            hitIndicator.transform.SetPositionAndRotation(CurrentHitPoint, Quaternion.identity);
+            hitIndicator.ChangeColor(Color.green);
+
+            if (Input.touchCount > 0)
+            {
+                currentTouch = Input.GetTouch(0);
+
+                var newBlock = Instantiate(ResourceManager.Instance.BlockPrefab, CurrentHitPoint, Quaternion.identity).GetComponent<Block>();
+
+                switch (currentTouch.phase)
+                {
+                    case TouchPhase.Began:
+
+                        if (currentHitTarget != null)
+                        {
+                            newBlock.StartPlacing();
+                        }                    
+
+                        break;
+                    case TouchPhase.Moved:
+
+                        if(currentHitTarget != null)
+                        {
+                            newBlock.SetNewPosition(CurrentHitPoint);
+                        }
+
+                        break;
+                    case TouchPhase.Stationary:
+
+                        break;
+
+                    case TouchPhase.Ended:
+
+                        if (currentHitTarget != null)
+                        {
+                            newBlock.NewPlacement(CurrentHitPoint);
+                        }
+
+                        break;
+
+                    case TouchPhase.Canceled:
+
+                        if (currentHitTarget != null)
+                        {
+                            newBlock.CancelPlacement();
+                        }
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
+        }
+        else
+        {
+            hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            hitIndicator.ChangeState(false);
+            SetLinePositions(Vector3.zero, Vector3.zero, false);
+        }       
     }
 
     private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)

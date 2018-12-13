@@ -10,7 +10,7 @@ public class UIManager : Singelton<UIManager>
     [SerializeField]
     private Sprite deviceTapSprite;
 
-    private Image DeviceImage;
+    private Image deviceImage;
 
     private Text currentStateText;
     private Text previousStateText;
@@ -102,6 +102,8 @@ public class UIManager : Singelton<UIManager>
 
     private void Initialize()
     {
+        deviceImage = GameMaster.Instance.HUDCanvas.Find("DeviceImage").GetComponent<Image>();
+
         InitializeGameDebugBox();
         InitializeARSessionDebugBox();
         InitializeAudioDebugBox();      
@@ -110,6 +112,7 @@ public class UIManager : Singelton<UIManager>
     private void InitializeGameDebugBox()
     {
         GameDebugBox = GameMaster.Instance.HUDCanvas.Find("GameDebugBox");
+
         HuabotStates = GameDebugBox.Find("HuabotStates");
         HuabotStats = GameDebugBox.Find("HuabotStats");
 
@@ -165,7 +168,7 @@ public class UIManager : Singelton<UIManager>
         ARErrorMessageText.text = "Error: " + SessionManager.Instance.ErrorMessage;
         DevicePoseText.text = "Device pose: " + CameraEngine.Instance.CameraPose.ToString();
         HitTargetText.text = "Hit Target: " + InputManager.Instance.CurrentTrackableName;
-        HitPositionText.text = "Hit position: " + InputManager.Instance.CurrentHitPosition;
+        HitPositionText.text = "Hit position: " + InputManager.Instance.CurrentHitPoint;
         HitDistanceText.text = "Hit distance: " + InputManager.Instance.CurrentHitDistance;
     }
 
@@ -174,14 +177,45 @@ public class UIManager : Singelton<UIManager>
         Invoke("OnQuitPressed", quitDelay);
     }
 
-    public void SelectPrefabButton(int prefabIndex)
+    public void SpawnBlockButton()
     {
-        
+        InputManager.Instance.CanWeCreateBox();
     }
 
-    public void SwitchDeviceImage()
+    /// <summary>
+    ///  is ImageEnable = Set device image on/off, 
+    ///  1 = Set device "pan" sprite,
+    ///  2 = Set device "tap" sprite
+    /// </summary>
+    /// <param name="spriteIndex"></param>
+    public void SwitchDeviceImage(bool isImageEnable, int spriteIndex = 0)
     {
-        DeviceImage.sprite = DeviceImage.sprite == devicePanSprite ? deviceTapSprite : devicePanSprite;
+        deviceImage.enabled = isImageEnable;
+
+        switch (spriteIndex)
+        {
+            case 0:
+
+                // Do nothing...
+
+                break;
+
+            case 1:
+
+                deviceImage.sprite = devicePanSprite;
+
+                break;
+
+            case 2:
+
+                deviceImage.sprite = deviceTapSprite;
+
+                break;
+       
+            default:
+
+                break;
+        }
     }
 
     #endregion CUSTOM_FUNCTIONS

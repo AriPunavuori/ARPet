@@ -60,8 +60,7 @@ public class HorizontalPlane : MonoBehaviour
 
     public void Update()
     {
-        UpdateHorizontalPlaneTracking();
-        UpdateARHorizontalPlane();   
+        UpdateHorizontalPlaneTracking();        
     }
 
     public void Initialize(ARPlane plane)
@@ -90,6 +89,8 @@ public class HorizontalPlane : MonoBehaviour
             meshRenderer.enabled = false;
             return;
         }
+
+        UpdateARHorizontalPlane();
     }
 
     private void UpdateARHorizontalPlane()

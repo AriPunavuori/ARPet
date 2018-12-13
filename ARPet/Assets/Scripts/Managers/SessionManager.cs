@@ -272,10 +272,15 @@ public class SessionManager : Singelton<SessionManager>
         }
     }
 
-    public void ClearHorizontalPlanes()
+    public void ClearAndRemoveHorizontalPlanes()
     {
         if(horizontalPlanes != null)
         {
+            foreach (var horizontalPlane in horizontalPlanes)
+            {
+                Destroy(horizontalPlane.gameObject);
+            }
+
             horizontalPlanes.Clear();
         }
     }
