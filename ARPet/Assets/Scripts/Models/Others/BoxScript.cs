@@ -84,7 +84,4 @@ public class BoxScript : MonoBehaviour,IDraggable {
             other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Force);// tämän tilalle kutsu behaviouriin että pakenee kohti escapevektoria
         }
     }
-
-    
-
 }

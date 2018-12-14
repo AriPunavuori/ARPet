@@ -54,7 +54,7 @@ public class World : MonoBehaviour
 
     private void Update()
     {
-        // TrackWorld();
+        TrackWorld();
     }
 
     private void OnDestroy()
