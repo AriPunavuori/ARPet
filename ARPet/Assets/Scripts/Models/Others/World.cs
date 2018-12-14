@@ -42,12 +42,12 @@ public class World : MonoBehaviour
         worldCollider = GetComponentInChildren<Collider>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        //navMeshSurfaces = GetComponents<NavMeshSurface>();
+        navMeshSurfaces = GetComponents<NavMeshSurface>();
     }
 
     private void Start()
     {
-        //BuildNavMesh(navMeshSurfaces);
+        BuildNavMesh(navMeshSurfaces);
     }
 
     private void OnEnable()
@@ -57,7 +57,7 @@ public class World : MonoBehaviour
 
     private void Update()
     {
-       // TrackWorld();
+       TrackWorld();
     }
 
     private void OnDestroy()

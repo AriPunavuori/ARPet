@@ -10,7 +10,7 @@ public class RoamingState : IState
 
     private float randomIdleTime;
     private readonly float randomMinIdleTime = 0.5f;
-    private readonly float randomMaxIdleTime = 4f;
+    private readonly float randomMaxIdleTime = 2f;
 
     #endregion VARIABLES
 
@@ -42,7 +42,7 @@ public class RoamingState : IState
     {
         return new Vector3(
             Random.Range(-areaSize.x, areaSize.x),
-            0.05f,
+            0.5f,
             Random.Range(-areaSize.z, areaSize.z));
     }
 
