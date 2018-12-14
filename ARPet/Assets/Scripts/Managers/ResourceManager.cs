@@ -31,7 +31,7 @@ public class ResourceManager : Singelton<ResourceManager>
         HitIndicatorPrefab = Resources.Load<GameObject>("Prefabs/Models/HitIndicator");
         HuabotPrefab = Resources.Load<GameObject>("Prefabs/Models/Huabot");
 
-        BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/Block");
+        BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/ARBox");
 
         ARBackground_mat = Resources.Load<Material>("Prefabs/Materials/ARBackground_mat");
 

@@ -65,9 +65,9 @@ public class HuabotAIController : MonoBehaviour
         stateMachine.ChangeState(new RoamingState(
            transform,
                new Vector3(
-               2 - .1f,
+               1 - .1f,
                .5f,
-               2 - .1f)));
+               1 - .1f)));
     }
 
     private void Update()

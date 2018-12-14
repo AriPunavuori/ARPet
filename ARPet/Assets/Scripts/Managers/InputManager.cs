@@ -54,7 +54,7 @@ public class InputManager : Singelton<InputManager>
     private void Awake()
     {
         Initialize();
-        SetLinePositions(Vector3.zero, Vector3.zero, false);
+        //SetLinePositions(Vector3.zero, Vector3.zero, false);
     }
 
     private void Start()
@@ -90,7 +90,7 @@ public class InputManager : Singelton<InputManager>
             var normal = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
             hitIndicator.transform.SetPositionAndRotation(CurrentHitPoint, normal);
-            SetLinePositions(/*screenCenterPoint*/ray.origin, CurrentHitPoint, true);
+            //SetLinePositions(/*screenCenterPoint*/ray.origin, CurrentHitPoint, true);
 
             if(WorldManager.Instance.IsWorldCreated == false)
             {
@@ -102,7 +102,7 @@ public class InputManager : Singelton<InputManager>
             currentHitTarget = null;
             hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             hitIndicator.ChangeState(false);
-            SetLinePositions(Vector3.zero, Vector3.zero, false);
+            //SetLinePositions(Vector3.zero, Vector3.zero, false);
 
             UIManager.Instance.SwitchDeviceImage(true, 1);
         }
@@ -112,7 +112,7 @@ public class InputManager : Singelton<InputManager>
     {
         if (bounds.size.x >= targetPlacementArea.x && bounds.size.z >= targetPlacementArea.z)
         {
-            UIManager.Instance.SwitchDeviceImage(true, 2);
+            //UIManager.Instance.SwitchDeviceImage(true, 2);
 
             hitIndicator.transform.SetPositionAndRotation(hitInfo.point, hitNormal);
             hitIndicator.ChangeColor(Color.green);
@@ -224,16 +224,16 @@ public class InputManager : Singelton<InputManager>
         {
             hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             hitIndicator.ChangeState(false);
-            SetLinePositions(Vector3.zero, Vector3.zero, false);
+            //SetLinePositions(Vector3.zero, Vector3.zero, false);
         }       
     }
 
-    private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)
-    {
-        lineRenderer.SetPosition(0, startPosition);
-        lineRenderer.SetPosition(1, endPosition);
-        lineRenderer.enabled = isEnabled;
-    }
+    //private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)
+    //{
+    //    lineRenderer.SetPosition(0, startPosition);
+    //    lineRenderer.SetPosition(1, endPosition);
+    //    lineRenderer.enabled = isEnabled;
+    //}
 
     #endregion CUSTOM_FUNCTIONS
 }
