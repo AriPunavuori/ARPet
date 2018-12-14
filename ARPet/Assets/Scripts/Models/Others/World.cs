@@ -1,14 +1,12 @@
 ﻿using HuaweiARUnitySDK;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class World : MonoBehaviour
 {
-    private Color defaultColor;
-    private Color ableToPlaceColor = new Color(0, 1, 0, 0.5f);
-    private Color unAbleToPlaceColor = new Color(1, 0, 0, 0.5f);
-
     private Collider worldCollider;
     private MeshRenderer meshRenderer;
+    private NavMeshSurface[] navMeshSurfaces;
 
     public ARAnchor WorldAnchor
     {
@@ -44,7 +42,12 @@ public class World : MonoBehaviour
         worldCollider = GetComponentInChildren<Collider>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        defaultColor = meshRenderer.material.color;
+        //navMeshSurfaces = GetComponents<NavMeshSurface>();
+    }
+
+    private void Start()
+    {
+        //BuildNavMesh(navMeshSurfaces);
     }
 
     private void OnEnable()
@@ -54,12 +57,20 @@ public class World : MonoBehaviour
 
     private void Update()
     {
-        TrackWorld();
+       // TrackWorld();
     }
 
     private void OnDestroy()
     {
         SessionManager.Instance.DetachARAnchor(WorldAnchor);
+    }
+
+    public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)
+    {
+        for (int i = 0; i < navMeshSurfaces.Length; i++)
+        {
+            navMeshSurfaces[i].BuildNavMesh();
+        }
     }
 
     private void TrackWorld()

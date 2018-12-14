@@ -15,8 +15,8 @@ public class Block : MonoBehaviour
 
     public void StartPlacing()
     {
-        rigidbody.useGravity = false;
-        rigidbody.isKinematic = false;
+        //rigidbody.useGravity = false;
+        //rigidbody.isKinematic = false;
     }
 
     public void SetNewPosition(Vector3 newPosition)
