@@ -1,0 +1,147 @@
+fileFormatVersion: 2
+guid: 8550741f5de477444b93626ed5918edb
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: BatHinge
+    100004: BatLid
+    100006: Display
+    100008: ear L
+    100010: ear R
+    100012: HingeL
+    100014: HingeR
+    100016: Huabot
+    100018: Visor
+    400000: //RootNode
+    400002: BatHinge
+    400004: BatLid
+    400006: Display
+    400008: ear L
+    400010: ear R
+    400012: HingeL
+    400014: HingeR
+    400016: Huabot
+    400018: Visor
+    2100000: 'Material #2'
+    2100002: No Name
+    2300000: BatHinge
+    2300002: BatLid
+    2300004: Display
+    2300006: ear L
+    2300008: ear R
+    2300010: HingeL
+    2300012: HingeR
+    2300014: Huabot
+    2300016: Visor
+    3300000: BatHinge
+    3300002: BatLid
+    3300004: Display
+    3300006: ear L
+    3300008: ear R
+    3300010: HingeL
+    3300012: HingeR
+    3300014: Huabot
+    3300016: Visor
+    4300000: Huabot
+    4300002: HingeR
+    4300004: ear R
+    4300006: HingeL
+    4300008: ear L
+    4300010: Visor
+    4300012: Display
+    4300014: BatHinge
+    4300016: BatLid
+    6400000: BatHinge
+    6400002: BatLid
+    6400004: Display
+    6400006: ear L
+    6400008: ear R
+    6400010: HingeL
+    6400012: HingeR
+    6400014: Huabot
+    6400016: Visor
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.010000001
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
