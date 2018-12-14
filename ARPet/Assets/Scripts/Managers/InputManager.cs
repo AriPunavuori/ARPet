@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿using HuaweiARUnitySDK;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : Singelton<InputManager>
 {
-    private HorizontalPlane currentHorizontalPlane;
-
     #region VARIABLES
 
     private Vector3 targetPlacementArea = new Vector3(1f, 1, 1f);

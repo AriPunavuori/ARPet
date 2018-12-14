@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class WorldManager : Singelton<WorldManager>
 {
@@ -27,7 +26,7 @@ public class WorldManager : Singelton<WorldManager>
 
     #region UNITY_FUNCTIONS
 
-    private void Awake()
+    private void Start()
     {
         Initialize();
     }
@@ -38,7 +37,7 @@ public class WorldManager : Singelton<WorldManager>
 
     private void Initialize()
     {
-       
+        //CreateWorld(new Pose(Vector3.zero, Quaternion.identity));
     }
 
     public void CreateWorld(Pose newPose)
@@ -49,7 +48,7 @@ public class WorldManager : Singelton<WorldManager>
         }
 
         World = Instantiate(ResourceManager.Instance.WorldObjectPrefab, newPose.position, newPose.rotation).GetComponent<World>();
-        World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
+        //World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
         IsWorldCreated = true;
 
         Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + Vector3.up, Quaternion.identity);
@@ -59,20 +58,9 @@ public class WorldManager : Singelton<WorldManager>
         UIManager.Instance.SwitchDeviceImage(false);
     }
 
-    public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)
-    {
-        for (int i = 0; i < navMeshSurfaces.Length; i++)
-        {
-            navMeshSurfaces[i].BuildNavMesh();
-        }
-    }
+   
 
-    public void TryPlaceObject(GameObject selectedPrefab, Pose currentHitPose)
-    {
-        var newInstance = Instantiate(selectedPrefab, currentHitPose.position, currentHitPose.rotation);
-
-        createdObjects.Add(newInstance);
-    }
+  
 
     #endregion CUSTOM_FUNCTIONS
 }

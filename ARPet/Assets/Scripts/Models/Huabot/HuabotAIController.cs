@@ -56,13 +56,18 @@ public class HuabotAIController : MonoBehaviour
 
     private void Start()
     {
-        //SetStats();
-        //stateMachine.ChangeState(new RoamingState(
-        //    transform,
-        //        new Vector3(
-        //        LevelManager.Instance.FloorSize.x - 1,
-        //        1, 
-        //        LevelManager.Instance.FloorSize.z - 1)));
+        SetStats();
+        Invoke("FOO", 2);
+    }
+
+    private void FOO()
+    {
+        stateMachine.ChangeState(new RoamingState(
+           transform,
+               new Vector3(
+               10 - .1f,
+               0,
+               10 - .1f)));
     }
 
     private void Update()
@@ -179,6 +184,9 @@ public class HuabotAIController : MonoBehaviour
 
     public void SetDestination(Vector3 newDestination)
     {
+        print(newDestination);
+        //newDestination = new Vector3(.5f, .5f, .5f);
+        print(newDestination);
         navMeshAgent.SetDestination(newDestination);
     }
 
