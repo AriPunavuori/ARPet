@@ -11,6 +11,7 @@ public class Battery : MonoBehaviour, IDraggable {
     Vector3 fakeUp;
     Vector3 fakeForward;
     public bool isMoving;
+    public bool draggable = true;
     float movingThreshold = 0.1f;
     Collider scareCol;
     Quaternion dragStartRot;
@@ -38,9 +39,11 @@ public class Battery : MonoBehaviour, IDraggable {
     }
 
     public void OnDragEnd() {
-        dragger = null;
-        rb.isKinematic = false;
-        fakeUp = Vector3.zero;
+        if(draggable) {
+            dragger = null;
+            rb.isKinematic = false;
+            fakeUp = Vector3.zero;
+        }
     }
 
     public void OnDragContinue(Vector3 target) {
@@ -48,15 +51,21 @@ public class Battery : MonoBehaviour, IDraggable {
     }
 
     public void OnDragContinue(Vector3 target, Quaternion draggerRotation) {
-        rb.velocity = Vector3.zero;
-        var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
-        targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward, Vector3.up), Vector3.up);
-        rb.MovePosition(target);
-        rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRot, maxRotSpeed * Time.deltaTime));
+        if(draggable) {
+            rb.velocity = Vector3.zero;
+            var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
+            targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward, Vector3.up), Vector3.up);
+            rb.MovePosition(target);
+            rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRot, maxRotSpeed * Time.deltaTime));
+        }
     }
 
     public bool IsCurrentlyDraggable() {
-        return true;
+        if(draggable) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     void Awake() {
@@ -70,6 +79,7 @@ public class Battery : MonoBehaviour, IDraggable {
             if(dragger != null) {
                 dragger.BreakDrag();
             }
+            draggable = false;
             Destroy(gameObject);
         }
     }

@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoxScript : MonoBehaviour,IDraggable {
-
-
-
+public class BoxScript : MonoBehaviour,IDraggable
+{
     IDragger dragger;
     Vector3 oldPos;
     Vector3 newPos;
     Vector3 fakeUp;
     Vector3 fakeForward;
     public bool isMoving;
+    public bool draggable = true;
     float movingThreshold = 0.1f;
     Collider scareCol;
     Quaternion dragStartRot;
@@ -19,7 +18,9 @@ public class BoxScript : MonoBehaviour,IDraggable {
     public float maxRotSpeed;
     Rigidbody rb;
 
-    public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
+    public void OnDragStart(IDragger dragger, Quaternion draggerRotation)
+    {
+        rb = GetComponent<Rigidbody>();
         var rotCheck = new Vector3[] { transform.right, -transform.right, transform.up, -transform.up, transform.forward, -transform.forward };
         for (int i = 0 ; i<rotCheck.Length ; i++) {
             if(rotCheck[i].y > fakeUp.y) {
@@ -36,9 +37,11 @@ public class BoxScript : MonoBehaviour,IDraggable {
     }
 
     public void OnDragEnd() {
-        dragger = null;
-        rb.isKinematic = false;
-        fakeUp = Vector3.zero;
+        if(draggable) {
+            dragger = null;
+            rb.isKinematic = false;
+            fakeUp = Vector3.zero;
+        }
     }
 
     public void OnDragContinue(Vector3 target) {
@@ -46,16 +49,22 @@ public class BoxScript : MonoBehaviour,IDraggable {
     }
 
     public void OnDragContinue(Vector3 target, Quaternion draggerRotation) {
-        rb.velocity = Vector3.zero;
-        var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
+        if(draggable) {
+            rb.velocity = Vector3.zero;
+            var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
 
-        targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward,Vector3.up), Vector3.up);
-        rb.MovePosition(target);
-        rb.MoveRotation(Quaternion.RotateTowards(transform.rotation,targetRot,maxRotSpeed * Time.deltaTime)) ;
+            targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward, Vector3.up), Vector3.up);
+            rb.MovePosition(target);
+            rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRot, maxRotSpeed * Time.deltaTime));
+        }
     }
 
     public bool IsCurrentlyDraggable() {
-        return true;
+        if(!draggable) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     void Awake () {
