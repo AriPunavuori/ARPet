@@ -10,6 +10,11 @@ public class Dragger : MonoBehaviour, IDragger {
     IDraggable currentDrag;
     float dragDistance;
 
+    private void Awake()
+    {
+        box = ResourceManager.Instance.BlockPrefab;
+    }
+
     public void BreakDrag() {
         currentDrag = null;
     }

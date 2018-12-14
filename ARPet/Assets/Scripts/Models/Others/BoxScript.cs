@@ -56,8 +56,6 @@ public class BoxScript : MonoBehaviour,IDraggable
             targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward, Vector3.up), Vector3.up);
             rb.MovePosition(target);
             rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRot, maxRotSpeed * Time.deltaTime));
-
-            Handheld.Vibrate();
         }
     }
 
