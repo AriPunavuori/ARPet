@@ -21,7 +21,7 @@ public class Dragger : MonoBehaviour, IDragger {
         }
 
         if(currentDrag != null) {
-            if(Input.GetMouseButtonUp(0)) {
+            if(Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.B)) {
                 currentDrag.OnDragEnd();
                 currentDrag = null;
             } else {
@@ -46,9 +46,9 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     public void SpawnBox() {
-        Instantiate(box);
-        box.transform.position = new Vector3(0,10,0);
-        currentDrag = box.GetComponent<IDraggable>();
+        var newBox = Instantiate(box);
+        newBox.transform.position = transform.forward * 0.3f;
+        currentDrag = newBox.GetComponent<IDraggable>();
         if(currentDrag != null) {
             currentDrag.OnDragStart(this, transform.rotation);
         }
