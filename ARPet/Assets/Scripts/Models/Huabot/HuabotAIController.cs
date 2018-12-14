@@ -65,9 +65,9 @@ public class HuabotAIController : MonoBehaviour
         stateMachine.ChangeState(new RoamingState(
            transform,
                new Vector3(
-               10 - .1f,
-               0,
-               10 - .1f)));
+               2 - .1f,
+               .5f,
+               2 - .1f)));
     }
 
     private void Update()
@@ -145,17 +145,24 @@ public class HuabotAIController : MonoBehaviour
 
     private void OnInteractionStart()
     {
-        Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.red);
+        //Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.red);
     }
 
     private void OnInteractionEnd()
     {
-        Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.white);
+        //Huabot.Instance.HuabotGraphicsController.ChangeMaterialColor(Color.white);
 
         interactionTarget.gameObject.SetActive(false);
         interactionTarget = null;
 
-        stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
+        stateMachine.ChangeState(new RoamingState(
+           transform,
+               new Vector3(
+               10 - .1f,
+               .5f,
+               10 - .1f)));
+        print("Foo");
+        //stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
     }
 
     private Transform GetClosestObject(Collider[] hitColliders)
@@ -184,8 +191,7 @@ public class HuabotAIController : MonoBehaviour
 
     public void SetDestination(Vector3 newDestination)
     {
-        print(newDestination);
-        //newDestination = new Vector3(.5f, .5f, .5f);
+        //navMeshAgent.Warp(newDestination);
         print(newDestination);
         navMeshAgent.SetDestination(newDestination);
     }

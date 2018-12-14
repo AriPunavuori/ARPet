@@ -137,7 +137,7 @@ public class InputManager : Singelton<InputManager>
 
                     case TouchPhase.Ended:
 
-                        WorldManager.Instance.CreateWorld(new Pose(hitIndicator.transform.position, hitNormal));
+                        WorldManager.Instance.CreateWorld(new Pose(/*hitIndicator.transform.position*/CurrentHitPoint, hitNormal));
 
                         UIManager.Instance.SwitchDeviceImage(false);
 
