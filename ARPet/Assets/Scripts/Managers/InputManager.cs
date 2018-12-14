@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public class InputManager : Singelton<InputManager>
 {
+    private HorizontalPlane currentHorizontalPlane;
+
     #region VARIABLES
 
     private Vector3 targetPlacementArea = new Vector3(1f, 1, 1f);
@@ -102,6 +104,8 @@ public class InputManager : Singelton<InputManager>
             hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             hitIndicator.ChangeState(false);
             SetLinePositions(Vector3.zero, Vector3.zero, false);
+
+            UIManager.Instance.SwitchDeviceImage(true, 1);
         }
     }
 
@@ -111,7 +115,7 @@ public class InputManager : Singelton<InputManager>
         {
             UIManager.Instance.SwitchDeviceImage(true, 2);
 
-            hitIndicator.transform.SetPositionAndRotation(bounds.center, hitNormal);
+            hitIndicator.transform.SetPositionAndRotation(hitInfo.point, hitNormal);
             hitIndicator.ChangeColor(Color.green);
 
             if (Input.touchCount > 0)
