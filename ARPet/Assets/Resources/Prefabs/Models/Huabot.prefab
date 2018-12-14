@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54905887052914624}
   - component: {fileID: 114983605418608110}
   - component: {fileID: 65300940492421266}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Huabot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 4037908140835728}
   - component: {fileID: 33031241892385424}
   - component: {fileID: 23711185143205796}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ear L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4611968899772194}
   - component: {fileID: 33672493496911378}
   - component: {fileID: 23034870306458446}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Huabot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4275862535956482}
   - component: {fileID: 33360395754849410}
   - component: {fileID: 23719817252500770}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ear R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 4736910828944550}
   - component: {fileID: 33655619278584320}
   - component: {fileID: 23519294717247404}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 4700766257487220}
   - component: {fileID: 33839167662812600}
   - component: {fileID: 23786200736619734}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HingeL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4723238597255842}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 4876101952595392}
   - component: {fileID: 33880578447058914}
   - component: {fileID: 23396856919723352}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BatHinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 4848091133386768}
   - component: {fileID: 33052187289555278}
   - component: {fileID: 23060357869322700}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BatLid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 4078430934586380}
   - component: {fileID: 33493364338045730}
   - component: {fileID: 23820801242705092}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Visor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4988974399168560}
   - component: {fileID: 95457343474593612}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ARbot8-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 4327168972163046}
   - component: {fileID: 33185821261239326}
   - component: {fileID: 23904349678129554}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HingeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +333,7 @@ Transform:
   m_GameObject: {fileID: 1015411367389260}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4723238597255842}
   m_Father: {fileID: 0}
@@ -785,8 +785,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.08, z: 0.1}
-  m_Center: {x: 0, y: 0.03, z: -0.002}
+  m_Size: {x: 10.242754, y: 4.4875617, z: 10.096049}
+  m_Center: {x: 0.16241252, y: 1.7737811, z: -0.23822308}
 --- !u!95 &95457343474593612
 Animator:
   serializedVersion: 3
