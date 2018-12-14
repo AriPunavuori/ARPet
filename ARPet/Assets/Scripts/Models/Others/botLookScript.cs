@@ -15,9 +15,11 @@ public class botLookScript : MonoBehaviour {
 	
 
 	void Update () {
-        Debug.DrawLine(target.position, transform.position);
-       var localDir = transform.InverseTransformVector(target.position - transform.position);
-        localDir.Normalize();
-        eye.position = origPos + eye.right * xFactor * localDir.x;
+        if(target != null) {
+            //Debug.DrawLine(target.position, transform.position);
+            var localDir = transform.InverseTransformVector(target.position - transform.position);
+            localDir.Normalize();
+            eye.position = origPos + eye.right * xFactor * localDir.x;
+        }
     }
 }

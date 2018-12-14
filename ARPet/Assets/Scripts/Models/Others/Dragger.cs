@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grabber : MonoBehaviour, IDragger
- {
+public class Dragger : MonoBehaviour, IDragger {
     public LayerMask HitLayerMask;
 
     private readonly float maxHitDist = 100f;
-
+    public GameObject box;
     IDraggable currentDrag;
     float dragDistance;
 
@@ -16,6 +15,10 @@ public class Grabber : MonoBehaviour, IDragger
     }
 
 	void Update () {
+
+        if(Input.GetKeyDown(KeyCode.B)) {
+            SpawnBox();
+        }
 
         if(currentDrag != null) {
             if(Input.GetMouseButtonUp(0)) {
@@ -39,6 +42,15 @@ public class Grabber : MonoBehaviour, IDragger
                     }
                 }
             }
+        }
+    }
+
+    public void SpawnBox() {
+        Instantiate(box);
+        box.transform.position = new Vector3(0,10,0);
+        currentDrag = box.GetComponent<IDraggable>();
+        if(currentDrag != null) {
+            currentDrag.OnDragStart(this, transform.rotation);
         }
     }
 }
