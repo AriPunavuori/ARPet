@@ -32,7 +32,7 @@ public class World : MonoBehaviour
     {
         WorldAnchor = anchor.ARAnchor;
 
-        transform.SetPositionAndRotation(WorldAnchorPose.position, WorldAnchorPose.rotation);
+        //transform.SetPositionAndRotation(WorldAnchorPose.position, WorldAnchorPose.rotation);
 
         //meshRenderer.enabled = false;
     }
@@ -57,7 +57,7 @@ public class World : MonoBehaviour
 
     private void Update()
     {
-       TrackWorld();
+       //TrackWorld();
     }
 
     private void OnDestroy()
@@ -86,7 +86,7 @@ public class World : MonoBehaviour
 
                 MoveWorld(WorldAnchorPose);
 
-                // transform.Rotate(0f, 225f, 0f, Space.Self);
+                transform.Rotate(0f, 225f, 0f, Space.Self);
 
                 meshRenderer.enabled = true;
                 break;
