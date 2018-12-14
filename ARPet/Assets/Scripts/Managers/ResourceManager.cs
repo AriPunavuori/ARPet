@@ -20,8 +20,11 @@ public class ResourceManager : Singelton<ResourceManager>
 
     public AudioMixer AudioMixer { get; private set; }
 
+    public GameObject Foo;
+
     private void Awake()
     {
+
         HuabotARConfig = Resources.Load<ARConfigBase>("Prefabs/ArConfig/HuabotARConfig");
 
         PalmPrefab = Resources.Load<GameObject>("Prefabs/Models/Palm");
@@ -31,7 +34,7 @@ public class ResourceManager : Singelton<ResourceManager>
         HitIndicatorPrefab = Resources.Load<GameObject>("Prefabs/Models/HitIndicator");
         HuabotPrefab = Resources.Load<GameObject>("Prefabs/Models/Huabot");
 
-        BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/Block");
+        BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/ARBox");
 
         ARBackground_mat = Resources.Load<Material>("Prefabs/Materials/ARBackground_mat");
 

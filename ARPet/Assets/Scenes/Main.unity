@@ -2127,7 +2127,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2178,6 +2178,7 @@ GameObject:
   - component: {fileID: 1246751461}
   - component: {fileID: 1246751460}
   - component: {fileID: 1246751463}
+  - component: {fileID: 1246751464}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2212,8 +2213,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.05
+  far clip plane: 10
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -2256,6 +2257,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2df82c62ff41e4eae9a683937114ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1246751464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1246751459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a886ee3902f2b4b5587593c4b5412cd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HitLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  box: {fileID: 1260058120229014, guid: 4b89bbe02f57c4430948a29900acadad, type: 2}
 --- !u!1 &1295347307
 GameObject:
   m_ObjectHideFlags: 0

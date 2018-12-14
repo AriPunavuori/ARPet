@@ -51,7 +51,8 @@ public class WorldManager : Singelton<WorldManager>
         World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
         IsWorldCreated = true;
 
-        Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + Vector3.up, Quaternion.identity);
+        //Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
+        Instantiate(ResourceManager.Instance.BlockPrefab, newPose.position + Vector3.up, Quaternion.identity);
 
         SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
 

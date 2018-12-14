@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoxScript : MonoBehaviour,IDraggable {
-
-
-
+public class BoxScript : MonoBehaviour,IDraggable
+{
     IDragger dragger;
     Vector3 oldPos;
     Vector3 newPos;
@@ -20,7 +18,8 @@ public class BoxScript : MonoBehaviour,IDraggable {
     public float maxRotSpeed;
     Rigidbody rb;
 
-    public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
+    public void OnDragStart(IDragger dragger, Quaternion draggerRotation)
+    {
         rb = GetComponent<Rigidbody>();
         var rotCheck = new Vector3[] { transform.right, -transform.right, transform.up, -transform.up, transform.forward, -transform.forward };
         for (int i = 0 ; i<rotCheck.Length ; i++) {

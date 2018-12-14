@@ -1,59 +1,14 @@
 fileFormatVersion: 2
-guid: 2f6064dab3ee1594ea8940b3ba431eb2
+guid: 85a071a9d37567f48a6790971b48738e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: BatHinge
-    100004: BatLid
-    100006: Display
-    100008: ear L
-    100010: ear R
-    100012: HingeL
-    100014: HingeR
-    100016: Huabot
-    100018: Visor
     400000: //RootNode
-    400002: BatHinge
-    400004: BatLid
-    400006: Display
-    400008: ear L
-    400010: ear R
-    400012: HingeL
-    400014: HingeR
-    400016: Huabot
-    400018: Visor
     2100000: 'Material #2'
-    2100002: No Name
-    2300000: BatHinge
-    2300002: BatLid
-    2300004: Display
-    2300006: ear L
-    2300008: ear R
-    2300010: HingeL
-    2300012: HingeR
-    2300014: Huabot
-    2300016: Visor
-    3300000: BatHinge
-    3300002: BatLid
-    3300004: Display
-    3300006: ear L
-    3300008: ear R
-    3300010: HingeL
-    3300012: HingeR
-    3300014: Huabot
-    3300016: Visor
-    4300000: Huabot
-    4300002: HingeR
-    4300004: ear R
-    4300006: HingeL
-    4300008: ear L
-    4300010: Visor
-    4300012: Display
-    4300014: BatHinge
-    4300016: BatLid
-    7400000: Take 001
-    9500000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Box001
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -90,8 +45,8 @@ ModelImporter:
     addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -105,14 +60,14 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -130,7 +85,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
