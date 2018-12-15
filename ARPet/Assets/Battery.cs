@@ -18,6 +18,11 @@ public class Battery : MonoBehaviour, IDraggable {
     Quaternion draggerStartRot;
     public float maxRotSpeed;
     Rigidbody rb;
+    MoveBot mb;
+
+    private void Start() {
+        mb = FindObjectOfType<MoveBot>();
+    }
 
     public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
         var rotCheck = new Vector3[] { transform.right, -transform.right, transform.up, -transform.up, transform.forward, -transform.forward };
@@ -74,7 +79,7 @@ public class Battery : MonoBehaviour, IDraggable {
 
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.name == "ARBotFinal") {
-            //Tähän Lataus
+            mb.GotSomeJuice();
             print("Botti Latautuu");
             if(dragger != null) {
                 dragger.BreakDrag();

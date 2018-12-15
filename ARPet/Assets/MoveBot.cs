@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public enum BotState { Idle, Roaming, Interested, Searching, Spooked, Happy, Bored, Hungry, Hello }
 public class MoveBot : MonoBehaviour {
 
+    Animator[] Animators;
     NavMeshAgent nma;
     public Vector3 target;
     public BotState currentBotState;
@@ -20,6 +21,7 @@ public class MoveBot : MonoBehaviour {
     float targetDist = 0.4f;
     bool targetFound;
     public bool targetSet;
+    bool stateSet;
 
     private void Awake() {
         nma = GetComponent<NavMeshAgent>();
@@ -28,6 +30,15 @@ public class MoveBot : MonoBehaviour {
         hungryTimer = hungryIntreval;
     }
 
+    private void PlayAnimations(string animationName) {
+
+        foreach(var animator in Animators) {
+            animator.Play(animationName);
+        }
+    }
+    private void Start() {
+        Animators = GetComponentsInChildren<Animator>();
+    }
     private void Update() {
 
  
@@ -38,16 +49,18 @@ public class MoveBot : MonoBehaviour {
 
         if(idleTimer > 0 && currentBotState != BotState.Hungry) {
             currentBotState = BotState.Idle;
-        } else if(currentBotState != BotState.Interested) {
+        } else if(currentBotState != BotState.Interested && currentBotState != BotState.Hungry) {
 
             currentBotState = BotState.Roaming;
 
-            if(boredTimer < 0 && currentBotState != BotState.Hungry) {
+            if(boredTimer < 0 && currentBotState != BotState.Hungry && !stateSet) {
                 currentBotState = BotState.Bored;
             }
 
-            if(hungryTimer < 0) {
+            if(hungryTimer < 0 && !stateSet) {
                 currentBotState = BotState.Hungry;
+                PlayAnimations("batteryStart");
+                stateSet = true;
             }
         }
 
@@ -101,5 +114,7 @@ public class MoveBot : MonoBehaviour {
         hungryTimer = hungryIntreval;
         boredTimer = boredInterval;
         currentBotState = BotState.Roaming;
+        PlayAnimations("charged");
+        idleTimer = 2.5f;
     }
 }

@@ -22,6 +22,9 @@ public class Dragger : MonoBehaviour, IDragger {
 
     private void Awake() {
         boxPrefab = ResourceManager.Instance.BlockPrefab;
+    }
+
+    private void Start() {
         mb = FindObjectOfType<MoveBot>();
     }
 
@@ -46,7 +49,9 @@ public class Dragger : MonoBehaviour, IDragger {
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
-                mb.BotIsInterested(target.position);
+               if(mb.currentBotState != BotState.Hungry) {
+                    mb.BotIsInterested(target.position);
+                }
             }
 
         } else {
@@ -78,10 +83,11 @@ public class Dragger : MonoBehaviour, IDragger {
                         dragDistance = hitInfo.distance;
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
-                        BotLookScript.target = target;
 
-                        mb.boredTimer = mb.boredInterval;
-                        mb.BotIsInterested(target.position);
+                        if(mb.currentBotState != BotState.Hungry) {
+                            mb.boredTimer = mb.boredInterval;
+                            BotLookScript.target = target;
+                        }
                     } 
                 }
 
