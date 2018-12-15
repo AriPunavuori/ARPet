@@ -73,7 +73,7 @@ public class Battery : MonoBehaviour, IDraggable {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.name == "ARBot") {
+        if(other.gameObject.name == "ARBotFinal") {
             //Tähän Lataus
             print("Botti Latautuu");
             if(dragger != null) {

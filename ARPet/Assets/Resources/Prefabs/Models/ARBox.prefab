@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isMoving: 0
   draggable: 1
-  maxRotSpeed: 0
+  maxRotSpeed: 10
 --- !u!135 &135722990618107154
 SphereCollider:
   m_ObjectHideFlags: 1
