@@ -9,8 +9,8 @@ public class BoxScript : MonoBehaviour,IDraggable
     Vector3 fakeForward;
     public bool isMoving;
     public bool draggable = true;
-    float movingThreshold = 0.1f;
-    Collider scareCol;
+    float movingThreshold = 0.01f;
+    SphereCollider scareCol;
     Quaternion dragStartRot;
     Quaternion draggerStartRot;
     public float maxRotSpeed;
@@ -72,7 +72,8 @@ public class BoxScript : MonoBehaviour,IDraggable
 	
 	void Update () {
 		newPos = transform.position;
-        if(Vector3.Distance(newPos, oldPos) > movingThreshold) {
+        var dist = Vector3.Distance(newPos, oldPos);
+        if(dist > movingThreshold) {
             isMoving = true;
             scareCol.enabled = true;
         } else {
@@ -83,7 +84,7 @@ public class BoxScript : MonoBehaviour,IDraggable
 	}
 
     private void OnTriggerStay(Collider other) {
-        if(other.gameObject.name == "ARBot") {
+        if(other.gameObject.name == "ARBotFinal") {
 
             var escapeVector = other.transform.position - transform.position;
             //escapeVector.y = 0;

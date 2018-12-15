@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class botLookScript : MonoBehaviour {
-    public Transform target;
+public class BotLookScript : MonoBehaviour {
+    public static Transform target;
     public Transform eye;
     public float maxX;
     public float xFactor = 3;
@@ -13,7 +13,6 @@ public class botLookScript : MonoBehaviour {
         origPos = eye.position;
 	}
 	
-
 	void Update () {
         if(target != null) {
             //Debug.DrawLine(target.position, transform.position);

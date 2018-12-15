@@ -6,12 +6,13 @@ public class Dragger : MonoBehaviour, IDragger {
     private readonly float maxHitDist = 100f;
     private GameObject boxPrefab;
     IDraggable currentDrag;
+    Transform target;
     float dragDistance;
     float textTimer;
     float resetText = Mathf.Infinity;
     bool mctiShown;
     bool ttiShown;
-
+    MoveBot mb;
 
     public float distToGrab = 0.5f;
     public TextMeshProUGUI UIText;
@@ -19,9 +20,9 @@ public class Dragger : MonoBehaviour, IDragger {
         currentDrag = null;
     }
 
-    private void Awake()
-    {
+    private void Awake() {
         boxPrefab = ResourceManager.Instance.BlockPrefab;
+        mb = FindObjectOfType<MoveBot>();
     }
 
     void Update () {
@@ -39,11 +40,15 @@ public class Dragger : MonoBehaviour, IDragger {
 
         if(currentDrag != null) {
             if(Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.B)) {
+                mb.BotRoam();
+                BotLookScript.target = null;
                 currentDrag.OnDragEnd();
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
+                mb.BotIsInterested(target.position);
             }
+
         } else {
             var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));// InputManager.Instance.Ray;
             // !!!
@@ -52,6 +57,7 @@ public class Dragger : MonoBehaviour, IDragger {
             if(Physics.Raycast(ray, out hitInfo, maxHitDist, HitLayerMask)) {
                 //Debug.Log(hitInfo.collider.name);
                 var draggable = hitInfo.collider.GetComponent<IDraggable>();
+                target = hitInfo.collider.GetComponent<Transform>();
                 if(draggable != null) {
                     if(hitInfo.distance < distToGrab) {
                         if(!ttiShown) {
@@ -69,12 +75,16 @@ public class Dragger : MonoBehaviour, IDragger {
                     }
 
                     if(Input.GetMouseButtonDown(0)) {
-
                         dragDistance = hitInfo.distance;
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
+                        BotLookScript.target = target;
+
+                        mb.boredTimer = mb.boredInterval;
+                        mb.BotIsInterested(target.position);
                     } 
                 }
+
             } else {
                 if(textTimer < 0) {
                     UIText.text = "";
