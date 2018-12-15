@@ -6,7 +6,7 @@ public class World : MonoBehaviour
 {
     private Collider worldCollider;
     private MeshRenderer meshRenderer;
-    private NavMeshSurface[] navMeshSurfaces;
+    private NavMeshSurface navMeshSurface;
 
     public ARAnchor WorldAnchor
     {
@@ -42,12 +42,14 @@ public class World : MonoBehaviour
         worldCollider = GetComponentInChildren<Collider>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        navMeshSurfaces = GetComponents<NavMeshSurface>();
+        navMeshSurface = GetComponent<NavMeshSurface>();
     }
 
     private void Start()
     {
-        BuildNavMesh(navMeshSurfaces);
+        navMeshSurface.BuildNavMesh();
+
+        Instantiate(ResourceManager.Instance.HuabotPrefab, transform.position + new Vector3(0, .1f, 0), Quaternion.identity);
     }
 
     private void OnEnable()
@@ -63,14 +65,6 @@ public class World : MonoBehaviour
     private void OnDestroy()
     {
         SessionManager.Instance.DetachARAnchor(WorldAnchor);
-    }
-
-    public void BuildNavMesh(NavMeshSurface[] navMeshSurfaces)
-    {
-        for (int i = 0; i < navMeshSurfaces.Length; i++)
-        {
-            navMeshSurfaces[i].BuildNavMesh();
-        }
     }
 
     private void TrackWorld()

@@ -106,7 +106,7 @@ public class UIManager : Singelton<UIManager>
 
         InitializeGameDebugBox();
         InitializeARSessionDebugBox();
-        InitializeAudioDebugBox();      
+        InitializeAudioDebugBox();
     }
 
     private void InitializeGameDebugBox()

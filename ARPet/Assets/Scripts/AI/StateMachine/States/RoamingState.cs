@@ -8,7 +8,7 @@ public class RoamingState : IState
     private Vector3 roamingDestination;
     private Vector3 roamingArea;
 
-    private float randomIdleTime;
+    private float randomIdleTime = 4;
     private readonly float randomMinIdleTime = 0.5f;
     private readonly float randomMaxIdleTime = 2f;
 
@@ -42,7 +42,7 @@ public class RoamingState : IState
     {
         return new Vector3(
             Random.Range(-areaSize.x, areaSize.x),
-            0.5f,
+            0.1f,
             Random.Range(-areaSize.z, areaSize.z));
     }
 
@@ -77,7 +77,8 @@ public class RoamingState : IState
         randomIdleTime = Random.Range(randomMinIdleTime, randomMaxIdleTime);
 
         roamingDestination = RandomDestinationFromArea(roamingArea);
-        Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
+        //Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
+        //Debug.Log(roamingDestination);
     }  
 
     #endregion CUSTOM_FUNCTIONS

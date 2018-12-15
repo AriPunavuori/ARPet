@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54905887052914624}
   - component: {fileID: 114983605418608110}
   - component: {fileID: 65300940492421266}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Huabot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 4524314287337558}
   - component: {fileID: 33781221636189520}
   - component: {fileID: 23303076430169256}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BatHinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4800656724810026}
   - component: {fileID: 33160442001046124}
   - component: {fileID: 23150747242268292}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BatLid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4920760493019726}
   - component: {fileID: 33468119585694316}
   - component: {fileID: 23278973731387834}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4723238597255842}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 4762357087981544}
   - component: {fileID: 33616120155348544}
   - component: {fileID: 23299493906836584}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ear R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4213530165805986}
   - component: {fileID: 95741878551191402}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ARbot8-1-0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 4154055835499044}
   - component: {fileID: 33494095428837648}
   - component: {fileID: 23734672968941204}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HingeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 4771792925969700}
   - component: {fileID: 33404732904980826}
   - component: {fileID: 23673135773679084}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 4211240697451056}
   - component: {fileID: 33049212065004666}
   - component: {fileID: 23839525828520658}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ear L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 4376618772134708}
   - component: {fileID: 33125561497307684}
   - component: {fileID: 23559193569809174}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Huabot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 4880734648416758}
   - component: {fileID: 33746843116116006}
   - component: {fileID: 23288640748536062}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HingeL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,16 +835,16 @@ NavMeshAgent:
   m_GameObject: {fileID: 1015411367389260}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.07
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0.06
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
