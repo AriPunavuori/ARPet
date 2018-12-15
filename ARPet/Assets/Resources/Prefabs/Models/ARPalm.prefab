@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 95562868401477246}
   - component: {fileID: 114664458472710820}
   m_Layer: 0
-  m_Name: ARPalmFinal
+  m_Name: ARPalm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

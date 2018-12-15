@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 54228710029075600}
   - component: {fileID: 65998019445053006}
   m_Layer: 9
-  m_Name: ARBatteryFinal
+  m_Name: ARBattery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

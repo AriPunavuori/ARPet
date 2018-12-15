@@ -84,9 +84,9 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     public void SpawnBox() {
-        var newBox = Instantiate(boxPrefab, transform.forward * 0.3f, Quaternion.identity);  
+        //var newBox = Instantiate(boxPrefab, transform.forward * 0.3f, Quaternion.identity);  
 
-        //var newBox = Instantiate(boxPrefab, CameraEngine.Instance.CameraPose.position + Vector3.forward, CameraEngine.Instance.CameraPose.rotation);  
+        var newBox = Instantiate(boxPrefab, CameraEngine.Instance.CameraPose.position + Vector3.forward, CameraEngine.Instance.CameraPose.rotation);  
 
         if (currentDrag != null) {
             currentDrag.OnDragStart(this, transform.rotation);

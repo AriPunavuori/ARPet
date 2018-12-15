@@ -25,12 +25,12 @@ public class ResourceManager : Singelton<ResourceManager>
 
         HuabotARConfig = Resources.Load<ARConfigBase>("Prefabs/ArConfig/HuabotARConfig");
 
-        PalmPrefab = Resources.Load<GameObject>("Prefabs/Models/Palm");
+        PalmPrefab = Resources.Load<GameObject>("Prefabs/Models/ARPalm");
         AnchorPrefab = Resources.Load<GameObject>("Prefabs/Models/Anchor");
         HorizontalPlanePrefab = Resources.Load<GameObject>("Prefabs/Models/HorizontalPlane");
         WorldObjectPrefab = Resources.Load<GameObject>("Prefabs/Models/World");
         HitIndicatorPrefab = Resources.Load<GameObject>("Prefabs/Models/HitIndicator");
-        HuabotPrefab = Resources.Load<GameObject>("Prefabs/Models/Huabot");
+        HuabotPrefab = Resources.Load<GameObject>("Prefabs/Models/ARBot");
 
         BlockPrefab = Resources.Load<GameObject>("Prefabs/Models/ARBox");
 

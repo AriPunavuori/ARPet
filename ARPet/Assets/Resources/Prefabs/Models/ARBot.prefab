@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 54081005898933618}
   - component: {fileID: 135962864136326632}
   m_Layer: 9
-  m_Name: ARBotFinal
+  m_Name: ARBot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +253,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1986257645266498}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.177, y: 0.1902, z: -0.69}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4980048299898162}
