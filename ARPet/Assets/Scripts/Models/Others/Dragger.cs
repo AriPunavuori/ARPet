@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using TMPro;
 public class Dragger : MonoBehaviour, IDragger {
     public LayerMask HitLayerMask;
 
@@ -7,7 +7,14 @@ public class Dragger : MonoBehaviour, IDragger {
     private GameObject boxPrefab;
     IDraggable currentDrag;
     float dragDistance;
+    float textTimer;
+    float resetText = Mathf.Infinity;
+    bool mctiShown;
+    bool ttiShown;
 
+
+    public float distToGrab = 0.5f;
+    public TextMeshProUGUI UIText;
     public void BreakDrag() {
         currentDrag = null;
     }
@@ -18,6 +25,13 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     void Update () {
+
+        textTimer -= Time.deltaTime;
+        resetText -= Time.deltaTime;
+        if(resetText < 0){
+            mctiShown = false;
+            ttiShown = false;
+        }
 
         if(Input.GetKeyDown(KeyCode.B)) {
             SpawnBox();
@@ -31,7 +45,7 @@ public class Dragger : MonoBehaviour, IDragger {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
             }
         } else {
-            var ray = /*Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));*/ InputManager.Instance.Ray;
+            var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             // !!!
             RaycastHit hitInfo;
 
@@ -39,11 +53,31 @@ public class Dragger : MonoBehaviour, IDragger {
                 //Debug.Log(hitInfo.collider.name);
                 var draggable = hitInfo.collider.GetComponent<IDraggable>();
                 if(draggable != null) {
+                    if(hitInfo.distance < distToGrab) {
+                        if(!ttiShown) {
+                            UIText.text = "Tap and hold interact!";
+                            ttiShown = true;
+                            textTimer = 5f;
+                            resetText = 60f;
+                        }
+                    } else {
+                        if(!mctiShown) {
+                            UIText.text = "Move closer to interact.";
+                            mctiShown = true;
+                            textTimer = 5f;
+                        }
+                    }
+
                     if(Input.GetMouseButtonDown(0)) {
+
                         dragDistance = hitInfo.distance;
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
-                    }
+                    } 
+                }
+            } else {
+                if(textTimer < 0) {
+                    UIText.text = "";
                 }
             }
         }
@@ -51,8 +85,7 @@ public class Dragger : MonoBehaviour, IDragger {
 
     public void SpawnBox() {
         var newBox = Instantiate(boxPrefab);
-        newBox.transform.position = /*transform.forward * 0.3f;*/ InputManager.Instance.Ray.origin;
-        currentDrag = newBox.GetComponent<IDraggable>();
+        newBox.transform.position = transform.forward * 0.3f; 
         if(currentDrag != null) {
             currentDrag.OnDragStart(this, transform.rotation);
         }
