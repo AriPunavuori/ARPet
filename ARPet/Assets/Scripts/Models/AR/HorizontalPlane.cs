@@ -106,7 +106,8 @@ public class HorizontalPlane : MonoBehaviour
 
         for (int i = 0; i < meshVertices3D.Count; i++)
         {
-            meshVertices3D[i] = TrackedPlaneCenterPose.rotation * meshVertices3D[i] + TrackedPlaneCenterPose.position;
+            // !!!
+            meshVertices3D[i] = TrackedPlaneCenterPose.rotation * meshVertices3D[i] + TrackedPlaneCenterPose.position /*+ new Vector3(0,-0.3f,0)*/;
         }
 
         meshRenderer.material.SetVector("_PlaneNormal", TrackedPlanePlaneNormal);

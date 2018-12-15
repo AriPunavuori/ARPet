@@ -8,7 +8,7 @@ public class RoamingState : IState
     private Vector3 roamingDestination;
     private Vector3 roamingArea;
 
-    private float randomIdleTime;
+    private float randomIdleTime = 4;
     private readonly float randomMinIdleTime = 0.5f;
     private readonly float randomMaxIdleTime = 2f;
 
@@ -42,13 +42,26 @@ public class RoamingState : IState
     {
         return new Vector3(
             Random.Range(-areaSize.x, areaSize.x),
-            0.5f,
+            0.1f,
             Random.Range(-areaSize.z, areaSize.z));
+    }
+
+    private void CheckDistance()
+    {
+        var distance = Vector3.Distance(objectToMove.transform.position, roamingDestination);
+
+        if (distance <= .5f)
+        {
+            SetNewRandomDestination();
+        }
     }
 
     public void Enter()
     {
         SetNewRandomDestination();
+
+
+        CheckDistance();
     }
 
     public void Execute()
@@ -59,12 +72,7 @@ public class RoamingState : IState
             return;
         }
 
-        if (objectToMove.transform.position.x.Equals(roamingDestination.x) 
-            && 
-            objectToMove.transform.position.z.Equals(roamingDestination.z))
-        {
-            SetNewRandomDestination();
-        }
+        CheckDistance();
     }
 
     public void Exit()
@@ -78,6 +86,7 @@ public class RoamingState : IState
 
         roamingDestination = RandomDestinationFromArea(roamingArea);
         Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
+        //Debug.Log(roamingDestination);
     }  
 
     #endregion CUSTOM_FUNCTIONS

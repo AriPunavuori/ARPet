@@ -20,7 +20,7 @@ public class animTestScript : MonoBehaviour {
             print("Hihi!");
         }
         if (Input.GetKeyDown(KeyCode.K)) {
-            m_Animator.Play("battery");
+            m_Animator.Play("batteryStart");
             print("I'm running out of juice!");
         }
         if (Input.GetKeyDown(KeyCode.H)) {

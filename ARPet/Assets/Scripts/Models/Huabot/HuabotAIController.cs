@@ -63,11 +63,11 @@ public class HuabotAIController : MonoBehaviour
     private void FOO()
     {
         stateMachine.ChangeState(new RoamingState(
-           transform,
+            transform,
                new Vector3(
-               1 - .1f,
-               .5f,
-               1 - .1f)));
+               .9f,
+              transform.position.y,
+               .9f)));
     }
 
     private void Update()
@@ -140,7 +140,7 @@ public class HuabotAIController : MonoBehaviour
 
     private void OnDestinationReached()
     {
-        stateMachine.ChangeState(new InteractState(4f, OnInteractionStart, OnInteractionEnd));
+        //stateMachine.ChangeState(new InteractState(4f, OnInteractionStart, OnInteractionEnd));
     }
 
     private void OnInteractionStart()
@@ -156,11 +156,11 @@ public class HuabotAIController : MonoBehaviour
         interactionTarget = null;
 
         stateMachine.ChangeState(new RoamingState(
-           transform,
-               new Vector3(
-               10 - .1f,
-               .5f,
-               10 - .1f)));
+                transform,
+                new Vector3(
+               9f,
+               transform.position.y,
+               9f)));
         print("Foo");
         //stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));
     }
@@ -191,8 +191,6 @@ public class HuabotAIController : MonoBehaviour
 
     public void SetDestination(Vector3 newDestination)
     {
-        //navMeshAgent.Warp(newDestination);
-        print(newDestination);
         navMeshAgent.SetDestination(newDestination);
     }
 
