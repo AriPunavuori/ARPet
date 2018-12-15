@@ -51,7 +51,8 @@ public class WorldManager : Singelton<WorldManager>
 
         Instantiate(ResourceManager.Instance.BlockPrefab, newPose.position + Vector3.up, Quaternion.identity);
 
-        SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
+        //SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
+        SessionManager.Instance.SetPlaneFindingMode(0);
 
         //UIManager.Instance.SwitchDeviceImage(false);
     }
