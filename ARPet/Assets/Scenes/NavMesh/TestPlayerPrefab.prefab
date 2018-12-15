@@ -23,8 +23,9 @@ GameObject:
   - component: {fileID: 23651798176361948}
   - component: {fileID: 65787776732094368}
   - component: {fileID: 195515941443549580}
+  - component: {fileID: 114548200654150690}
   m_Layer: 0
-  m_Name: Prefab
+  m_Name: TestPlayerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1955448435520664}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 0.1, z: 6}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -97,6 +98,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114548200654150690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1955448435520664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db8b616796c6174bb13923736c9dd05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &195515941443549580
 NavMeshAgent:
   m_ObjectHideFlags: 1
