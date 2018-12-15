@@ -66,7 +66,7 @@ public class HuabotAIController : MonoBehaviour
             transform,
                new Vector3(
                .9f,
-               0.1f,
+              transform.position.y,
                .9f)));
     }
 
@@ -159,7 +159,7 @@ public class HuabotAIController : MonoBehaviour
                 transform,
                 new Vector3(
                9f,
-               .1f,
+               transform.position.y,
                9f)));
         print("Foo");
         //stateMachine.ChangeState(new SearchState(transform.position, searchLayer, 20f, "Food", OnSearchCompleted));

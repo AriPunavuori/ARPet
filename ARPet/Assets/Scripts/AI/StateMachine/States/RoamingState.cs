@@ -46,9 +46,22 @@ public class RoamingState : IState
             Random.Range(-areaSize.z, areaSize.z));
     }
 
+    private void CheckDistance()
+    {
+        var distance = Vector3.Distance(objectToMove.transform.position, roamingDestination);
+
+        if (distance <= .5f)
+        {
+            SetNewRandomDestination();
+        }
+    }
+
     public void Enter()
     {
         SetNewRandomDestination();
+
+
+        CheckDistance();
     }
 
     public void Execute()
@@ -59,12 +72,7 @@ public class RoamingState : IState
             return;
         }
 
-        if (objectToMove.transform.position.x.Equals(roamingDestination.x) 
-            && 
-            objectToMove.transform.position.z.Equals(roamingDestination.z))
-        {
-            SetNewRandomDestination();
-        }
+        CheckDistance();
     }
 
     public void Exit()
@@ -77,7 +85,7 @@ public class RoamingState : IState
         randomIdleTime = Random.Range(randomMinIdleTime, randomMaxIdleTime);
 
         roamingDestination = RandomDestinationFromArea(roamingArea);
-        //Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
+        Huabot.Instance.HuabotAIController.SetDestination(roamingDestination);
         //Debug.Log(roamingDestination);
     }  
 
