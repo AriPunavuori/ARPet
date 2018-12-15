@@ -177,10 +177,10 @@ public class UIManager : Singelton<UIManager>
         Invoke("OnQuitPressed", quitDelay);
     }
 
-    public void SpawnBlockButton()
-    {
-        InputManager.Instance.CanWeCreateBox();
-    }
+    //public void SpawnBlockButton()
+    //{
+    //    InputManager.Instance.CanWeCreateBox();
+    //}
 
     /// <summary>
     ///  is ImageEnable = Set device image on/off, 

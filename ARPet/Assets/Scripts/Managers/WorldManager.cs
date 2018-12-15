@@ -35,7 +35,7 @@ public class WorldManager : Singelton<WorldManager>
 
     private void Initialize()
     {
-        CreateWorld(new Pose(Vector3.zero, Quaternion.identity));
+        //CreateWorld(new Pose(Vector3.zero, Quaternion.identity));
     }
 
     public void CreateWorld(Pose newPose)
@@ -54,7 +54,7 @@ public class WorldManager : Singelton<WorldManager>
 
         SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
 
-        UIManager.Instance.SwitchDeviceImage(false);
+        //UIManager.Instance.SwitchDeviceImage(false);
     }
 
    

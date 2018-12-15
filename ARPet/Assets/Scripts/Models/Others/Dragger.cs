@@ -45,7 +45,7 @@ public class Dragger : MonoBehaviour, IDragger {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
             }
         } else {
-            var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));// InputManager.Instance.Ray;
             // !!!
             RaycastHit hitInfo;
 
