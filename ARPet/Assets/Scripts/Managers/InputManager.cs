@@ -20,6 +20,7 @@ public class InputManager : Singelton<InputManager>
     private readonly float rayMaxDistance = 10f;
 
     private GameObject currentHitTarget;
+    private Ray ray;
 
     #endregion VARIABLES
 
@@ -45,6 +46,13 @@ public class InputManager : Singelton<InputManager>
         {
             return hitInfo.point != null ? hitInfo.point : Vector3.zero;
         }
+    }
+    public Ray Ray
+    {
+        get
+        {
+            return ray;
+        } 
     }
 
     #endregion PROPERTIES
@@ -80,7 +88,7 @@ public class InputManager : Singelton<InputManager>
 
     private void UnityShootRayFromScreenPoint(Vector2 screenPoint)
     {
-        var ray = CameraEngine.Instance.MainCamera./*ScreenPointToRay(screenCenterPoint)*/ViewportPointToRay(new Vector2( 0.5f, 0.5f));
+        ray = CameraEngine.Instance.MainCamera./*ScreenPointToRay(screenCenterPoint)*/ViewportPointToRay(new Vector2( 0.5f, 0.5f));
         if(Physics.Raycast(ray, out hitInfo, rayMaxDistance, hitLayerMask))
         {
             hitIndicator.ChangeState(true);

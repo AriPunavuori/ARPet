@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Dragger : MonoBehaviour, IDragger {
     public LayerMask HitLayerMask;
 
     private readonly float maxHitDist = 100f;
-    public GameObject box;
+    private GameObject boxPrefab;
     IDraggable currentDrag;
     float dragDistance;
 
@@ -14,7 +12,12 @@ public class Dragger : MonoBehaviour, IDragger {
         currentDrag = null;
     }
 
-	void Update () {
+    private void Awake()
+    {
+        boxPrefab = ResourceManager.Instance.BlockPrefab;
+    }
+
+    void Update () {
 
         if(Input.GetKeyDown(KeyCode.B)) {
             SpawnBox();
@@ -28,7 +31,8 @@ public class Dragger : MonoBehaviour, IDragger {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
             }
         } else {
-            var ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            var ray = /*Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));*/ InputManager.Instance.Ray;
+            // !!!
             RaycastHit hitInfo;
 
             if(Physics.Raycast(ray, out hitInfo, maxHitDist, HitLayerMask)) {
@@ -46,8 +50,8 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     public void SpawnBox() {
-        var newBox = Instantiate(box);
-        newBox.transform.position = transform.forward * 0.3f;
+        var newBox = Instantiate(boxPrefab);
+        newBox.transform.position = /*transform.forward * 0.3f;*/ InputManager.Instance.Ray.origin;
         currentDrag = newBox.GetComponent<IDraggable>();
         if(currentDrag != null) {
             currentDrag.OnDragStart(this, transform.rotation);
