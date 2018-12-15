@@ -5,8 +5,6 @@ public class WorldManager : Singelton<WorldManager>
 {
     #region VARIABLES
 
-    private List<GameObject> createdObjects = new List<GameObject>();
-
     #endregion VARIABLES
 
     #region PROPERTIES
@@ -37,7 +35,7 @@ public class WorldManager : Singelton<WorldManager>
 
     private void Initialize()
     {
-        //CreateWorld(new Pose(Vector3.zero, Quaternion.identity));
+        CreateWorld(new Pose(Vector3.zero, Quaternion.identity));
     }
 
     public void CreateWorld(Pose newPose)
@@ -51,7 +49,7 @@ public class WorldManager : Singelton<WorldManager>
         World.Initialize(SessionManager.Instance.CreateAnchor(newPose));
         IsWorldCreated = true;
 
-        //Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
+        Instantiate(ResourceManager.Instance.HuabotPrefab, newPose.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
         Instantiate(ResourceManager.Instance.BlockPrefab, newPose.position + Vector3.up, Quaternion.identity);
 
         SessionManager.Instance.ClearAndRemoveHorizontalPlanes();
