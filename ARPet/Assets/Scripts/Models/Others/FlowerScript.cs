@@ -25,7 +25,7 @@ public class FlowerScript : MonoBehaviour {
     public void BatteryHatched() {
         if(!batteryAttached) {
             var newBat = Instantiate(battery);
-            newBat.transform.position = transform.position + Vector3.up * 4;
+            newBat.transform.position = transform.position + Vector3.up * 0.43f;
             newBat.transform.parent = transform;
             batteryAttached = true;
             hatchTimer = hatchTime;
