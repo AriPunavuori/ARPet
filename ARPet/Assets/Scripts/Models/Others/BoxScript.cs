@@ -18,11 +18,9 @@ public class BoxScript : MonoBehaviour,IDraggable
     public float maxRotSpeed;
     Rigidbody rb;
 
-    public void OnDragStart(IDragger dragger, Quaternion draggerRotation)
-    {
-        rb = GetComponent<Rigidbody>();
+    public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
         var rotCheck = new Vector3[] { transform.right, -transform.right, transform.up, -transform.up, transform.forward, -transform.forward };
-        for (int i = 0 ; i<rotCheck.Length ; i++) {
+        for(int i = 0 ; i < rotCheck.Length ; i++) {
             if(rotCheck[i].y > fakeUp.y) {
                 fakeUp = rotCheck[i];
             }
@@ -33,7 +31,10 @@ public class BoxScript : MonoBehaviour,IDraggable
         this.dragger = dragger;
         dragStartRot = transform.rotation;
         draggerStartRot = draggerRotation;
+
         rb.isKinematic = true;
+        //transform.parent.batteryAttached = false;
+        transform.SetParent(null);
     }
 
     public void OnDragEnd() {
@@ -52,7 +53,6 @@ public class BoxScript : MonoBehaviour,IDraggable
         if(draggable) {
             rb.velocity = Vector3.zero;
             var targetRot = draggerRotation * Quaternion.Inverse(draggerStartRot) * dragStartRot;
-
             targetRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(targetRot * Vector3.forward, Vector3.up), Vector3.up);
             rb.MovePosition(target);
             rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRot, maxRotSpeed * Time.deltaTime));
@@ -60,7 +60,7 @@ public class BoxScript : MonoBehaviour,IDraggable
     }
 
     public bool IsCurrentlyDraggable() {
-        if(!draggable) {
+        if(draggable) {
             return true;
         } else {
             return false;
