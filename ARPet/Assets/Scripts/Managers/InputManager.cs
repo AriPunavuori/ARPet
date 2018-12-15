@@ -55,6 +55,11 @@ public class InputManager : Singelton<InputManager>
         } 
     }
 
+    public RaycastHit RaycastHit
+    {
+        get; set;
+    }
+
     #endregion PROPERTIES
 
     #region UNITY_FUNCTIONS
@@ -72,6 +77,7 @@ public class InputManager : Singelton<InputManager>
 
     private void Update()
     {
+        if(WorldManager.Instance.IsWorldCreated == false)
         UnityShootRayFromScreenPoint(screenCenterPoint);      
     }
 
@@ -112,7 +118,7 @@ public class InputManager : Singelton<InputManager>
             hitIndicator.ChangeState(false);
             //SetLinePositions(Vector3.zero, Vector3.zero, false);
 
-            UIManager.Instance.SwitchDeviceImage(true, 1);
+            //UIManager.Instance.SwitchDeviceImage(true, 1);
         }
     }
 
@@ -147,7 +153,7 @@ public class InputManager : Singelton<InputManager>
 
                         WorldManager.Instance.CreateWorld(new Pose(/*hitIndicator.transform.position*/CurrentHitPoint, hitNormal));
 
-                        UIManager.Instance.SwitchDeviceImage(false);
+                        //UIManager.Instance.SwitchDeviceImage(false);
 
                         break;
 
@@ -163,78 +169,78 @@ public class InputManager : Singelton<InputManager>
         }
         else
         {
-            UIManager.Instance.SwitchDeviceImage(true, 1);
+            //UIManager.Instance.SwitchDeviceImage(true, 1);
 
             hitIndicator.ChangeColor(Color.red);
         }
     }
 
-    public void CanWeCreateBox()
-    {
-        if(currentHitTarget != null)
-        {
-            hitIndicator.transform.SetPositionAndRotation(CurrentHitPoint, Quaternion.identity);
-            hitIndicator.ChangeColor(Color.green);
+    //public void CanWeCreateBox()
+    //{
+    //    if (currentHitTarget != null)
+    //    {
+    //        hitIndicator.transform.SetPositionAndRotation(CurrentHitPoint, Quaternion.identity);
+    //        hitIndicator.ChangeColor(Color.green);
 
-            if (Input.touchCount > 0)
-            {
-                currentTouch = Input.GetTouch(0);
+    //        if (Input.touchCount > 0)
+    //        {
+    //            currentTouch = Input.GetTouch(0);
 
-                var newBlock = Instantiate(ResourceManager.Instance.BlockPrefab, CurrentHitPoint, Quaternion.identity).GetComponent<Block>();
+    //            var newBlock = Instantiate(ResourceManager.Instance.BlockPrefab, CurrentHitPoint, Quaternion.identity).GetComponent<Block>();
 
-                switch (currentTouch.phase)
-                {
-                    case TouchPhase.Began:
+    //            switch (currentTouch.phase)
+    //            {
+    //                case TouchPhase.Began:
 
-                        if (currentHitTarget != null)
-                        {
-                            newBlock.StartPlacing();
-                        }                    
+    //                    if (currentHitTarget != null)
+    //                    {
+    //                        newBlock.StartPlacing();
+    //                    }
 
-                        break;
-                    case TouchPhase.Moved:
+    //                    break;
+    //                case TouchPhase.Moved:
 
-                        if(currentHitTarget != null)
-                        {
-                            newBlock.SetNewPosition(CurrentHitPoint);
-                        }
+    //                    if (currentHitTarget != null)
+    //                    {
+    //                        newBlock.SetNewPosition(CurrentHitPoint);
+    //                    }
 
-                        break;
-                    case TouchPhase.Stationary:
+    //                    break;
+    //                case TouchPhase.Stationary:
 
-                        break;
+    //                    break;
 
-                    case TouchPhase.Ended:
+    //                case TouchPhase.Ended:
 
-                        if (currentHitTarget != null)
-                        {
-                            newBlock.NewPlacement(CurrentHitPoint);
-                        }
+    //                    if (currentHitTarget != null)
+    //                    {
+    //                        newBlock.NewPlacement(CurrentHitPoint);
+    //                    }
 
-                        break;
+    //                    break;
 
-                    case TouchPhase.Canceled:
+    //                case TouchPhase.Canceled:
 
-                        if (currentHitTarget != null)
-                        {
-                            newBlock.CancelPlacement();
-                        }
+    //                    if (currentHitTarget != null)
+    //                    {
+    //                        newBlock.CancelPlacement();
+    //                    }
 
-                        break;
+    //                    break;
 
-                    default:
+    //                default:
 
-                        break;
-                }
-            }
-        }
-        else
-        {
-            hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-            hitIndicator.ChangeState(false);
-            //SetLinePositions(Vector3.zero, Vector3.zero, false);
-        }       
-    }
+    //                    break;
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        hitIndicator.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+    //        hitIndicator.ChangeState(false);
+    //        //SetLinePositions(Vector3.zero, Vector3.zero, false);
+    //    }
+    //}
 
     //private void SetLinePositions(Vector3 startPosition, Vector3 endPosition, bool isEnabled)
     //{
