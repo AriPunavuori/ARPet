@@ -20,8 +20,6 @@ public class ResourceManager : Singelton<ResourceManager>
 
     public AudioMixer AudioMixer { get; private set; }
 
-    public GameObject Foo;
-
     private void Awake()
     {
 
