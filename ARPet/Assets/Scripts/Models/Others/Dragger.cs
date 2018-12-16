@@ -43,14 +43,14 @@ public class Dragger : MonoBehaviour, IDragger {
 
         if(currentDrag != null) {
             if(Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.B)) {
-                mb.BotRoam();
+                mb.SetBotState(BotState.Roaming, mb.GenerateRandomTarget());
                 BotLookScript.target = null;
                 currentDrag.OnDragEnd();
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
                if(mb.currentBotState != BotState.Hungry) {
-                    mb.BotIsInterested(target.position);
+                    mb.SetBotState(BotState.Interested, target.position);
                 }
             }
 
@@ -85,6 +85,7 @@ public class Dragger : MonoBehaviour, IDragger {
                         currentDrag.OnDragStart(this, transform.rotation);
 
                         if(mb.currentBotState != BotState.Hungry) {
+                            mb.SetBotState(BotState.Interested, target.position);
                             mb.boredTimer = mb.boredInterval;
                             BotLookScript.target = target;
                         }
