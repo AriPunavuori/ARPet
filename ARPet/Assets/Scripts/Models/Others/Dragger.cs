@@ -48,13 +48,17 @@ public class Dragger : MonoBehaviour, IDragger {
 
         if(currentDrag != null) {
             if(Input.GetMouseButtonUp(0) /*|| Input.GetKeyUp(KeyCode.B)*/) {
-                mb.BotRoam();
-                BotLookScript.target = null;
+                if(mb != null)
+                {
+                    mb.BotRoam();
+                    BotLookScript.target = null;
+                }
+          
                 currentDrag.OnDragEnd();
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
-               if(mb.currentBotState != BotState.Hungry) {
+               if(mb != null && mb.currentBotState != BotState.Hungry) {
                     mb.BotIsInterested(target.position);
                 }
             }
