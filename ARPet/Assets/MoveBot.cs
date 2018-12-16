@@ -33,7 +33,7 @@ public class MoveBot : MonoBehaviour {
     public float boredTimer;
     public float hungryTimer = 20;
 
-    float targetDist = 0.4f;
+    float targetDist = 0.1f;
     bool targetFound;
     public bool targetSet;
     bool stateSet;
@@ -139,8 +139,9 @@ public class MoveBot : MonoBehaviour {
         }
 
         if(currentBotState == BotState.Searching) {
+            print("aloitetaan etsintä looppi");
             // Wait tilastä tänne ja kun lelu löytyy, niin happy tilaan
-
+            
             if(!targetSet) {
                 nma.destination = target;
                 targetSet = true;
@@ -148,6 +149,7 @@ public class MoveBot : MonoBehaviour {
 
             if(Vector3.Distance(transform.position, target) < targetDist) {
                 SetBotState(BotState.Happy, Vector3.zero, Happy, "Happy");
+                print("Löyty");
             }
 
             if(nma.velocity.sqrMagnitude > Mathf.Epsilon) {
@@ -162,6 +164,7 @@ public class MoveBot : MonoBehaviour {
         }
 
         if(currentBotState == BotState.Waiting) {
+            isBored = false;
             // Tila vaihdetaan lelun laskemisella searching tilaan
         }
     }
