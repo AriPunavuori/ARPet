@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlowerScript : MonoBehaviour {
 
     public float hatchTime = 10;
-    float hatchTimer;
+    public float hatchTimer;
     public GameObject battery;
     public bool batteryAttached;
 	// Use this for initialization

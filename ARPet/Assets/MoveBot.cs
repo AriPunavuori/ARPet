@@ -10,23 +10,40 @@ public class MoveBot : MonoBehaviour {
     public Vector3 target;
     public BotState currentBotState;
 
+    public AudioClip Bored;
+    public AudioClip Charged;
+    public AudioClip Happy;
+    public AudioClip Hello;
+    public AudioClip Hungry;
+    public AudioClip Idle;
+    public AudioClip Interested;
+    public AudioClip Roaming;
+    public AudioClip Searching;
+    public AudioClip Spooked;
+    public AudioClip Waiting;
+    AudioSource audioSource;
+
     public float idleInterval;
-    public float boredInterval;
-    public float hungryIntreval;
-    public float stateInterval;
+    public float boredInterval = 300;
+    public float hungryInterval = 120;
+    public float stateInterval = 2;
 
     public float idleTimer;
     public float stateTimer;
     public float boredTimer;
-    public float hungryTimer;
+    public float hungryTimer = 20;
 
     float targetDist = 0.4f;
     bool targetFound;
     public bool targetSet;
     bool stateSet;
 
+    bool isHungry;
+    bool isBored;
+
     private void Awake() {
         nma = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         //idleTimer = idleInterval;
         //boredTimer = boredInterval;
         //hungryTimer = hungryIntreval;
@@ -38,6 +55,7 @@ public class MoveBot : MonoBehaviour {
             animator.Play(animationName);
         }
     }
+
     private void Start() {
         Animators = GetComponentsInChildren<Animator>();
     }
@@ -51,11 +69,14 @@ public class MoveBot : MonoBehaviour {
             stateTimer -= Time.deltaTime;
         }
 
-        if(boredTimer < 0) {
-            currentBotState = BotState.Bored;
+        if(boredTimer < 0 && !isBored) {
+            SetBotState(BotState.Bored, Vector3.zero, Bored, "Bored");
+            isBored = true;
         }
-        if(hungryTimer < 0) {
-            currentBotState = BotState.Hungry;
+
+        if(hungryTimer < 0 && !isHungry) {
+            SetBotState(BotState.Hungry, Vector3.zero, Hungry, "Hungry");
+            isHungry =true;
         }
 
         if(currentBotState == BotState.Bored && currentBotState != BotState.Hungry) {
@@ -66,21 +87,21 @@ public class MoveBot : MonoBehaviour {
         if(currentBotState == BotState.Charged) {
             // triggeröidään patterilla ja täältä roaming
             if(stateTimer < 0) {
-                SetBotState(BotState.Roaming, GenerateRandomTarget());
+                SetBotState(BotState.Roaming, GenerateRandomTarget(), Roaming, "Roaming");
             }
         }
 
         if(currentBotState == BotState.Happy) {
             // Triggeröidään löytämällä lelu ja täältä roaming tilaan
             if(stateTimer < 0) {
-                SetBotState(BotState.Roaming, GenerateRandomTarget());
+                SetBotState(BotState.Roaming, GenerateRandomTarget(), Roaming, "Roaming");
             }
         }
 
         if(currentBotState == BotState.Hello) {
             // Triggeröidään tulemalla lähelle
             if(stateTimer < 0) {
-                SetBotState(BotState.Roaming, GenerateRandomTarget());
+                SetBotState(BotState.Roaming, GenerateRandomTarget(), Roaming, "Roaming");
             }
         }
 
@@ -91,7 +112,7 @@ public class MoveBot : MonoBehaviour {
         if(currentBotState == BotState.Idle) {
             // Triggeröidään ainakin roamingista ja palataan roamingiin
             if(idleTimer < 0) {
-                SetBotState(BotState.Roaming, GenerateRandomTarget());
+                SetBotState(BotState.Roaming, GenerateRandomTarget(), Roaming, "Roaming");
             }
         }
 
@@ -102,7 +123,7 @@ public class MoveBot : MonoBehaviour {
         if(currentBotState == BotState.Roaming) {
 
             if(Vector3.Distance(transform.position, target) < targetDist) {
-                SetBotState(BotState.Idle, Vector3.zero);
+                SetBotState(BotState.Idle, Vector3.zero, Idle, "Idle");
                 idleTimer = Random.Range(0.2f, 2f);
             }
 
@@ -123,7 +144,7 @@ public class MoveBot : MonoBehaviour {
 
         if(currentBotState == BotState.Spooked) {
             if(stateTimer < 0) {
-                SetBotState(BotState.Roaming, GenerateRandomTarget());
+                SetBotState(BotState.Roaming, GenerateRandomTarget(), Roaming, "Roaming");
             }
         }
 
@@ -132,13 +153,13 @@ public class MoveBot : MonoBehaviour {
         }
     }
 
-    public void SetBotState(BotState newState, Vector3 newTarget) {
+    public void SetBotState(BotState newState, Vector3 newTarget, AudioClip clip, string animState) {
         currentBotState = newState;
-
-        //PlayAnimations("newState");
-
-        //Play audio botState
-        //Play anim botState
+        audioSource.clip = clip;
+        PlayAnimations("" + animState);
+        audioSource.Play();
+        //Play audio state
+        //Play anim state
         stateTimer = stateInterval;
     }
 
@@ -149,10 +170,11 @@ public class MoveBot : MonoBehaviour {
     }
 
     public void GotSomeJuice() {
-        hungryTimer = hungryIntreval;
+        hungryTimer = hungryInterval;
         boredTimer = boredInterval;
-        SetBotState(BotState.Charged, Vector3.zero);
+        SetBotState(BotState.Charged, Vector3.zero, Charged, "Charged");
         stateTimer = stateInterval;
+        isHungry = false;
     }
 
     public Vector3 GenerateRandomTarget() {

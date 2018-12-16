@@ -10,6 +10,7 @@ public class Battery : MonoBehaviour, IDraggable {
     Vector3 newPos;
     Vector3 fakeUp;
     Vector3 fakeForward;
+    FlowerScript powerPalm;
     public bool isMoving;
     public bool draggable = true;
     float movingThreshold = 0.1f;
@@ -22,6 +23,7 @@ public class Battery : MonoBehaviour, IDraggable {
 
     private void Start() {
         mb = FindObjectOfType<MoveBot>();
+        powerPalm = FindObjectOfType<FlowerScript>();
     }
 
     public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
@@ -37,7 +39,8 @@ public class Battery : MonoBehaviour, IDraggable {
         this.dragger = dragger;
         dragStartRot = transform.rotation;
         draggerStartRot = draggerRotation;
-
+        powerPalm.batteryAttached = false;
+        powerPalm.hatchTimer = powerPalm.hatchTime;
         rb.isKinematic = true;
         //transform.parent.batteryAttached = false;
         transform.SetParent(null);
