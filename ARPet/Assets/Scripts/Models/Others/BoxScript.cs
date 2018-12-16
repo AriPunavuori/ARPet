@@ -93,9 +93,11 @@ public class BoxScript : MonoBehaviour,IDraggable
         if(other.gameObject.name == "ARBotFinal") {
 
             var escapeVector = other.transform.position - transform.position;
-            //escapeVector.y = 0;
+            escapeVector.y = 0;
             escapeVector = Vector3.ProjectOnPlane(escapeVector,Vector3.up);
-            other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Force);// tämän tilalle kutsu behaviouriin että pakenee kohti escapevektoria
+            other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Force);
+            mb.SetBotState(BotState.Spooked, transform.position + escapeVector, mb.Spooked, "Spooked");
+            // tämän tilalle kutsu behaviouriin että pakenee kohti escapevektoria
         }
     }
 }

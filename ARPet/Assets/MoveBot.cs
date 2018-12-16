@@ -192,6 +192,5 @@ public class MoveBot : MonoBehaviour {
     public Vector3 GenerateRandomTarget() {
         targetSet = false;
         return target = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1));
-
     }
 }
