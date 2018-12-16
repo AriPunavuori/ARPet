@@ -6,6 +6,7 @@ public class Dragger : MonoBehaviour, IDragger {
     private readonly float maxHitDist = 100f;
     private GameObject boxPrefab;
     IDraggable currentDrag;
+    IDraggable plush;
     Transform target;
     float dragDistance;
     float textTimer;
@@ -26,6 +27,8 @@ public class Dragger : MonoBehaviour, IDragger {
 
     private void Start() {
         mb = FindObjectOfType<MoveBot>();
+        plush = FindObjectOfType<PlushToy>();
+
     }
 
     void Update () {
@@ -43,14 +46,14 @@ public class Dragger : MonoBehaviour, IDragger {
 
         if(currentDrag != null) {
             if(Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.B)) {
-                mb.SetBotState(BotState.Roaming, mb.GenerateRandomTarget(), mb.Roaming, "Roaming");
                 BotLookScript.target = null;
                 currentDrag.OnDragEnd();
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
-               if(mb.currentBotState != BotState.Hungry) {
+               if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
                     mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
+                    print("Interested");
                 }
             }
 
@@ -84,7 +87,7 @@ public class Dragger : MonoBehaviour, IDragger {
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
 
-                        if(mb.currentBotState != BotState.Hungry) {
+                        if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
                             mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
                             mb.boredTimer = mb.boredInterval;
                             BotLookScript.target = target;

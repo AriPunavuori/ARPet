@@ -140,6 +140,19 @@ public class MoveBot : MonoBehaviour {
 
         if(currentBotState == BotState.Searching) {
             // Wait tilastä tänne ja kun lelu löytyy, niin happy tilaan
+
+            if(!targetSet) {
+                nma.destination = target;
+                targetSet = true;
+            }
+
+            if(Vector3.Distance(transform.position, target) < targetDist) {
+                SetBotState(BotState.Happy, Vector3.zero, Happy, "Happy");
+            }
+
+            if(nma.velocity.sqrMagnitude > Mathf.Epsilon) {
+                transform.rotation = Quaternion.LookRotation(nma.velocity.normalized);
+            }
         }
 
         if(currentBotState == BotState.Spooked) {
@@ -160,13 +173,9 @@ public class MoveBot : MonoBehaviour {
         audioSource.Play();
         //Play audio state
         //Play anim state
-        stateTimer = stateInterval;
-    }
-
-    public void BotIsInterested(Vector3 newTarget) {
-        currentBotState = BotState.Interested;
-        target = newTarget;
         targetSet = false;
+        target = newTarget;
+        stateTimer = stateInterval;
     }
 
     public void GotSomeJuice() {

@@ -1,21 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class BoxScript : MonoBehaviour,IDraggable
-{
+public class PlushToy : MonoBehaviour, IDraggable {
+
     IDragger dragger;
     Vector3 oldPos;
     Vector3 newPos;
     Vector3 fakeUp;
     Vector3 fakeForward;
-    MoveBot mb;
     public bool isMoving;
     public bool draggable = true;
-    float movingThreshold = 0.01f;
-    SphereCollider scareCol;
+    float movingThreshold = 0.1f;
+    Collider scareCol;
     Quaternion dragStartRot;
     Quaternion draggerStartRot;
     public float maxRotSpeed;
     Rigidbody rb;
+    MoveBot mb;
+
+    private void Start() {
+        mb = FindObjectOfType<MoveBot>();
+    }
 
     public void OnDragStart(IDragger dragger, Quaternion draggerRotation) {
         var rotCheck = new Vector3[] { transform.right, -transform.right, transform.up, -transform.up, transform.forward, -transform.forward };
@@ -30,10 +36,8 @@ public class BoxScript : MonoBehaviour,IDraggable
         this.dragger = dragger;
         dragStartRot = transform.rotation;
         draggerStartRot = draggerRotation;
-
         rb.isKinematic = true;
-        //transform.parent.batteryAttached = false;
-        transform.SetParent(null);
+        mb.SetBotState(BotState.Waiting, Vector3.zero, mb.Waiting, "Waiting");
     }
 
     public void OnDragEnd() {
@@ -41,7 +45,8 @@ public class BoxScript : MonoBehaviour,IDraggable
             dragger = null;
             rb.isKinematic = false;
             fakeUp = Vector3.zero;
-            mb.SetBotState(BotState.Roaming, mb.GenerateRandomTarget(), mb.Roaming, "Roaming");
+            mb.SetBotState(BotState.Roaming, transform.position, mb.Searching, "Searching");
+            print("Searhing started");
         }
     }
 
@@ -67,35 +72,8 @@ public class BoxScript : MonoBehaviour,IDraggable
         }
     }
 
-    void Awake () {
-        scareCol = GetComponent<SphereCollider>();
+    void Awake() {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Start() {
-        mb = FindObjectOfType<MoveBot>();
-    }
-
-    void Update () {
-		newPos = transform.position;
-        var dist = Vector3.Distance(newPos, oldPos);
-        if(dist > movingThreshold) {
-            isMoving = true;
-            scareCol.enabled = true;
-        } else {
-            isMoving = false;
-            scareCol.enabled = false;
-        }
-        oldPos = transform.position;
-	}
-
-    private void OnTriggerStay(Collider other) {
-        if(other.gameObject.name == "ARBotFinal") {
-
-            var escapeVector = other.transform.position - transform.position;
-            //escapeVector.y = 0;
-            escapeVector = Vector3.ProjectOnPlane(escapeVector,Vector3.up);
-            other.attachedRigidbody.AddForce(escapeVector.normalized * 100, ForceMode.Force);// tämän tilalle kutsu behaviouriin että pakenee kohti escapevektoria
-        }
-    }
 }
