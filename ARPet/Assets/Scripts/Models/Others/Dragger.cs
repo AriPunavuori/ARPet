@@ -25,10 +25,15 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     private void Start() {
-        mb = FindObjectOfType<MoveBot>();
+       /* mb = FindObjectOfType<MoveBot>()*/;
     }
 
     void Update () {
+
+        if(mb == null)
+        {
+            mb = FindObjectOfType<MoveBot>();
+        }
 
         textTimer -= Time.deltaTime;
         resetText -= Time.deltaTime;
@@ -37,12 +42,12 @@ public class Dragger : MonoBehaviour, IDragger {
             ttiShown = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.B)) {
-            SpawnBox();
-        }
+        //if(Input.GetKeyDown(KeyCode.B)) {
+        //    SpawnBox();
+        //}
 
         if(currentDrag != null) {
-            if(Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.B)) {
+            if(Input.GetMouseButtonUp(0) /*|| Input.GetKeyUp(KeyCode.B)*/) {
                 mb.BotRoam();
                 BotLookScript.target = null;
                 currentDrag.OnDragEnd();
@@ -55,7 +60,7 @@ public class Dragger : MonoBehaviour, IDragger {
             }
 
         } else {
-            var ray = /*CameraEngine.Instance.MainCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));*/Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));// InputManager.Instance.Ray;
+            var ray = CameraEngine.Instance.MainCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));//Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));// InputManager.Instance.Ray;
             // !!!
             RaycastHit hitInfo;
 
@@ -84,10 +89,14 @@ public class Dragger : MonoBehaviour, IDragger {
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
 
-                        if(mb.currentBotState != BotState.Hungry) {
-                            mb.boredTimer = mb.boredInterval;
-                            BotLookScript.target = target;
-                        }
+                        if(mb != null)
+                        {
+                            if (mb.currentBotState != BotState.Hungry)
+                            {
+                                mb.boredTimer = mb.boredInterval;
+                                BotLookScript.target = target;
+                            }
+                        }                     
                     } 
                 }
 
@@ -100,9 +109,9 @@ public class Dragger : MonoBehaviour, IDragger {
     }
 
     public void SpawnBox() {
-        //var newBox = Instantiate(boxPrefab, transform.forward * 0.3f, Quaternion.identity);  
+        var newBox = Instantiate(boxPrefab, /*InputManager.Instance.Ray.origin * 0.3f*/CameraEngine.Instance.MainCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f)).origin + Vector3.forward, Quaternion.identity);  
 
-        var newBox = Instantiate(boxPrefab, CameraEngine.Instance.CameraPose.position + Vector3.forward, CameraEngine.Instance.CameraPose.rotation);  
+        //var newBox = Instantiate(boxPrefab, CameraEngine.Instance.CameraPose.position + Vector3.forward, CameraEngine.Instance.CameraPose.rotation);  
 
         if (currentDrag != null) {
             currentDrag.OnDragStart(this, transform.rotation);

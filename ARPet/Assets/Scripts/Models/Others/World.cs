@@ -4,6 +4,8 @@ using UnityEngine.AI;
 
 public class World : MonoBehaviour
 {
+    private int boxSpawnCount = 5;
+
     private Collider worldCollider;
     private MeshRenderer meshRenderer;
     private NavMeshSurface navMeshSurface;
@@ -42,14 +44,29 @@ public class World : MonoBehaviour
         worldCollider = GetComponentInChildren<Collider>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
 
-        navMeshSurface = GetComponent<NavMeshSurface>();
+        navMeshSurface = GetComponentInChildren<NavMeshSurface>();   
+        navMeshSurface.BuildNavMesh();
     }
 
     private void Start()
     {
-        navMeshSurface.BuildNavMesh();
+        //navMeshSurface.BuildNavMesh();
 
-        Instantiate(ResourceManager.Instance.HuabotPrefab, transform.position + new Vector3(0, .1f, 0), Quaternion.identity);
+        //Instantiate(ResourceManager.Instance.HuabotPrefab, transform.position + new Vector3(0, 0f, 0), Quaternion.identity);
+
+        SpawnBox(new Vector3(0.5f, 0.2f, 0.1f), Quaternion.identity);
+        SpawnBox(new Vector3(0.4f, 0.2f, 0.2f), Quaternion.identity);
+        SpawnBox(new Vector3(3f, 0.2f, 0.3f), Quaternion.identity);
+        SpawnBox(new Vector3(0.2f, 0.2f, 0.4f), Quaternion.identity);
+        //SpawnBox(new Vector3(0.1f, 0.5f, 0.5f), Quaternion.identity);
+
+    }
+
+    private void SpawnBox(Vector3 position, Quaternion rotation)
+    {
+        position += transform.localPosition;
+
+        Instantiate(ResourceManager.Instance.BlockPrefab, position, rotation);
     }
 
     private void OnEnable()
