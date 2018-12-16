@@ -266,21 +266,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 114639505316537120, guid: 3878af041b7364cda89719f8388b045b,
-        type: 2}
-      propertyPath: eye
-      value: 
-      objectReference: {fileID: 112858741}
     - target: {fileID: 114241508147154364, guid: 3878af041b7364cda89719f8388b045b,
         type: 2}
       propertyPath: eye
       value: 
       objectReference: {fileID: 672708494}
-    - target: {fileID: 114891608520653272, guid: 3878af041b7364cda89719f8388b045b,
+    - target: {fileID: 114639505316537120, guid: 3878af041b7364cda89719f8388b045b,
         type: 2}
-      propertyPath: hungryTimer
-      value: 200
-      objectReference: {fileID: 0}
+      propertyPath: eye
+      value: 
+      objectReference: {fileID: 112858741}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3878af041b7364cda89719f8388b045b, type: 2}
   m_IsPrefabAsset: 0
