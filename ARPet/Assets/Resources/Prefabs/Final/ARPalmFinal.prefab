@@ -801,7 +801,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02a92dde7c3b648fab9223e21f78e364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hatchTime: 2
+  hatchTime: 10
+  hatchTimer: 0
   battery: {fileID: 1768906530052480, guid: fcb88edb9c854184d8cb469622bd0190, type: 2}
   batteryAttached: 0
 --- !u!136 &136635925378073568

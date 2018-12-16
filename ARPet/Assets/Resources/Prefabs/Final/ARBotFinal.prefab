@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 135922599075277192}
   - component: {fileID: 114891608520653272}
   - component: {fileID: 195383906845071124}
+  - component: {fileID: 82213977508591532}
   m_Layer: 9
   m_Name: ARBotFinal
   m_TagString: Untagged
@@ -809,6 +810,101 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!82 &82213977508591532
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1961594374823264}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &95695021003557948
 Animator:
   serializedVersion: 3
@@ -916,9 +1012,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0, z: 0}
   currentBotState: 7
+  Bored: {fileID: 8300000, guid: 003edf84958b95940b9b4c9656e69375, type: 3}
+  Charged: {fileID: 8300000, guid: 3d2488d707ba0824581d3a342a3da332, type: 3}
+  Happy: {fileID: 8300000, guid: 5748d4d227903fb4db3f63739416175e, type: 3}
+  Hello: {fileID: 8300000, guid: 5748d4d227903fb4db3f63739416175e, type: 3}
+  Hungry: {fileID: 8300000, guid: 21349f9227fc26442abe93188b9badac, type: 3}
+  Idle: {fileID: 8300000, guid: c55ead8a51c41be4e8cdf7a6c6c5c9c0, type: 3}
+  Interested: {fileID: 8300000, guid: d26a564fd8a46c848a7b960e47493c73, type: 3}
+  Roaming: {fileID: 8300000, guid: c55ead8a51c41be4e8cdf7a6c6c5c9c0, type: 3}
+  Searching: {fileID: 8300000, guid: 45ad4d3040c0e744398f6265fa91671d, type: 3}
+  Spooked: {fileID: 8300000, guid: 97a3839ee5f70fc468a8a32cba412355, type: 3}
+  Waiting: {fileID: 8300000, guid: bafb63bf395c37c4581003466d5bb053, type: 3}
   idleInterval: 0
   boredInterval: 200
-  hungryIntreval: 200
+  hungryInterval: 120
   stateInterval: 2
   idleTimer: 0
   stateTimer: 0
