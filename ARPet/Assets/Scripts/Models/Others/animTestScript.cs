@@ -12,23 +12,23 @@ public class animTestScript : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.J)) {
-            m_Animator.Play("spook");
+            m_Animator.Play("Spooked");
             print("Eek!");
         }
         if (Input.GetKeyDown(KeyCode.L)) {
-            m_Animator.Play("laugh");
+            m_Animator.Play("Laugh");
             print("Hihi!");
         }
         if (Input.GetKeyDown(KeyCode.K)) {
-            m_Animator.Play("batteryStart");
+            m_Animator.Play("Hungry");
             print("I'm running out of juice!");
         }
         if (Input.GetKeyDown(KeyCode.H)) {
-            m_Animator.Play("hello");
+            m_Animator.Play("Hello");
             print("hey there!");
         }
         if (Input.GetKeyDown(KeyCode.B)) {
-            m_Animator.Play("charged");
+            m_Animator.Play("Charged");
             print("Fully charged! :-)");
         }
     }

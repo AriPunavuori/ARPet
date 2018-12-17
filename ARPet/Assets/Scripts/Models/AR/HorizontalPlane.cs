@@ -60,7 +60,12 @@ public class HorizontalPlane : MonoBehaviour
 
     public void Update()
     {
-        UpdateHorizontalPlaneTracking();        
+        if(!InputManager.Instance.worldActive) {
+            UpdateHorizontalPlaneTracking();
+        } else {
+            meshRenderer.enabled = false;
+        }
+
     }
 
     public void Initialize(ARPlane plane)

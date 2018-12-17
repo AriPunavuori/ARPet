@@ -1,6 +1,7 @@
 ﻿using HuaweiARUnitySDK;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 public class InputManager : Singelton<InputManager>
 {
@@ -10,15 +11,15 @@ public class InputManager : Singelton<InputManager>
 
     [SerializeField]
     private LayerMask hitLayerMask;
-
+    public GameObject world;
     private Touch currentTouch;
     private LineRenderer lineRenderer;
     private HitIndicator hitIndicator;
-
+    public bool worldActive;
     private RaycastHit hitInfo;
     private Vector2 screenCenterPoint;
     private readonly float rayMaxDistance = 10f;
-
+    public NavMeshSurface nms;
     private GameObject currentHitTarget;
     private Ray ray;
 
@@ -77,7 +78,7 @@ public class InputManager : Singelton<InputManager>
 
     private void Update()
     {
-        if(WorldManager.Instance.IsWorldCreated == false)
+        if(!worldActive)
         UnityShootRayFromScreenPoint(screenCenterPoint);      
     }
 
@@ -151,10 +152,15 @@ public class InputManager : Singelton<InputManager>
 
                     case TouchPhase.Ended:
 
-                        WorldManager.Instance.CreateWorld(new Pose(/*hitIndicator.transform.position*/CurrentHitPoint, hitNormal));
+                    //WorldManager.Instance.CreateWorld(new Pose(/*hitIndicator.transform.position*/CurrentHitPoint, hitNormal));
 
-                        //UIManager.Instance.SwitchDeviceImage(false);
+                    //UIManager.Instance.SwitchDeviceImage(false);
 
+                    world.SetActive(true);
+                    world.transform.position = CurrentHitPoint;
+                    worldActive = true;
+                    hitIndicator.gameObject.SetActive(false);
+                    nms.BuildNavMesh();
                         break;
 
                     case TouchPhase.Canceled:

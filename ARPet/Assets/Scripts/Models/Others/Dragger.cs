@@ -51,10 +51,10 @@ public class Dragger : MonoBehaviour, IDragger {
                 currentDrag = null;
             } else {
                 currentDrag.OnDragContinue(transform.position + transform.forward * dragDistance, transform.rotation);
-               if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
-                    mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
-                    print("Interested");
-                }
+               //if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
+                //    mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
+                //    print("Interested");
+                //}
             }
 
         } else {
@@ -87,11 +87,11 @@ public class Dragger : MonoBehaviour, IDragger {
                         currentDrag = draggable;
                         currentDrag.OnDragStart(this, transform.rotation);
 
-                        if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
-                            mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
-                            mb.boredTimer = mb.boredInterval;
-                            BotLookScript.target = target;
-                        }
+                        //if(mb.currentBotState != BotState.Hungry && currentDrag != plush) {
+                        //    mb.SetBotState(BotState.Interested, target.position, mb.Interested, "Interested");
+                        //    mb.boredTimer = mb.boredInterval;
+                        //    BotLookScript.target = target;
+                        //}
                     } 
                 }
 
