@@ -73,10 +73,17 @@ NavMeshProjectSettings:
   m_Settings:
   - serializedVersion: 2
     agentTypeID: 0
+<<<<<<< HEAD:ProjectSettings/NavMeshAreas.asset
     agentRadius: 0.5
     agentHeight: 2
     agentSlope: 45
     agentClimb: 0.75
+=======
+    agentRadius: 0.075
+    agentHeight: 0.05
+    agentSlope: 45
+    agentClimb: 0.001
+>>>>>>> c5991e646145c1830fee939d0e66a147eea824cc:ARPet/ProjectSettings/NavMeshAreas.asset
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2

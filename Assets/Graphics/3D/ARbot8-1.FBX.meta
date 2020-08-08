@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8550741f5de477444b93626ed5918edb
+guid: 3df934ddf97cd8b419bd4706ffcf68de
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -52,15 +52,6 @@ ModelImporter:
     4300012: Display
     4300014: BatHinge
     4300016: BatLid
-    6400000: BatHinge
-    6400002: BatLid
-    6400004: Display
-    6400006: ear L
-    6400008: ear R
-    6400010: HingeL
-    6400012: HingeR
-    6400014: Huabot
-    6400016: Visor
     7400000: Take 001
     9500000: //RootNode
   externalObjects: {}
@@ -94,13 +85,13 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -114,7 +105,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.010000001
+    previousCalculatedGlobalScale: 0.01
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
